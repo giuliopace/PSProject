@@ -1,0 +1,11 @@
+DAYS = anon_enum(2);
+ROOMS = {r1, r2};
+TIMES = {morning, noon};
+
+students = anon_enum(2);
+classes = {t01, t02, t03, t04, t05, t06,
+         t07, t08};
+
+subscription = [| 0,0,0,1,1,0,0,1,0
+                | 0,1,0,1,0,0,0,0,1
+                |]
