@@ -1,29 +1,12 @@
-% Use this editor as a MiniZinc scratch book
-include "globals.mzn";
+int nrDays;
+int nrWeeks;
+int slotsPerDay;
 
-enum DAYS;
-enum ROOMS;
-enum TIMES;
-constraint assert(card(DAYS) * card(ROOMS) * card(TIMES) == card(talks), "Number of slots must match number of talks");
+int nrClasses = length();
 
-enum talks;
-enum people;
+predicate no_overlap(var int:s1, int:d1, var int:s2, int:d2) =
+    s1 + d1 <= s2 \/ s2 + d2 <= s1;
 
-array[people, talks] of 0..4: pref;
-array[DAYS, TIMES, ROOMS] of var talks: sched;
+% decision variable : which option is picked for each class
 
-constraint alldifferent (d in DAYS, t in TIMES, r in ROOMS) (sched[d, t, r]);
 
-array[people] of var int: score;
-constraint forall(p in people) (
-  score[p] = sum([if exists (r in ROOMS) (pref[p, sched[d, t, r]] = 4) 
-       then 1 else 0 endif | d in DAYS, t in TIMES] 
-   )
-);
-
-solve maximize sum(score);
-
-output 
- ["SCORE: \(sum(score)) \n\n"] ++
- [show(sched[d, t, r]) ++ " " ++ 
-   if r == card(ROOMS) then if t == card(TIMES) then "\n\n" else "\n" endif else "" endif | d in DAYS, t in TIMES, r in ROOMS];
