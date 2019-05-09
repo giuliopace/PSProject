@@ -6,6 +6,7 @@ int: slotsPerDay;
 int: nrClasses;
 
 array[1..nrClasses] of int: classes_options;
+array[1..nrClasses] of int: classes_idx;
 
 % total number of options, regardless of the class
 int: nrOptions = sum(classes_options);
@@ -20,11 +21,11 @@ predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
 int: max_option = max(classes_options);
 
 % decision variable : which option is picked for each class
-array[1..nrClasses] of var 1..max_option: picked_options;
+array[1..nrClasses] of var 0..max_option-1: picked_options;
 
 % constraint : 
 constraint forall(i in 1..nrClasses)(
-    0 <= picked_options[i] /\ picked_options[i] <= classes_options[i]+1
+    0 <= picked_options[i] /\ picked_options[i] <= classes_options[i]-1
 );
 
 constraint forall(i in 1..nrClasses)(
@@ -32,14 +33,16 @@ constraint forall(i in 1..nrClasses)(
         forall(w in 1..nrWeeks)(
             forall(d in 1..nrDays)(
                 i == j 
-            \/  not (classes_weeks[i+picked_options[i],w] /\ classes_weeks[j+picked_options[j],w])
-            \/  not (classes_days[i+picked_options[i],d] /\ classes_days[j+picked_options[j],d])
+            \/  not (classes_weeks[classes_idx[i]+picked_options[i],w] /\ classes_weeks[classes_idx[j]+picked_options[j],w])
+            \/  not (classes_days[classes_idx[i]+picked_options[i],d] /\ classes_days[classes_idx[j]+picked_options[j],d])
             \/  no_overlap(
-                    classes_days_sd[i+picked_options[i],1],
-                    classes_days_sd[i+picked_options[i],2],
-                    classes_days_sd[j+picked_options[j],1],
-                    classes_days_sd[j+picked_options[j],2])
+                    classes_days_sd[classes_idx[i]+picked_options[i],1],
+                    classes_days_sd[classes_idx[i]+picked_options[i],2],
+                    classes_days_sd[classes_idx[j]+picked_options[j],1],
+                    classes_days_sd[classes_idx[j]+picked_options[j],2])
             )
         )
     )
-)
+);
+
+solve satisfy;

@@ -7,30 +7,33 @@ nrClasses = 2;
 % array giving the number of possible time options for each class
 classes_options = [3,2];
 
+% array giving the index of each class in the class_week array
+classes_idx = [1,4];
+
 % possible weeks
 classes_weeks = 
-   [|false,	false,	false,	true,	true,	%class1
-	|false,	true,	true,	false,	false,	%class1
-	|true,	true,	true,	false,	false,	%class1
-	|false,	true,	true,	false,	false,	%class2
-	|false,	false,	true,	false,	true,	%class2
+  [|false,	false,	false,	true,		true,		%class1
+	|	false,	true,		true,		false,	false,	%class1
+	|	true,		true,		true,		false,	false,	%class1
+	|	false,	true,		true,		true,	false,	%class2
+	|	false,	false,	false,	true,	true,		%class2
 	|];
 
 % second column is the starting point
 % third column is the duration
 % next columns are the possible days
 classes_days = 
-   [|true,	true,	true,	true,	true,	true,	true,	%class1
-	|true,	true,	true,	true,	true,	true,	true,	%class1
-	|true,	true,	true,	true,	true,	true,	true,	%class1
-	|true,	true,	true,	true,	true,	true,	true,	%class2
-	|true,	true,	true,	true,	true,	true,	true,	%class2
+  [|true,	true,	true,	true,	true,	true,	true,	%class1
+	|	true,	true,	true,	true,	true,	true,	true,	%class1
+	|	true,	true,	true,	true,	true,	true,	true,	%class1
+	|	true,	true,	true,	true,	true,	true,	true,	%class2
+	|	true,	true,	true,	true,	true,	true,	true,	%class2
 	|];
 
 classes_days_sd = 
-   [|90,	20
-	|90,	20
-	|90,	20
-	|90,	20
-	|90,	20
+  [|90,	20
+	|	90,	20
+	|	90,	20
+	|	90,	20
+	|	90,	20
 	|];
