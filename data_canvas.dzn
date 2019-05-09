@@ -1,13 +1,11 @@
-nrDays = 7
-nrWeeks = 5
-slotsPerDay = 288
+nrDays = 7;
+nrWeeks = 5;
+slotsPerDay = 288;
 
-nrClasses = 2
+nrClasses = 2;
 
 % array giving the number of possible time options for each class
-classes_options = [|
-    3,2|
-]
+classes_options = [3,2];
 
 % first column is the id of the class, next columns are possible weeks
 classes_weeks = [|
@@ -15,17 +13,15 @@ classes_weeks = [|
     1,0,1,1,0,0|
     1,1,1,0,0,0|
     2,0,1,1,0,0|
-    2,0,0,1,0,1|
-]
+    2,0,0,1,0,1|];
 
 % first column is the id of the class,
 % second column is the starting point
 % third column is the duration
 % next columns are the possible days
 classes_days = [|
-    1,90,20,1,1,1,1,1,1|
-    1,90,20,1,1,1,1,1,1|
-    1,90,20,1,1,1,1,1,1|
-    2,90,20,1,1,1,1,1,1|
-    2,90,20,1,1,1,1,1,1|
-]
+    1,90,20,1,1,1,1,1,1,1|
+    1,90,20,1,1,1,1,1,1,1|
+    1,90,20,1,1,1,1,1,1,1|
+    2,90,20,1,1,1,1,1,1,1|
+    2,90,20,1,1,1,1,1,1,1|];
