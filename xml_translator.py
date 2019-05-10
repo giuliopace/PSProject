@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import itertools
+import sys
 
 base_file = """
 nrDays = {};
@@ -80,7 +81,7 @@ def convert_xml(xml_string):
 	classes_options_s = '['
 	for idx, class_ in classes.items():
 		classes_options_s += str(len(class_['time_options'])) + ','
-	classes_options_s = classes_options_s[:-1] + '];'
+	classes_options_s = classes_options_s[:-1] + ']'
 
 	# classes_idx
 	classes_idx_s = '['
@@ -88,7 +89,7 @@ def convert_xml(xml_string):
 	for idx, class_ in classes.items():
 		classes_idx_s += str(id) + ','
 		id += len(class_['time_options'])
-	classes_idx_s = classes_idx_s[:-1] + '];'
+	classes_idx_s = classes_idx_s[:-1] + ']'
 
 	# classes_weeks
 	classes_weeks_s = '['
@@ -102,7 +103,7 @@ def convert_xml(xml_string):
 				else:
 					classes_weeks_s += 'false,'
 			classes_weeks_s += '\n'
-	classes_weeks_s += '|];'
+	classes_weeks_s += '|]'
 
 	# classes_days
 	classes_days_s = '['
@@ -116,7 +117,7 @@ def convert_xml(xml_string):
 				else:
 					classes_days_s += 'false,'
 			classes_days_s += '% class {}\n'.format(idx)
-	classes_days_s += '|];'
+	classes_days_s += '|]'
 
 	# classes_days_sd
 	classes_days_sd_s = '['
@@ -127,7 +128,7 @@ def convert_xml(xml_string):
 			classes_days_sd_s += str(option['start']) + ','
 			classes_days_sd_s += str(option['length']) + ','
 			classes_days_sd_s += '\n'
-	classes_days_sd_s += '|];'
+	classes_days_sd_s += '|]'
 
 	return base_file.format(
 		str(nr_days),
@@ -141,5 +142,6 @@ def convert_xml(xml_string):
 		classes_days_sd_s
 	)
 
-xml_file = open("./instances/test_wbg-fal10.xml", "r")
+filename = sys.argv[1]
+xml_file = open(filename, "r")
 print(convert_xml(xml_file.read()))
