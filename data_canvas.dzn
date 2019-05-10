@@ -19,9 +19,7 @@ classes_weeks =
 	|	false,	false,	false,	true,	true,		%class2
 	|];
 
-% second column is the starting point
-% third column is the duration
-% next columns are the possible days
+% possible days
 classes_days = 
   [|true,	true,	true,	true,	true,	true,	true,	%class1
 	|	true,	true,	true,	true,	true,	true,	true,	%class1
