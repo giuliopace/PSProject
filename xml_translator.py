@@ -57,6 +57,22 @@ def convert_xml(xml_string):
 	nr_days = int(problem.attrib['nrDays'])
 	slots_per_day = int(problem.attrib['slotsPerDay']) 
 
+	# room info 
+	rooms = {}
+	rooms_node = problem.find('rooms')
+	for room in rooms_node:
+		id = room.attrib['id']
+		rooms[id] = {}
+		rooms[id]['capacity'] = int(room.attrib['capacity'])
+		rooms[id]['unavailabilities'] = []
+		for unav in room:
+			u = {}
+			u['days'] = unav.attrib['days']
+			u['weeks'] = unav.attrib['weeks']
+			u['start'] = int(unav.attrib['start'])
+			u['length'] = int(unav.attrib['length'])
+			rooms[id]['unavailabilities'].append(u)
+
 	# classes info
 	classes = {}
 	courses = problem.find('courses')
@@ -67,8 +83,8 @@ def convert_xml(xml_string):
 					id = class_.attrib['id']
 					classes[id] = {}
 					classes[id]['limit'] = class_.attrib['limit']
+					
 					classes[id]['time_options'] = []
-
 					for time_option in class_.findall('time'):
 						opt = {}
 						opt['days'] = time_option.attrib['days']
@@ -78,6 +94,13 @@ def convert_xml(xml_string):
 						opt['penalty'] = int(time_option.attrib['penalty'])
 						classes[id]['time_options'].append(opt)
 
+					classes[id]['room'] = []
+					for room in class_.findall("room")
+						r = {}
+						r['id'] = room.attrib['id']
+						r['penalty'] = room.attrib['penalty']
+						classes[id]['room'].append(r)
+						
 	## create dzn string from python dict
 
 	# classes_options
