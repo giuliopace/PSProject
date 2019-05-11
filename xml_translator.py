@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import itertools
 import sys
+from array import *
 
 base_file = """
 nrDays = {};
@@ -8,7 +9,6 @@ nrWeeks = {};
 slotsPerDay = {};
 
 nrClasses = {};
-
 
 % array giving the number of possible time options for each class
 classes_options = {};
@@ -27,6 +27,29 @@ classes_days_sd = {};
 
 % options penalty
 option_penalties = {}
+
+nrRooms = {};
+
+room_capacities = {};
+
+% array giving the number of unavailabilities per room
+room_unav_cnt = {};
+
+% array giving the index of each room in the unavailabilities array
+rooms_unav_idx = {};
+
+% possible weeks
+rooms_weeks = {};
+
+% possible days
+rooms_days = {};
+
+% start and duration of the class
+rooms_days_sd = {};
+
+% traveltime adjacency matrix
+travel_adj_mat = {};
+
 """
 
 def convert_xml(xml_string):
@@ -56,6 +79,7 @@ def convert_xml(xml_string):
 	nr_weeks = int(problem.attrib['nrWeeks'])
 	nr_days = int(problem.attrib['nrDays'])
 	slots_per_day = int(problem.attrib['slotsPerDay']) 
+	
 
 	# room info 
 	rooms = {}
@@ -65,13 +89,26 @@ def convert_xml(xml_string):
 		rooms[id] = {}
 		rooms[id]['capacity'] = int(room.attrib['capacity'])
 		rooms[id]['unavailabilities'] = []
-		for unav in room:
+		for unav in room.findall("unavailable"):
 			u = {}
 			u['days'] = unav.attrib['days']
 			u['weeks'] = unav.attrib['weeks']
 			u['start'] = int(unav.attrib['start'])
 			u['length'] = int(unav.attrib['length'])
 			rooms[id]['unavailabilities'].append(u)
+
+
+	# init traveltime adjacency matrix
+
+	traveltime = [[0 for x in range(len(rooms))] for y in range(len(rooms))]
+	
+	for room in rooms_node:
+		id = int(room.attrib['id'])
+		for travel in room.findall("travel"):
+			oid = int(travel.attrib['room'])
+			dist = int(travel.attrib['value'])
+			traveltime[id-1][oid-1] = dist
+			traveltime[oid-1][id-1] = dist
 
 	# classes info
 	classes = {}
@@ -95,7 +132,7 @@ def convert_xml(xml_string):
 						classes[id]['time_options'].append(opt)
 
 					classes[id]['room'] = []
-					for room in class_.findall("room")
+					for room in class_.findall("room"):
 						r = {}
 						r['id'] = room.attrib['id']
 						r['penalty'] = room.attrib['penalty']
@@ -160,6 +197,71 @@ def convert_xml(xml_string):
 			options_penalty_s += str(option['penalty']) + ','
 	options_penalty_s = options_penalty_s[:-1] + ']'
 
+	# room capacity
+	rooms_capacity_s = '['
+	for idx, room in rooms.items():
+		rooms_capacity_s += str(room['capacity']) + ',' 
+	rooms_capacity_s = rooms_capacity_s[:-1] + ']'
+
+	# room unav cnt
+	rooms_unav_cnt_s = '['
+	for idx, room in rooms.items():
+		rooms_unav_cnt_s += str(len(room['unavailabilities'])) + ',' 
+	rooms_unav_cnt_s = rooms_unav_cnt_s[:-1] + ']'
+
+	# room unav idx
+	rooms_unav_idx_s = '['
+	id = 1 
+	for idx, room in rooms.items():
+		rooms_unav_idx_s += str(id) + ','
+		id += len(room['unavailabilities'])
+	rooms_unav_idx_s = rooms_unav_idx_s[:-1] + ']'
+
+
+	# rooms_weeks
+	rooms_weeks_s = '['
+	for idx, class_ in rooms.items():
+		for option in class_['unavailabilities']:
+			rooms_weeks_s += '|'
+			for char in option['weeks']:
+				if char == '1':
+					rooms_weeks_s += 'true,'
+				else:
+					rooms_weeks_s += 'false,'
+			rooms_weeks_s += '\n'
+	rooms_weeks_s += '|]'
+
+	# rooms_days
+	rooms_days_s = '['
+	for idx, class_ in rooms.items():
+		for option in class_['unavailabilities']:
+			rooms_days_s += '|'
+			for char in option['days']:
+				if char == '1':
+					rooms_days_s += 'true,'
+				else:
+					rooms_days_s += 'false,'
+			rooms_days_s += '% room {}\n'.format(idx)
+	rooms_days_s += '|]'
+
+	# rooms_days_sd
+	rooms_days_sd_s = '['
+	for idx, class_ in rooms.items():
+		for option in class_['unavailabilities']:
+			rooms_days_sd_s += '|'
+			rooms_days_sd_s += str(option['start']) + ','
+			rooms_days_sd_s += str(option['length']) + ','
+			rooms_days_sd_s += '\n'
+	rooms_days_sd_s += '|]'
+
+	travel_adj_mat_s = '['
+	for x in range(len(rooms)):
+		travel_adj_mat_s += '|'
+		for y in range(len(rooms)):
+			travel_adj_mat_s += str(traveltime[x-1][y-1]) + ','
+		travel_adj_mat_s += '\n'
+		
+
 	return base_file.format(
 		str(nr_days),
 		str(nr_weeks),
@@ -170,8 +272,27 @@ def convert_xml(xml_string):
 		classes_weeks_s,
 		classes_days_s,
 		classes_days_sd_s,
-		options_penalty_s
+		options_penalty_s,
+		str(len(rooms)),
+		rooms_capacity_s,
+		rooms_unav_cnt_s,
+		rooms_unav_idx_s,
+		rooms_weeks_s,
+		rooms_days_s,
+		rooms_days_sd_s,
+		travel_adj_mat_s
 	)
+
+"""
+room_capacities = {};
+
+% array giving the number of unavailabilities per room
+room_unav_cnt = {};
+
+% array giving the index of each room in the unavailabilities array
+rooms_unav_idx = {};
+
+"""
 
 filename = sys.argv[1]
 xml_file = open(filename, "r")

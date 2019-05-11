@@ -42,6 +42,6 @@ option_penalties = [1,2,3,4,5];
 room_unav_cnt = [3,2];
 
 % array giving the index of each room in the unavailabilities array
-rooms_idx = [1,4];
+rooms_unav_idx = [1,4];
 
 room_unav = []
