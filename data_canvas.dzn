@@ -35,3 +35,5 @@ classes_days_sd =
 	|	90,	20
 	|	90,	20
 	|];
+
+option_penalties = [1,2,3,4,5];

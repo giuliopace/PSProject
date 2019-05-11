@@ -24,6 +24,9 @@ classes_days = {};
 
 % start and duration of the class
 classes_days_sd = {};
+
+% options penalty
+option_penalties = {}
 """
 
 def convert_xml(xml_string):
@@ -93,7 +96,6 @@ def convert_xml(xml_string):
 
 	# classes_weeks
 	classes_weeks_s = '['
-	id = 1 
 	for idx, class_ in classes.items():
 		for option in class_['time_options']:
 			classes_weeks_s += '|'
@@ -107,7 +109,6 @@ def convert_xml(xml_string):
 
 	# classes_days
 	classes_days_s = '['
-	id = 1 
 	for idx, class_ in classes.items():
 		for option in class_['time_options']:
 			classes_days_s += '|'
@@ -121,7 +122,6 @@ def convert_xml(xml_string):
 
 	# classes_days_sd
 	classes_days_sd_s = '['
-	id = 1 
 	for idx, class_ in classes.items():
 		for option in class_['time_options']:
 			classes_days_sd_s += '|'
@@ -129,6 +129,13 @@ def convert_xml(xml_string):
 			classes_days_sd_s += str(option['length']) + ','
 			classes_days_sd_s += '\n'
 	classes_days_sd_s += '|]'
+
+	# options_penalty
+	options_penalty_s = '['
+	for idx, class_ in classes.items():
+		for option in class_['time_options']:
+			options_penalty_s += str(option['penalty']) + ','
+	options_penalty_s = options_penalty_s[:-1] + ']'
 
 	return base_file.format(
 		str(nr_days),
@@ -139,7 +146,8 @@ def convert_xml(xml_string):
 		classes_idx_s,
 		classes_weeks_s,
 		classes_days_s,
-		classes_days_sd_s
+		classes_days_sd_s,
+		options_penalty_s
 	)
 
 filename = sys.argv[1]
