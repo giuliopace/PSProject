@@ -38,10 +38,28 @@ classes_days_sd =
 
 option_penalties = [1,2,3,4,5];
 
+nrRoom = 20;
+
 % array giving the number of unavailabilities per room
-room_unav_cnt = [3,2];
+room_unav_cnt = [0,0];
 
 % array giving the index of each room in the unavailabilities array
-rooms_unav_idx = [1,4];
+rooms_unav_idx = [1,1];
 
-room_unav = []
+% possible weeks
+rooms_weeks = [];
+
+% possible days
+rooms_days = [];
+
+% start and duration of the class
+rooms_days_sd = [];
+
+% traveltime adjacency matrix
+travel_adj_mat = 
+	[|1,1
+	 |1,1
+	 |];
+
+
+

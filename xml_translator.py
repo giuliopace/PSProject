@@ -217,7 +217,6 @@ def convert_xml(xml_string):
 		id += len(room['unavailabilities'])
 	rooms_unav_idx_s = rooms_unav_idx_s[:-1] + ']'
 
-
 	# rooms_weeks
 	rooms_weeks_s = '['
 	for idx, class_ in rooms.items():
@@ -229,7 +228,8 @@ def convert_xml(xml_string):
 				else:
 					rooms_weeks_s += 'false,'
 			rooms_weeks_s += '\n'
-	rooms_weeks_s += '|]'
+	if rooms_weeks_s == "[|]":
+		rooms_weeks_s = "[]"
 
 	# rooms_days
 	rooms_days_s = '['
@@ -243,6 +243,8 @@ def convert_xml(xml_string):
 					rooms_days_s += 'false,'
 			rooms_days_s += '% room {}\n'.format(idx)
 	rooms_days_s += '|]'
+	if rooms_days_s == "[|]":
+		rooms_days_s = "[]"
 
 	# rooms_days_sd
 	rooms_days_sd_s = '['
@@ -253,6 +255,8 @@ def convert_xml(xml_string):
 			rooms_days_sd_s += str(option['length']) + ','
 			rooms_days_sd_s += '\n'
 	rooms_days_sd_s += '|]'
+	if rooms_days_sd_s == "[|]":
+		rooms_days_sd_s = "[]"
 
 	travel_adj_mat_s = '['
 	for x in range(len(rooms)):
@@ -260,7 +264,7 @@ def convert_xml(xml_string):
 		for y in range(len(rooms)):
 			travel_adj_mat_s += str(traveltime[x-1][y-1]) + ','
 		travel_adj_mat_s += '\n'
-		
+	travel_adj_mat_s += '|]'
 
 	return base_file.format(
 		str(nr_days),

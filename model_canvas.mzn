@@ -17,6 +17,21 @@ array[1..nrOptions, 1..nrDays] of bool: classes_days;
 array[1..nrOptions, 1..2] of 1..slotsPerDay: classes_days_sd;
 array[1..nrOptions] of int: option_penalties;
 
+% total number of rooms
+int: nrRooms;
+
+array[1..nrRooms] of int: room_unav_cnt;
+array[1..nrRooms] of int: rooms_unav_idx;
+
+% total number of unavailabilities
+int: nrUnav = sum(room_unav_cnt);
+int: max_unav = max(room_unav_cnt);
+
+array[1..nrOptions, 1..nrWeeks] of bool: rooms_weeks;
+array[1..nrOptions, 1..nrDays] of bool: rooms_days;
+array[1..nrOptions, 1..2] of 1..slotsPerDay: rooms_days_sd;
+array[1..nrOptions] of int: option_penalties;
+
 predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
     s1 + d1 <= s2 \/ s2 + d2 <= s1;
 
