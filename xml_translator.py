@@ -9,6 +9,7 @@ nrWeeks = {};
 slotsPerDay = {};
 
 nrClasses = {};
+nrStudents = 1; %temporary
 
 % array giving the number of possible time options for each class
 classes_options = {};
@@ -17,20 +18,18 @@ classes_options = {};
 classes_idx = {};
 
 % possible weeks
-classes_weeks = {};
+classes_weeks_input = {};
 
 % possible days
-classes_days = {};
+classes_days_input = {};
 
 % start and duration of the class
-classes_days_sd = {};
+classes_slots_input = {};
 
 % options penalty
-option_penalties = {}
+classes_penalties_input = {};
 
 nrRooms = {};
-
-room_capacities = {};
 
 % array giving the number of unavailabilities per room
 room_unav_cnt = {};
@@ -38,17 +37,19 @@ room_unav_cnt = {};
 % array giving the index of each room in the unavailabilities array
 rooms_unav_idx = {};
 
+room_capacities_input = {};
+
 % possible weeks
-rooms_weeks = {};
+rooms_weeks_input = {};
 
 % possible days
-rooms_days = {};
+rooms_days_input = {};
 
 % start and duration of the class
-rooms_days_sd = {};
+rooms_slots_input = {};
 
 % traveltime adjacency matrix
-travel_adj_mat = {};
+travel_adj_mat_input = {};
 
 """
 
@@ -228,6 +229,7 @@ def convert_xml(xml_string):
 				else:
 					rooms_weeks_s += 'false,'
 			rooms_weeks_s += '\n'
+	rooms_weeks_s += '|]'
 	if rooms_weeks_s == "[|]":
 		rooms_weeks_s = "[]"
 
@@ -278,9 +280,9 @@ def convert_xml(xml_string):
 		classes_days_sd_s,
 		options_penalty_s,
 		str(len(rooms)),
-		rooms_capacity_s,
 		rooms_unav_cnt_s,
 		rooms_unav_idx_s,
+		rooms_capacity_s,
 		rooms_weeks_s,
 		rooms_days_s,
 		rooms_days_sd_s,

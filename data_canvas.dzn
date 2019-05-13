@@ -3,6 +3,7 @@ nrWeeks = 5;
 slotsPerDay = 288;
 
 nrClasses = 2;
+nrStudents = 1; %temporary
 
 % array giving the number of possible time options for each class
 classes_options = [3,2];
@@ -11,24 +12,24 @@ classes_options = [3,2];
 classes_idx = [1,4];
 
 % possible weeks
-classes_weeks = 
-  [|false,	false,	false,	true,		true,		%class1
-	|	false,	true,		true,		false,	false,	%class1
-	|	true,		true,		true,		false,	false,	%class1
-	|	false,	true,		true,		true,	false,	%class2
-	|	false,	false,	false,	true,	true,		%class2
+classes_weeks_input = 
+  [|false,	false,	false,	true,	true,		%class1
+	|	false,	true,	true,	false,	false,	%class1
+	|	true,	true,	true,	false,	false,	%class1
+	|	false,	true,	true,	true,	false,	%class2
+	|	false,	false,	false,	true,	true,	%class2
 	|];
 
 % possible days
-classes_days = 
-  [|true,	true,	true,	true,	true,	true,	true,	%class1
+classes_days_input = 
+  [|true,	true,	true,	true,	true,	true,	true,	    	%class1
 	|	true,	true,	true,	true,	true,	true,	true,	%class1
 	|	true,	true,	true,	true,	true,	true,	true,	%class1
 	|	true,	true,	true,	true,	true,	true,	true,	%class2
 	|	true,	true,	true,	true,	true,	true,	true,	%class2
 	|];
 
-classes_days_sd = 
+classes_slots_input = 
   [|90,	20
 	|	90,	20
 	|	90,	20
@@ -36,9 +37,9 @@ classes_days_sd =
 	|	90,	20
 	|];
 
-option_penalties = [1,2,3,4,5];
+classes_penalties_input = [1,2,3,4,5];
 
-nrRoom = 20;
+nrRooms = 2;
 
 % array giving the number of unavailabilities per room
 room_unav_cnt = [0,0];
@@ -46,17 +47,19 @@ room_unav_cnt = [0,0];
 % array giving the index of each room in the unavailabilities array
 rooms_unav_idx = [1,1];
 
+room_capacities_input = [10,10]
+
 % possible weeks
-rooms_weeks = [];
+rooms_weeks_input = [];
 
 % possible days
-rooms_days = [];
+rooms_days_input = [];
 
 % start and duration of the class
-rooms_days_sd = [];
+rooms_slots_input = [];
 
 % traveltime adjacency matrix
-travel_adj_mat = 
+travel_adj_mat_input = 
 	[|1,1
 	 |1,1
 	 |];
