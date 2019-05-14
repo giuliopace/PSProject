@@ -7,14 +7,22 @@ int: nrClasses;
 int: nrStudents;
 int: nrRooms;
 
+% index helpers
 array[1..nrClasses] of int: classes_options;
 array[1..nrClasses] of int: classes_idx;
 
 array[1..nrRooms] of int: room_unav_cnt;
 array[1..nrRooms] of int: rooms_unav_idx;
 
+array[1..nrRooms] of int: classes_rooms_cnt;
+array[1..nrRooms] of int: classes_rooms_idx;
+
+
 % total number of options, regardless of the class
 int: nrOptions = sum(classes_options);
+
+% total number of options, regardless of the class
+int: nrClassesRooms = sum(classes_rooms_cnt);
 
 % total number of room unavailabilities
 int: nrUnavs = sum(room_unav_cnt);
@@ -24,6 +32,8 @@ array[1..nrOptions, 1..nrWeeks] of bool: classes_weeks_input;
 array[1..nrOptions, 1..nrDays] of bool: classes_days_input;
 array[1..nrOptions, 1..2] of 1..slotsPerDay: classes_slots_input;
 array[1..nrOptions] of int: classes_penalties_input;
+
+array[1..nrClassesRooms, 1..2] of int: classes_rooms_input;
 
 array[1..nrRooms] of int: room_capacities_input;
 array[1..nrUnavs, 1..nrWeeks] of bool: rooms_weeks_input;
@@ -52,9 +62,30 @@ predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
 
 % constraints #################################################################################################################
 
-% room assigment can only be between 0 and nrRooms
+% class assigned to one of its possible room option
 constraint forall(i in 1..nrClasses)(
-    classes_room[i] >= 0 /\ classes_room[i] <= nrRooms
+    (classes_rooms_cnt[i] == 0 /\ classes_room[i] == -1) % if the class doesn't need a room
+    \/ 
+    % otw assign one of the possible rooms
+    exist(r in classes_rooms_idx[i]..(classes_rooms_idx[i]+classes_rooms_cnt[i]-1)) ( 
+        classes_rooms_input[r] == classes_room[i] 
+        %todo penalty
+
+        %.. and check if this room is available for all appointements
+        forall(w in 1..nrWeeks) (
+            forall(d in 1..nrDays) (
+                \/  not (classes_room[i] == classes_room[j])
+                \/  not (classes_weeks[i,w] /\ classes_weeks[j,w])
+                \/  not (classes_days[i,d] /\ classes_days[j,d])
+                \/
+                \/  no_overlap(
+                        classes_start[i],
+                        classes_duration[i],
+                        classes_start[j],
+                        classes_duration[j])
+            )
+        )
+    )
 );
 
 % check if schedule assignment is possible
@@ -78,8 +109,10 @@ constraint forall(i in 1..nrClasses)(
         forall(w in 1..nrWeeks)(
             forall(d in 1..nrDays)(
                 i == j 
+            \/  not (classes_room[i] == classes_room[j])
             \/  not (classes_weeks[i,w] /\ classes_weeks[j,w])
             \/  not (classes_days[i,d] /\ classes_days[j,d])
+            \/
             \/  no_overlap(
                     classes_start[i],
                     classes_duration[i],

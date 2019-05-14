@@ -39,6 +39,20 @@ classes_slots_input =
 
 classes_penalties_input = [1,2,3,4,5];
 
+% array giving the number of room options for each class
+classes_rooms_cnt = [2,2];
+
+% array giving the index of each class in the class_room array
+classes_rooms_idx = [1,3];
+
+% options penalty (first value is the class index, second is the associated penalty)
+classes_rooms_input = 
+  [|1,1
+  |1,1
+  |1,1
+  |1,1
+  |];
+
 nrRooms = 2;
 
 % array giving the number of unavailabilities per room
@@ -47,7 +61,7 @@ room_unav_cnt = [0,0];
 % array giving the index of each room in the unavailabilities array
 rooms_unav_idx = [1,1];
 
-room_capacities_input = [10,10]
+room_capacities_input = [10,10];
 
 % possible weeks
 rooms_weeks_input = [];

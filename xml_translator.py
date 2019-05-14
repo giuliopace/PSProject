@@ -29,6 +29,15 @@ classes_slots_input = {};
 % options penalty
 classes_penalties_input = {};
 
+% array giving the number of room options for each class
+classes_rooms_cnt = {};
+
+% array giving the index of each class in the class_room array
+classes_rooms_idx = {};
+
+% options penalty (first value is the class index, second is the associated penalty)
+classes_rooms_input = {};
+
 nrRooms = {};
 
 % array giving the number of unavailabilities per room
@@ -132,12 +141,12 @@ def convert_xml(xml_string):
 						opt['penalty'] = int(time_option.attrib['penalty'])
 						classes[id]['time_options'].append(opt)
 
-					classes[id]['room'] = []
+					classes[id]['rooms'] = []
 					for room in class_.findall("room"):
 						r = {}
 						r['id'] = room.attrib['id']
 						r['penalty'] = room.attrib['penalty']
-						classes[id]['room'].append(r)
+						classes[id]['rooms'].append(r)
 						
 	## create dzn string from python dict
 
@@ -191,12 +200,38 @@ def convert_xml(xml_string):
 			classes_days_sd_s += '\n'
 	classes_days_sd_s += '|]'
 
-	# options_penalty
-	options_penalty_s = '['
+	# classes_penalty
+	classes_penalty_s = '['
 	for idx, class_ in classes.items():
 		for option in class_['time_options']:
-			options_penalty_s += str(option['penalty']) + ','
-	options_penalty_s = options_penalty_s[:-1] + ']'
+			classes_penalty_s += str(option['penalty']) + ','
+	classes_penalty_s = classes_penalty_s[:-1] + ']'
+
+
+	# classes_rooms_cnt
+	classes_rooms_cnt_s = '['
+	for idx, class_ in classes.items():
+		classes_rooms_cnt_s += str(len(class_['rooms'])) + ','
+	classes_rooms_cnt_s = classes_rooms_cnt_s[:-1] + ']'
+
+	# classes_rooms_idx
+	classes_rooms_idx_s = '['
+	id = 1 
+	for idx, class_ in classes.items():
+		classes_rooms_idx_s += str(id) + ','
+		id += len(class_['rooms'])
+	classes_rooms_idx_s = classes_rooms_idx_s[:-1] + ']'
+
+	# class_rooms
+	classes_rooms_s = '['
+	for idx, class_ in classes.items():
+		for room in class_['rooms']:
+			classes_rooms_s += '|'
+			classes_rooms_s += str(option['id']) + ','
+			classes_rooms_s += str(option['penalty']) + ','
+			classes_rooms_s += '\n'
+	classes_rooms_s += '|]'
+	
 
 	# room capacity
 	rooms_capacity_s = '['
@@ -278,7 +313,10 @@ def convert_xml(xml_string):
 		classes_weeks_s,
 		classes_days_s,
 		classes_days_sd_s,
-		options_penalty_s,
+		classes_penalty_s,
+		classes_rooms_cnt_s,
+		classes_rooms_idx_s,
+		classes_rooms_s,
 		str(len(rooms)),
 		rooms_unav_cnt_s,
 		rooms_unav_idx_s,
