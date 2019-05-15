@@ -12,8 +12,8 @@ int: nrRooms;
 array[1..nrClasses] of int: classes_options;
 array[1..nrClasses] of int: classes_idx;
 
-array[1..nrRooms] of int: rooms_unav_cnt;
-array[1..nrRooms] of int: rooms_unav_idx;
+array[1..nrRooms+1] of int: rooms_unav_cnt;
+array[1..nrRooms+1] of int: rooms_unav_idx;
 
 array[1..nrClasses] of int: classes_rooms_cnt;
 array[1..nrClasses] of int: classes_rooms_idx;
@@ -55,7 +55,7 @@ array[1..nrRooms, 1..nrRooms] of int: travel_adj_mat_input;
 array[1..nrClasses, 1..nrDays] of var bool: classes_days;           % assignment of day schedule for each class
 array[1..nrClasses, 1..nrWeeks] of var bool: classes_weeks;         % assignment of week schedule for each class
 array[1..nrClasses, 1..nrStudents] of var bool: classes_students;   % assignment of enrolled students for each class
-array[1..nrClasses] of var -1..nrRooms: classes_room;               % room assignment for each class
+array[1..nrClasses] of var 1..nrRooms: classes_room;               % room assignment for each class
 array[1..nrClasses] of var 0..slotsPerDay: classes_start;           % start time assignment for each class
 array[1..nrClasses] of var 0..slotsPerDay: classes_duration;        % duration assignment for each class
 array[1..nrClasses] of var int: classes_option_penalties;           % penalty for each option
@@ -73,8 +73,8 @@ predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
 
 % class assigned to one of its possible room
 constraint forall(i in 1..nrClasses)(
-    % if the class doesn't need a room => we set its room to be "-1"
-    (classes_rooms_cnt[i] == 0 /\ classes_room[i] == -1) 
+    % if the class doesn't need a room => we set its room to be "nrRooms+1"
+    (classes_rooms_cnt[i] == 0 /\ classes_room[i] == nrRooms+1) 
     \/ 
     % otw assign one of the possible rooms
     exists(r in classes_rooms_idx[i]..(classes_rooms_idx[i]+classes_rooms_cnt[i]-1)) ( 
@@ -83,20 +83,23 @@ constraint forall(i in 1..nrClasses)(
     )
 );
 
+%+rooms_unav_cnt[classes_room[i]]-1
 % check if room is available on time assignement
 constraint forall (i in 1..nrClasses)(
-    classes_room[i] == -1
+    classes_room[i] == nrRooms+1
     \/
-    forall (unav in rooms_unav_idx[classes_room[i]]..(rooms_unav_idx[classes_room[i]]+rooms_unav_cnt[classes_room[i]]-1))(
-        forall(w in 1..nrWeeks)(
-            forall(d in 1..nrDays)(
-            not (classes_weeks[i,w] /\ rooms_unav_weeks_input[unav,w])
-            \/  not (classes_days[i,d] /\ rooms_unav_days_input[unav,d])
-            \/  no_overlap(
-                    classes_start[i],
-                    classes_duration[i],
-                    rooms_unav_slots_input[unav, 1],
-                    rooms_unav_slots_input[unav, 2])
+    forall (room in classes_room[i]..classes_room[i])(
+        forall (unav in rooms_unav_idx[room]..(rooms_unav_idx[room]+rooms_unav_cnt[room]-1))(
+            forall(w in 1..nrWeeks)(
+                forall(d in 1..nrDays)(
+                not (classes_weeks[i,w] /\ rooms_unav_weeks_input[unav,w])
+                \/  not (classes_days[i,d] /\ rooms_unav_days_input[unav,d])
+                \/  no_overlap(
+                        classes_start[i],
+                        classes_duration[i],
+                        rooms_unav_slots_input[unav, 1],
+                        rooms_unav_slots_input[unav, 2])
+                )
             )
         )
     )
@@ -123,8 +126,8 @@ constraint forall(i in 1..nrClasses)(
         forall(w in 1..nrWeeks)(
             forall(d in 1..nrDays)(
             i == j 
-            \/ classes_room[i] == -1
-            \/ classes_room[j] == -1
+            \/ classes_room[i] == nrRooms+1
+            \/ classes_room[j] == nrRooms+1
             \/  not (classes_room[i] == classes_room[j])
             \/  not (classes_weeks[i,w] /\ classes_weeks[j,w])
             \/  not (classes_days[i,d] /\ classes_days[j,d])

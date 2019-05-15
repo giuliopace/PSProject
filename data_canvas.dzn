@@ -55,10 +55,10 @@ classes_rooms_input =
   |];
 
 % array giving the number of unavailabilities per room
-rooms_unav_cnt = [0,0];
+rooms_unav_cnt = [0,0,0];
 
 % array giving the index of each room in the unavailabilities array
-rooms_unav_idx = [1,1];
+rooms_unav_idx = [1,1,0];
 
 room_capacities_input = [10,10];
 

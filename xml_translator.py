@@ -242,15 +242,17 @@ def convert_xml(xml_string):
 	rooms_unav_cnt_s = '['
 	for idx, room in rooms.items():
 		rooms_unav_cnt_s += str(len(room['unavailabilities'])) + ',' 
-	rooms_unav_cnt_s = rooms_unav_cnt_s[:-1] + ']'
+	# add a virtual room with 0 unav (if the class does not need a room)
+	rooms_unav_cnt_s += '0]'
 
 	# room unav idx
 	rooms_unav_idx_s = '['
-	id = 1 
+	id = 1
 	for idx, room in rooms.items():
 		rooms_unav_idx_s += str(id) + ','
 		id += len(room['unavailabilities'])
-	rooms_unav_idx_s = rooms_unav_idx_s[:-1] + ']'
+	# add a virtual room with index 0 (if the class does not need a room)
+	rooms_unav_idx_s += '0]'
 
 	# rooms_unav_weeks
 	rooms_unav_weeks_s = '['
