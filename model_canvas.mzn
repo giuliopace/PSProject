@@ -88,18 +88,17 @@ constraint forall(i in 1..nrClasses)(
 constraint forall (i in 1..nrClasses)(
     classes_room[i] == nrRooms+1
     \/
-    forall (room in classes_room[i]..classes_room[i])(
-        forall (unav in rooms_unav_idx[room]..(rooms_unav_idx[room]+rooms_unav_cnt[room]-1))(
-            forall(w in 1..nrWeeks)(
-                forall(d in 1..nrDays)(
-                not (classes_weeks[i,w] /\ rooms_unav_weeks_input[unav,w])
-                \/  not (classes_days[i,d] /\ rooms_unav_days_input[unav,d])
-                \/  no_overlap(
-                        classes_start[i],
-                        classes_duration[i],
-                        rooms_unav_slots_input[unav, 1],
-                        rooms_unav_slots_input[unav, 2])
-                )
+    %forall (unav in rooms_unav_idx[classes_room[i]]..(rooms_unav_idx[classes_room[i]]+rooms_unav_cnt[classes_room[i]]-1))(
+    forall (unav in 0..-1)(
+        forall(w in 1..nrWeeks)(
+            forall(d in 1..nrDays)(
+            not (classes_weeks[i,w] /\ rooms_unav_weeks_input[unav,w])
+            \/  not (classes_days[i,d] /\ rooms_unav_days_input[unav,d])
+            \/  no_overlap(
+                    classes_start[i],
+                    classes_duration[i],
+                    rooms_unav_slots_input[unav, 1],
+                    rooms_unav_slots_input[unav, 2])
             )
         )
     )
