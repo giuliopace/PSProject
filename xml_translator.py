@@ -10,6 +10,7 @@ slotsPerDay = {};
 
 nrClasses = {};
 nrStudents = 1; %temporary
+nrRooms = {};
 
 % array giving the number of possible time options for each class
 classes_options = {};
@@ -38,10 +39,8 @@ classes_rooms_idx = {};
 % options penalty (first value is the class index, second is the associated penalty)
 classes_rooms_input = {};
 
-nrRooms = {};
-
 % array giving the number of unavailabilities per room
-room_unav_cnt = {};
+rooms_unav_cnt = {};
 
 % array giving the index of each room in the unavailabilities array
 rooms_unav_idx = {};
@@ -49,13 +48,13 @@ rooms_unav_idx = {};
 room_capacities_input = {};
 
 % possible weeks
-rooms_weeks_input = {};
+rooms_unav_weeks_input = {};
 
 % possible days
-rooms_days_input = {};
+rooms_unav_days_input = {};
 
 % start and duration of the class
-rooms_slots_input = {};
+rooms_unav_slots_input = {};
 
 % traveltime adjacency matrix
 travel_adj_mat_input = {};
@@ -227,8 +226,8 @@ def convert_xml(xml_string):
 	for idx, class_ in classes.items():
 		for room in class_['rooms']:
 			classes_rooms_s += '|'
-			classes_rooms_s += str(option['id']) + ','
-			classes_rooms_s += str(option['penalty']) + ','
+			classes_rooms_s += str(room['id']) + ','
+			classes_rooms_s += str(room['penalty']) + ','
 			classes_rooms_s += '\n'
 	classes_rooms_s += '|]'
 	
@@ -253,47 +252,47 @@ def convert_xml(xml_string):
 		id += len(room['unavailabilities'])
 	rooms_unav_idx_s = rooms_unav_idx_s[:-1] + ']'
 
-	# rooms_weeks
-	rooms_weeks_s = '['
+	# rooms_unav_weeks
+	rooms_unav_weeks_s = '['
 	for idx, class_ in rooms.items():
 		for option in class_['unavailabilities']:
-			rooms_weeks_s += '|'
+			rooms_unav_weeks_s += '|'
 			for char in option['weeks']:
 				if char == '1':
-					rooms_weeks_s += 'true,'
+					rooms_unav_weeks_s += 'true,'
 				else:
-					rooms_weeks_s += 'false,'
-			rooms_weeks_s += '\n'
-	rooms_weeks_s += '|]'
-	if rooms_weeks_s == "[|]":
-		rooms_weeks_s = "[]"
+					rooms_unav_weeks_s += 'false,'
+			rooms_unav_weeks_s += '\n'
+	rooms_unav_weeks_s += '|]'
+	if rooms_unav_weeks_s == "[|]":
+		rooms_unav_weeks_s = "[]"
 
-	# rooms_days
-	rooms_days_s = '['
+	# rooms_unav_days
+	rooms_unav_days_s = '['
 	for idx, class_ in rooms.items():
 		for option in class_['unavailabilities']:
-			rooms_days_s += '|'
+			rooms_unav_days_s += '|'
 			for char in option['days']:
 				if char == '1':
-					rooms_days_s += 'true,'
+					rooms_unav_days_s += 'true,'
 				else:
-					rooms_days_s += 'false,'
-			rooms_days_s += '% room {}\n'.format(idx)
-	rooms_days_s += '|]'
-	if rooms_days_s == "[|]":
-		rooms_days_s = "[]"
+					rooms_unav_days_s += 'false,'
+			rooms_unav_days_s += '% room {}\n'.format(idx)
+	rooms_unav_days_s += '|]'
+	if rooms_unav_days_s == "[|]":
+		rooms_unav_days_s = "[]"
 
-	# rooms_days_sd
-	rooms_days_sd_s = '['
+	# rooms_unav_slots
+	rooms_unav_slots_s = '['
 	for idx, class_ in rooms.items():
 		for option in class_['unavailabilities']:
-			rooms_days_sd_s += '|'
-			rooms_days_sd_s += str(option['start']) + ','
-			rooms_days_sd_s += str(option['length']) + ','
-			rooms_days_sd_s += '\n'
-	rooms_days_sd_s += '|]'
-	if rooms_days_sd_s == "[|]":
-		rooms_days_sd_s = "[]"
+			rooms_unav_slots_s += '|'
+			rooms_unav_slots_s += str(option['start']) + ','
+			rooms_unav_slots_s += str(option['length']) + ','
+			rooms_unav_slots_s += '\n'
+	rooms_unav_slots_s += '|]'
+	if rooms_unav_slots_s == "[|]":
+		rooms_unav_slots_s = "[]"
 
 	travel_adj_mat_s = '['
 	for x in range(len(rooms)):
@@ -308,6 +307,7 @@ def convert_xml(xml_string):
 		str(nr_weeks),
 		str(slots_per_day),
 		str(len(classes)),
+		str(len(rooms)),
 		classes_options_s,
 		classes_idx_s,
 		classes_weeks_s,
@@ -317,13 +317,12 @@ def convert_xml(xml_string):
 		classes_rooms_cnt_s,
 		classes_rooms_idx_s,
 		classes_rooms_s,
-		str(len(rooms)),
 		rooms_unav_cnt_s,
 		rooms_unav_idx_s,
 		rooms_capacity_s,
-		rooms_weeks_s,
-		rooms_days_s,
-		rooms_days_sd_s,
+		rooms_unav_weeks_s,
+		rooms_unav_days_s,
+		rooms_unav_slots_s,
 		travel_adj_mat_s
 	)
 

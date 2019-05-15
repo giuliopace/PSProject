@@ -1,3 +1,4 @@
+% general variables ###########################################################################################################
 int: nrDays;
 int: nrWeeks;
 int: slotsPerDay;
@@ -11,11 +12,11 @@ int: nrRooms;
 array[1..nrClasses] of int: classes_options;
 array[1..nrClasses] of int: classes_idx;
 
-array[1..nrRooms] of int: room_unav_cnt;
+array[1..nrRooms] of int: rooms_unav_cnt;
 array[1..nrRooms] of int: rooms_unav_idx;
 
-array[1..nrRooms] of int: classes_rooms_cnt;
-array[1..nrRooms] of int: classes_rooms_idx;
+array[1..nrClasses] of int: classes_rooms_cnt;
+array[1..nrClasses] of int: classes_rooms_idx;
 
 
 % total number of options, regardless of the class
@@ -25,32 +26,40 @@ int: nrOptions = sum(classes_options);
 int: nrClassesRooms = sum(classes_rooms_cnt);
 
 % total number of room unavailabilities
-int: nrUnavs = sum(room_unav_cnt);
+int: nrUnavs = sum(rooms_unav_cnt);
 
-% input data
+% input data ##################################################################################################################
+
+% input data for classes options
 array[1..nrOptions, 1..nrWeeks] of bool: classes_weeks_input;
 array[1..nrOptions, 1..nrDays] of bool: classes_days_input;
 array[1..nrOptions, 1..2] of 1..slotsPerDay: classes_slots_input;
 array[1..nrOptions] of int: classes_penalties_input;
 
+% input data for rooms available to a class
 array[1..nrClassesRooms, 1..2] of int: classes_rooms_input;
 
+% input data for room capacities
 array[1..nrRooms] of int: room_capacities_input;
-array[1..nrUnavs, 1..nrWeeks] of bool: rooms_weeks_input;
-array[1..nrUnavs, 1..nrDays] of bool: rooms_days_input;
-array[1..nrUnavs, 1..2] of 1..slotsPerDay: rooms_slots_input;
 
+% input data for room unavaibilities
+array[1..nrUnavs, 1..nrWeeks] of bool: rooms_unav_weeks_input;
+array[1..nrUnavs, 1..nrDays] of bool: rooms_unav_days_input;
+array[1..nrUnavs, 1..2] of 1..slotsPerDay: rooms_unav_slots_input;
+
+% input data for travel time between rooms
 array[1..nrRooms, 1..nrRooms] of int: travel_adj_mat_input;
 
 
-% decision variable : which option is picked for each class
-array[1..nrClasses, 1..nrDays] of var bool: classes_days; % assignment of day schedule for each class
-array[1..nrClasses, 1..nrWeeks] of var bool: classes_weeks; % assignment of week schedule for each class
-array[1..nrClasses, 1..nrStudents] of var bool: classes_students; % assignment of enrolled students for each class
-array[1..nrClasses] of var 0..nrRooms: classes_room; % room assignment for each class
-array[1..nrClasses] of var 0..slotsPerDay: classes_start; % start time assignment for each class
-array[1..nrClasses] of var 0..slotsPerDay: classes_duration; % duration assignment for each class
-array[1..nrClasses] of var int: classes_penalties; % penalty for each option
+% decision variables #########################################################################################################
+array[1..nrClasses, 1..nrDays] of var bool: classes_days;           % assignment of day schedule for each class
+array[1..nrClasses, 1..nrWeeks] of var bool: classes_weeks;         % assignment of week schedule for each class
+array[1..nrClasses, 1..nrStudents] of var bool: classes_students;   % assignment of enrolled students for each class
+array[1..nrClasses] of var 0..nrRooms: classes_room;                % room assignment for each class
+array[1..nrClasses] of var 0..slotsPerDay: classes_start;           % start time assignment for each class
+array[1..nrClasses] of var 0..slotsPerDay: classes_duration;        % duration assignment for each class
+array[1..nrClasses] of var int: classes_option_penalties;           % penalty for each option
+array[1..nrClasses] of var int: classes_room_penalties;             % penalty for each room
 
 
 % predicates ##################################################################################################################
@@ -62,27 +71,29 @@ predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
 
 % constraints #################################################################################################################
 
-% class assigned to one of its possible room option
+% class assigned to one of its possible room
 constraint forall(i in 1..nrClasses)(
     (classes_rooms_cnt[i] == 0 /\ classes_room[i] == -1) % if the class doesn't need a room
     \/ 
     % otw assign one of the possible rooms
-    exist(r in classes_rooms_idx[i]..(classes_rooms_idx[i]+classes_rooms_cnt[i]-1)) ( 
-        classes_rooms_input[r] == classes_room[i] 
-        %todo penalty
+    exists(r in classes_rooms_idx[i]..(classes_rooms_idx[i]+classes_rooms_cnt[i]-1)) ( 
+        classes_room[i] == classes_rooms_input[r,1]
+        /\ classes_room_penalties[i] == classes_rooms_input[r,2]
+    )
+);
 
-        %.. and check if this room is available for all appointements
-        forall(w in 1..nrWeeks) (
-            forall(d in 1..nrDays) (
-                \/  not (classes_room[i] == classes_room[j])
-                \/  not (classes_weeks[i,w] /\ classes_weeks[j,w])
-                \/  not (classes_days[i,d] /\ classes_days[j,d])
-                \/
-                \/  no_overlap(
-                        classes_start[i],
-                        classes_duration[i],
-                        classes_start[j],
-                        classes_duration[j])
+% check if room is available on time assignement
+constraint forall (i in 1..nrClasses)(
+    forall (unav in rooms_unav_idx[classes_room[i]]..(-1+rooms_unav_idx[classes_room[i]]+rooms_unav_cnt[classes_room[i]]))(
+        forall(w in 1..nrWeeks)(
+            forall(d in 1..nrDays)(
+            not (classes_weeks[i,w] /\ rooms_unav_weeks_input[unav,w])
+            \/  not (classes_days[i,d] /\ rooms_unav_days_input[unav,d])
+            \/  no_overlap(
+                    classes_start[i],
+                    classes_duration[i],
+                    rooms_unav_slots_input[unav, 1],
+                    rooms_unav_slots_input[unav, 2])
             )
         )
     )
@@ -97,7 +108,7 @@ constraint forall(i in 1..nrClasses) (
                 /\ classes_days[i,d] == classes_days_input[o,d]
                 /\ classes_start[i] == classes_slots_input[o,1]
                 /\ classes_duration[i] == classes_slots_input[o,2]
-		        /\ classes_penalties[i] == classes_penalties_input[o]
+		        /\ classes_option_penalties[i] == classes_penalties_input[o]
             )
         )
     )
@@ -108,11 +119,10 @@ constraint forall(i in 1..nrClasses)(
     forall(j in 1..nrClasses)(
         forall(w in 1..nrWeeks)(
             forall(d in 1..nrDays)(
-                i == j 
+            i == j 
             \/  not (classes_room[i] == classes_room[j])
             \/  not (classes_weeks[i,w] /\ classes_weeks[j,w])
             \/  not (classes_days[i,d] /\ classes_days[j,d])
-            \/
             \/  no_overlap(
                     classes_start[i],
                     classes_duration[i],
@@ -123,6 +133,7 @@ constraint forall(i in 1..nrClasses)(
     )
 );
 
-% sum of penalties
 
-solve minimize sum(classes_penalties);
+
+% objective function ##########################################################################################################
+solve minimize sum(classes_option_penalties)+sum(classes_room_penalties);
