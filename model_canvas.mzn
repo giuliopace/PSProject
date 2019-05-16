@@ -55,7 +55,7 @@ array[1..nrRooms, 1..nrRooms] of int: travel_adj_mat_input;
 array[1..nrClasses, 1..nrDays] of var bool: classes_days;           % assignment of day schedule for each class
 array[1..nrClasses, 1..nrWeeks] of var bool: classes_weeks;         % assignment of week schedule for each class
 array[1..nrClasses, 1..nrStudents] of var bool: classes_students;   % assignment of enrolled students for each class
-array[1..nrClasses] of var 1..nrRooms: classes_room;               % room assignment for each class
+array[1..nrClasses] of var 1..nrRooms: classes_room;                % room assignment for each class
 array[1..nrClasses] of var 0..slotsPerDay: classes_start;           % start time assignment for each class
 array[1..nrClasses] of var 0..slotsPerDay: classes_duration;        % duration assignment for each class
 array[1..nrClasses] of var int: classes_option_penalties;           % penalty for each option
@@ -113,7 +113,7 @@ constraint forall(i in 1..nrClasses) (
                 /\ classes_days[i,d] == classes_days_input[o,d]
                 /\ classes_start[i] == classes_slots_input[o,1]
                 /\ classes_duration[i] == classes_slots_input[o,2]
-		        /\ classes_option_penalties[i] == classes_penalties_input[o]
+		            /\ classes_option_penalties[i] == classes_penalties_input[o]
             )
         )
     )
@@ -140,6 +140,24 @@ constraint forall(i in 1..nrClasses)(
     )
 );
 
+% each student only attends classes in exactly 1 configuration of a course
+constraint forall(s in 1..nrStudents)(
+    forall(c1 in 1..nrClasses)(
+        forall(c2 in 1..nrClasses)(
+            c1 == c2
+            \/ not (class_hierarchy_input[c1,4] == class_hierarchy_input[c2,4])
+            \/ not (class_hierarchy_input[c1,3] == class_hierarchy_input[c2,3])
+        )
+    )
+);
+
+% each parent of a class must be attended as well if the child class will be attended
+constraint forall(s in 1..nrStudents)(
+    forall(c in 1..nrClasses)(
+        not (classes_students[c,s])
+        \/ classes_students[class_hierarchy_input[c],s]
+    )
+);
 
 
 % objective function ##########################################################################################################
