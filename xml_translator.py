@@ -1,6 +1,6 @@
 import json
 import re
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
 import itertools
 import sys
 from array import *
@@ -378,13 +378,13 @@ def convert_sol_to_xml(minizinc_output):
 			range(len(data["classes_days"]))):
 		string_weeks = ""
 		for week in weeks:
-			if week == 'true':
+			if week == True:
 				string_weeks += '1'
 			else:
 				string_weeks += '0'
 		string_days = ""
 		for day in days:
-			if day == 'true':
+			if day == True:
 				string_days += '1'
 			else:
 				string_days += '0'
@@ -400,11 +400,8 @@ def convert_sol_to_xml(minizinc_output):
 		for student in students:
 			ET.SubElement(classe, "student", id=str(student))
 
-	return ET.tostring(solution, encoding='utf-8', method='xml')
+	return ET.tostring(solution, encoding='utf-8', method='xml', pretty_print=True).decode()
 		
-		
-
-
 filename = sys.argv[2]
 option = sys.argv[1]
 xml_file = open(filename, "r")
