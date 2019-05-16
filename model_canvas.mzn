@@ -142,5 +142,7 @@ constraint forall(i in 1..nrClasses)(
 
 
 
+
+
 % objective function ##########################################################################################################
 solve minimize sum(classes_option_penalties)+sum(classes_room_penalties);

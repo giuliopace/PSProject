@@ -1,3 +1,5 @@
+import json
+import re
 import xml.etree.ElementTree as ET
 import itertools
 import sys
@@ -61,7 +63,7 @@ travel_adj_mat_input = {};
 
 """
 
-def convert_xml(xml_string):
+def convert_xml_to_dzn(xml_string):
 	"""
 		returns a conversion of the xml instance to the dzn format
 
@@ -328,17 +330,86 @@ def convert_xml(xml_string):
 		travel_adj_mat_s
 	)
 
-"""
-room_capacities = {};
+def convert_sol_to_xml(minizinc_output):
+	"""
+		Returns a conversion from minizinc's output to a 
+		solution in XML format defined here:
 
-% array giving the number of unavailabilities per room
-room_unav_cnt = {};
+		https://www.itc2019.org/format#solution
 
-% array giving the index of each room in the unavailabilities array
-rooms_unav_idx = {};
+		The solution should be printed with the following arguments:
 
-"""
+			minizinc model_canvas.mzn tiny_data.dzn --output-mode json --output-time --output-objective 
+		
+		Arguments
+		---------
+		minizinc_json : str
+			string containing the solution in JSON format
 
-filename = sys.argv[1]
+		Returns
+		-------
+		xml_string : str
+			string containing the solution in XML format
+	"""
+	# extracting running time
+	runtime = float(re.search("time elapsed: (.*) s", minizinc_output).group(1))
+
+	# extracting JSON
+	json_start = minizinc_output.find('{')
+	json_end = minizinc_output.find('}')
+	json_string = minizinc_output[json_start:json_end+1]
+	data = json.loads(json_string)
+
+	solution = ET.Element("solution",
+		name="unique-instance-name",
+		runtime=str(runtime),
+		technique="CP",
+		author="TDGPDP",
+		institution="TU Wien",
+		country="Austria")
+
+	for weeks, days, students, room, start, duration, i in zip(
+			data["classes_weeks"],
+			data["classes_days"],
+			data["classes_students"],
+			data["classes_room"],
+			data["classes_start"],
+			data["classes_duration"],
+			range(len(data["classes_days"]))):
+		string_weeks = ""
+		for week in weeks:
+			if week == 'true':
+				string_weeks += '1'
+			else:
+				string_weeks += '0'
+		string_days = ""
+		for day in days:
+			if day == 'true':
+				string_days += '1'
+			else:
+				string_days += '0'
+		classe = ET.SubElement(
+			solution,
+			"class",
+			id=str(i+1),
+			days=string_days,
+			weeks=string_weeks,
+			start=str(duration),
+			room=str(room))
+		
+		for student in students:
+			ET.SubElement(classe, "student", id=str(student))
+
+	return ET.tostring(solution, encoding='utf-8', method='xml')
+		
+		
+
+
+filename = sys.argv[2]
+option = sys.argv[1]
 xml_file = open(filename, "r")
-print(convert_xml(xml_file.read()))
+
+if option in ["-i", "--input"]:
+	print(convert_xml(xml_file.read()))
+elif option in ["-o", "--output"]:
+	print(convert_sol_to_xml(xml_file.read()))
