@@ -157,7 +157,7 @@ def convert_xml(xml_string):
 
 	# classes_idx
 	classes_idx_s = '['
-	id = 1 
+	id = 1
 	for idx, class_ in classes.items():
 		classes_idx_s += str(id) + ','
 		id += len(class_['time_options'])
@@ -304,6 +304,19 @@ def convert_xml(xml_string):
 		travel_adj_mat_s += '\n'
 	travel_adj_mat_s += '|]'
 
+
+	#students_preferences
+	students_preferences = '['
+	print("printin student")
+	print(students)
+	print("done printing stundets")
+	for idx, student in students.items():
+		students_preferences += '|'
+		for course in student:
+			students_preferences += course + ','
+		students_preferences += '\n'
+	students_preferences += '|]'
+
 	return base_file.format(
 		str(nr_days),
 		str(nr_weeks),
@@ -326,6 +339,8 @@ def convert_xml(xml_string):
 		rooms_unav_days_s,
 		rooms_unav_slots_s,
 		travel_adj_mat_s
+		classes_days_sd_s,
+		students_preferences
 	)
 
 """
