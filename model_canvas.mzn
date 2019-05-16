@@ -162,5 +162,7 @@ constraint forall(s in 1..nrStudents)(
 );
 
 
+
+
 % objective function ##########################################################################################################
 solve minimize sum(classes_option_penalties)+sum(classes_room_penalties);
