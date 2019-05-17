@@ -61,6 +61,9 @@ rooms_unav_slots_input = {};
 % traveltime adjacency matrix
 travel_adj_mat_input = {};
 
+%students_preferences (first value is a class, second value is the student id of the student that wants to attend it)
+students_preferences = {};
+
 """
 
 def convert_xml_to_dzn(xml_string):
@@ -89,10 +92,10 @@ def convert_xml_to_dzn(xml_string):
 	# problem info
 	nr_weeks = int(problem.attrib['nrWeeks'])
 	nr_days = int(problem.attrib['nrDays'])
-	slots_per_day = int(problem.attrib['slotsPerDay']) 
-	
+	slots_per_day = int(problem.attrib['slotsPerDay'])
 
-	# room info 
+
+	# room info
 	rooms = {}
 	rooms_node = problem.find('rooms')
 	for room in rooms_node:
@@ -108,11 +111,19 @@ def convert_xml_to_dzn(xml_string):
 			u['length'] = int(unav.attrib['length'])
 			rooms[id]['unavailabilities'].append(u)
 
+	students = {}
+	students_node = problem.find('students')
+	for student in students_node:
+		id = student.attrib['id']
+		students[id] = []
+		for course in student:
+			students[id].append(int(course.attrib['id']))
+
 
 	# init traveltime adjacency matrix
 
 	traveltime = [[0 for x in range(len(rooms))] for y in range(len(rooms))]
-	
+
 	for room in rooms_node:
 		id = int(room.attrib['id'])
 		for travel in room.findall("travel"):
@@ -131,7 +142,7 @@ def convert_xml_to_dzn(xml_string):
 					id = class_.attrib['id']
 					classes[id] = {}
 					classes[id]['limit'] = class_.attrib['limit']
-					
+
 					classes[id]['time_options'] = []
 					for time_option in class_.findall('time'):
 						opt = {}
@@ -148,7 +159,7 @@ def convert_xml_to_dzn(xml_string):
 						r['id'] = room.attrib['id']
 						r['penalty'] = room.attrib['penalty']
 						classes[id]['rooms'].append(r)
-						
+
 	## create dzn string from python dict
 
 	# classes_options
@@ -217,7 +228,7 @@ def convert_xml_to_dzn(xml_string):
 
 	# classes_rooms_idx
 	classes_rooms_idx_s = '['
-	id = 1 
+	id = 1
 	for idx, class_ in classes.items():
 		classes_rooms_idx_s += str(id) + ','
 		id += len(class_['rooms'])
@@ -232,18 +243,18 @@ def convert_xml_to_dzn(xml_string):
 			classes_rooms_s += str(room['penalty']) + ','
 			classes_rooms_s += '\n'
 	classes_rooms_s += '|]'
-	
+
 
 	# room capacity
 	rooms_capacity_s = '['
 	for idx, room in rooms.items():
-		rooms_capacity_s += str(room['capacity']) + ',' 
+		rooms_capacity_s += str(room['capacity']) + ','
 	rooms_capacity_s = rooms_capacity_s[:-1] + ']'
 
 	# room unav cnt
 	rooms_unav_cnt_s = '['
 	for idx, room in rooms.items():
-		rooms_unav_cnt_s += str(len(room['unavailabilities'])) + ',' 
+		rooms_unav_cnt_s += str(len(room['unavailabilities'])) + ','
 	# add a virtual room with 0 unav (if the class does not need a room)
 	rooms_unav_cnt_s += '0]'
 
@@ -308,16 +319,22 @@ def convert_xml_to_dzn(xml_string):
 
 
 	#students_preferences
+
+	#print('printing students')
+	#print(students)
+
 	students_preferences = '['
-	print("printin student")
-	print(students)
-	print("done printing stundets")
 	for idx, student in students.items():
-		students_preferences += '|'
+		#students_preferences += '|'
 		for course in student:
-			students_preferences += course + ','
-		students_preferences += '\n'
+			#print(student[id])
+			students_preferences += '|'
+			students_preferences += str(course) + ','
+			students_preferences += '% student {}\n'.format(idx)
+			students_preferences += '\n'
 	students_preferences += '|]'
+
+
 
 	return base_file.format(
 		str(nr_days),
@@ -340,9 +357,9 @@ def convert_xml_to_dzn(xml_string):
 		rooms_unav_weeks_s,
 		rooms_unav_days_s,
 		rooms_unav_slots_s,
-		travel_adj_mat_s
-		classes_days_sd_s,
-		students_preferences
+		travel_adj_mat_s,
+		students_preferences,
+		classes_days_sd_s
 	)
 
 def convert_sol_to_xml(minizinc_output):
