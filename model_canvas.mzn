@@ -210,6 +210,7 @@ constraint forall(s in 1..nrStudents)(
         not (subparts_students[sp,s])
         \/ exists(c in 1..nrClasses)(
             classes_students[c,s]
+            /\ class_hierarchy_input[c,2] == sp
         )
     )
 );
@@ -217,8 +218,9 @@ constraint forall(s in 1..nrStudents)(
 % each student has to take at least 1 class in each subpart of a config                                                             % NEW
 constraint forall(s in 1..nrStudents)(
     forall(c in 1..nrClasses)(
-        forall(sp in configs_idx[class_hierarchy_input[c,3]]..configs_cnt[class_hierarchy_input[c,3]])(
+        forall(sp in configs_idx[class_hierarchy_input[c,3]]..configs_idx[class_hierarchy_input[c,3]]+configs_cnt[class_hierarchy_input[c,3]])(
             subparts_students[sp,s]
+            \/ not (classes_students[c,s])
         )
     )
 );
