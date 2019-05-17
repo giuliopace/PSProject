@@ -59,6 +59,8 @@ rooms_unav_slots_input = {};
 % traveltime adjacency matrix
 travel_adj_mat_input = {};
 
+%students_preferences (first value is a class, second value is the student id of the student that wants to attend it)
+students_preferences = {};
 
 """
 
@@ -315,16 +317,22 @@ def convert_xml(xml_string):
 
 
 	#students_preferences
-	print('printing students')
-	print(students)
+
+	#print('printing students')
+	#print(students)
 
 	students_preferences = '['
 	for idx, student in students.items():
-		students_preferences += '|'
+		#students_preferences += '|'
 		for course in student:
-			students_preferences += course + ','
-		students_preferences += '\n'
+			#print(student[id])
+			students_preferences += '|'
+			students_preferences += str(course) + ','
+			students_preferences += '% student {}\n'.format(idx)
+			students_preferences += '\n'
 	students_preferences += '|]'
+
+
 
 	return base_file.format(
 		str(nr_days),
@@ -348,8 +356,8 @@ def convert_xml(xml_string):
 		rooms_unav_days_s,
 		rooms_unav_slots_s,
 		travel_adj_mat_s,
-		classes_days_sd_s,
-		students_preferences
+		students_preferences,
+		classes_days_sd_s
 	)
 
 """
