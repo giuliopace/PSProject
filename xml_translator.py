@@ -61,6 +61,11 @@ rooms_unav_slots_input = {};
 % traveltime adjacency matrix
 travel_adj_mat_input = {};
 
+
+%%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{}
+
 """
 
 def convert_xml_to_dzn(xml_string):
@@ -151,7 +156,7 @@ def convert_xml_to_dzn(xml_string):
 
 	# distribution constraint
 	distributions = {}
-	distribs_node = problem.find("distribution")
+	distribs_node = problem.find("distributions")
 	for distrib_node in distribs_node:
 		
 		# Parsing distribution informations
@@ -160,7 +165,7 @@ def convert_xml_to_dzn(xml_string):
 		penalty = 0
 		if "penalty" in distrib_node.attrib:
 			required = False
-			penalty = int(distrib_node["penalty"])
+			penalty = int(distrib_node.attrib["penalty"])
 		
 		if d_type not in distributions:
 			distributions[d_type] = []
@@ -168,14 +173,12 @@ def convert_xml_to_dzn(xml_string):
 		distrib = {}
 		distrib["required"] = required
 		distrib["penalty"] = penalty
+		distrib["classes"] = []
 		for class_ in distrib_node:
 			id = int(class_.attrib["id"])
-			
-			
-			
+			distrib["classes"].append(id)
 
-
-			
+		distributions[d_type].append(distrib)	
 						
 	## create dzn string from python dict
 
@@ -335,17 +338,41 @@ def convert_xml_to_dzn(xml_string):
 	travel_adj_mat_s += '|]'
 
 
-	#students_preferences
-	students_preferences = '['
-	print("printin student")
-	print(students)
-	print("done printing stundets")
-	for idx, student in students.items():
-		students_preferences += '|'
-		for course in student:
-			students_preferences += course + ','
-		students_preferences += '\n'
-	students_preferences += '|]'
+	distrib_string = ""
+
+	for name, distrib_collection in distributions.items():
+		
+		idx_array = name + "_idx = ["
+		cnt_array = name + "_cnt = ["
+		required_array = name + "_required = ["
+		penalty_array = name + "_penalty = ["
+		distrib_array = name + '_distrib_input = ['
+
+		id = 1
+
+		for distrib in distrib_collection:
+			
+			idx_array += str(id) + ','
+			id += len(distrib["classes"])
+			cnt_array += str(len(distrib["classes"])) + ','
+			required_array += str(distrib["required"]) + ','
+			penalty_array += str(distrib["penalty"]) + ','
+
+			for class_ in distrib["classes"]:
+				distrib_array += str(class_) + ','
+
+		idx_array = idx_array[:-1] + ']'
+		cnt_array = cnt_array[:-1] + ']'
+		required_array = required_array[:-1] + ']'
+		penalty_array = penalty_array[:-1] + ']'
+		distrib_array = distrib_array[:-1] + ']'
+
+		distrib_string += idx_array + ';\n'
+		distrib_string += cnt_array + ';\n'
+		distrib_string += required_array + ';\n'
+		distrib_string += penalty_array + ';\n'
+		distrib_string += distrib_array + ';\n\n'
+
 
 	return base_file.format(
 		str(nr_days),
@@ -368,9 +395,8 @@ def convert_xml_to_dzn(xml_string):
 		rooms_unav_weeks_s,
 		rooms_unav_days_s,
 		rooms_unav_slots_s,
-		travel_adj_mat_s
-		classes_days_sd_s,
-		students_preferences
+		travel_adj_mat_s,
+		distrib_string
 	)
 
 def convert_sol_to_xml(minizinc_output):
@@ -450,6 +476,6 @@ option = sys.argv[1]
 xml_file = open(filename, "r")
 
 if option in ["-i", "--input"]:
-	print(convert_xml(xml_file.read()))
+	print(convert_xml_to_dzn(xml_file.read()))
 elif option in ["-o", "--output"]:
 	print(convert_sol_to_xml(xml_file.read()))
