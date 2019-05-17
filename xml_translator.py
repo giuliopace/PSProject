@@ -341,7 +341,22 @@ def convert_xml_to_dzn(xml_string):
 	distrib_string = ""
 
 	for name, distrib_collection in distributions.items():
+
+		additionnal = ""
+		if re.match("MaxBreaks\((.*),(.*)\)", name):
+			matchres = re.search("MaxBreaks\((.*),(.*)\)", name)
+			nr1 = matchres.group(1)
+			print(name)
+			print(nr1)
+			nr2 = matchres.group(2)
+			additionnal+= '\n' + name + '_NR1=' + nr1 + ';'
+			additionnal+= '\n' + name + '_NR2=' + nr2 + ';'
 		
+		if re.match("MaxDays\(([0-9]*)\)", name):
+			matchres = re.search("MaxDays\(([0-9]*)\)", name)
+			nr1 = matchres.group(1)
+			additionnal+= '\n' + name + '_NR1=' + nr1 + '\n'
+
 		idx_array = name + "_idx = ["
 		cnt_array = name + "_cnt = ["
 		required_array = name + "_required = ["
@@ -367,6 +382,7 @@ def convert_xml_to_dzn(xml_string):
 		penalty_array = penalty_array[:-1] + ']'
 		distrib_array = distrib_array[:-1] + ']'
 
+		distrib_string += additionnal + '\n'
 		distrib_string += idx_array + ';\n'
 		distrib_string += cnt_array + ';\n'
 		distrib_string += required_array + ';\n'
