@@ -160,17 +160,42 @@ def convert_xml_to_dzn(xml_string):
 	for distrib_node in distribs_node:
 		
 		# Parsing distribution informations
-		d_type = distrib_node.attrib["type"]
+		distrib = {}
 		required = True
 		penalty = 0
 		if "penalty" in distrib_node.attrib:
 			required = False
 			penalty = int(distrib_node.attrib["penalty"])
+
+		# distrib name
+		d_type = distrib_node.attrib["type"]
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxBreaks\((.*),(.*)\)", d_type):
+			matchres = re.search("MaxBreaks\((.*),(.*)\)", d_type)
+			nr1 = matchres.group(1)
+			nr2 = matchres.group(2)
+			d_type = "MaxBreaks"
+			distrib["nr1"] = nr1
+			distrib["nr2"] = nr2	
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxDays\((.*)\)", d_type):
+			matchres = re.search("MaxDays\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "MaxDays"
+			distrib["nr1"] = nr1
+
+		# if some info is stored in the name, retrieve it
+		if re.match("WorkDay\((.*)\)", d_type):
+			matchres = re.search("WorkDay\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "WorkDay"
+			distrib["nr1"] = nr1
 		
 		if d_type not in distributions:
 			distributions[d_type] = []
 
-		distrib = {}
 		distrib["required"] = required
 		distrib["penalty"] = penalty
 		distrib["classes"] = []
@@ -343,19 +368,15 @@ def convert_xml_to_dzn(xml_string):
 	for name, distrib_collection in distributions.items():
 
 		additionnal = ""
-		if re.match("MaxBreaks\((.*),(.*)\)", name):
-			matchres = re.search("MaxBreaks\((.*),(.*)\)", name)
-			nr1 = matchres.group(1)
-			print(name)
-			print(nr1)
-			nr2 = matchres.group(2)
-			additionnal+= '\n' + name + '_NR1=' + nr1 + ';'
-			additionnal+= '\n' + name + '_NR2=' + nr2 + ';'
-		
-		if re.match("MaxDays\(([0-9]*)\)", name):
-			matchres = re.search("MaxDays\(([0-9]*)\)", name)
-			nr1 = matchres.group(1)
-			additionnal+= '\n' + name + '_NR1=' + nr1 + '\n'
+		nr1_array = ""
+		nr2_array = ""
+		if name == "MaxBreaks":
+			nr1_array = name + "_nr1 = ["
+			nr2_array = name + "_nr2 = ["
+		if name == "MaxDays":
+			nr1_array = name + "_nr1 = ["
+		if name == "WorkDay":
+			nr1_array = name + "_nr1 = ["
 
 		idx_array = name + "_idx = ["
 		cnt_array = name + "_cnt = ["
@@ -373,6 +394,14 @@ def convert_xml_to_dzn(xml_string):
 			required_array += str(distrib["required"]) + ','
 			penalty_array += str(distrib["penalty"]) + ','
 
+			if name == "MaxBreaks":
+				nr1_array += str(distrib["nr1"]) + ','
+				nr2_array += str(distrib["nr2"]) + ','
+			if name == "MaxDays":
+				nr1_array += str(distrib["nr1"]) + ','
+			if name == "WorkDay":
+				nr1_array += str(distrib["nr1"]) + ','
+
 			for class_ in distrib["classes"]:
 				distrib_array += str(class_) + ','
 
@@ -382,7 +411,18 @@ def convert_xml_to_dzn(xml_string):
 		penalty_array = penalty_array[:-1] + ']'
 		distrib_array = distrib_array[:-1] + ']'
 
-		distrib_string += additionnal + '\n'
+		if name == "MaxBreaks":
+			nr1_array = nr1_array[:-1] + ']'
+			nr2_array = nr2_array[:-1] + ']'
+			additionnal += nr1_array + ';\n' + nr2_array + ';\n'
+		if name == "MaxDays":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+		if name == "WorkDay":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+
+		distrib_string += additionnal
 		distrib_string += idx_array + ';\n'
 		distrib_string += cnt_array + ';\n'
 		distrib_string += required_array + ';\n'
