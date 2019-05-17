@@ -23,6 +23,9 @@ array[1..nrClasses] of int: classes_rooms_idx;
 array[1..nrConfigs] of int: configs_cnt;                                                                                          % NEW
 array[1..nrConfigs] of int: configs_idx;                                                                                          % NEW
 
+array[1..nrStudents] of int: course_pref_cnt;                                                                                     % NEW
+array[1..nrStudents] of int: course_pref_idx;                                                                                     % NEW
+
 % total number of options, regardless of the class
 int: nrOptions = sum(classes_options);
 
@@ -34,6 +37,9 @@ int: nrUnavs = sum(rooms_unav_cnt);
 
 % total number of subparts
 int: nrSubparts = sum(configs_cnt);                                                                                               % NEW
+
+% total number of subparts
+int: nrPref = sum(course_pref_cnt);                                                                                               % NEW
 
 
 % input data ##################################################################################################################
@@ -51,7 +57,7 @@ array[1..nrClasses, 4] of int: class_hierarchy_input;                           
 array[1..nrClasses] of int: class_limit_input;                                                                                    % NEW
 
 % input data for course preferences of each student            
-array[1..nrCourses, 1..nrStudents] of bool: course_pref_input;                                                                    % NEW
+array[1..nrPref] of int: course_pref_input;                                                                                       % NEW
 
 % input data for rooms available to a class
 array[1..nrClassesRooms, 1..2] of int: classes_rooms_input;
@@ -232,11 +238,10 @@ constraint forall(c in 1..nrClasses)(
 
 % every course on the preference list of students has to be taken                                                                   % NEW
 constraint forall(s in 1..nrStudents)(
-    forall(course in 1..nrCourses)(
+    forall(pref in course_pref_input[course_pref_idx[s]..course_pref_input[course_pref_idx[s]+course_pref_cnt[s])(
         exists(c in 1..nrClasses)(
-            not (course_pref_input[course,s])
-            \/ ((course_pref_input[course,s] == classes_students[c,s])
-                  /\ (class_hierarchy_input[c,4] == course))
+            classes_students[c,s]
+            /\ class_hierarchy_input[c,4] == course_pref_input[pref]
         )
     )
 );
