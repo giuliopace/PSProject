@@ -148,6 +148,16 @@ def convert_xml_to_dzn(xml_string):
 						r['id'] = room.attrib['id']
 						r['penalty'] = room.attrib['penalty']
 						classes[id]['rooms'].append(r)
+
+	# distribution constraint
+	distributions = {}
+	distribs_node = problem.find("distribution")
+	for distrib_node in distribs_node:
+		d_type = distrib_node.attrib["type"]
+		required = True
+		penalty = 0
+		if "required" in distrib_node.attrib:
+			
 						
 	## create dzn string from python dict
 
