@@ -153,10 +153,28 @@ def convert_xml_to_dzn(xml_string):
 	distributions = {}
 	distribs_node = problem.find("distribution")
 	for distrib_node in distribs_node:
+		
+		# Parsing distribution informations
 		d_type = distrib_node.attrib["type"]
 		required = True
 		penalty = 0
-		if "required" in distrib_node.attrib:
+		if "penalty" in distrib_node.attrib:
+			required = False
+			penalty = int(distrib_node["penalty"])
+		
+		if d_type not in distributions:
+			distributions[d_type] = []
+
+		distrib = {}
+		distrib["required"] = required
+		distrib["penalty"] = penalty
+		for class_ in distrib_node:
+			id = int(class_.attrib["id"])
+			
+			
+			
+
+
 			
 						
 	## create dzn string from python dict
