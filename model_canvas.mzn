@@ -145,8 +145,8 @@ constraint forall(s in 1..nrStudents)(
     forall(c1 in 1..nrClasses)(
         forall(c2 in 1..nrClasses)(
             c1 == c2
-            \/ not (classes_students[c1,s]
-            \/ not (classes_students[c2,s]
+            \/ not (classes_students[c1,s])
+            \/ not (classes_students[c2,s])
             \/ not (class_hierarchy_input[c1,4] == class_hierarchy_input[c2,4])
             \/ not (class_hierarchy_input[c1,3] == class_hierarchy_input[c2,3])
         )
