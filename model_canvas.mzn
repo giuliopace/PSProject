@@ -73,6 +73,8 @@ array[1..nrUnavs, 1..2] of 1..slotsPerDay: rooms_unav_slots_input;
 % input data for travel time between rooms
 array[1..nrRooms, 1..nrRooms] of int: travel_adj_mat_input;
 
+% input for distributional constraints
+
 
 % decision variables ##########################################################################################################
 array[1..nrClasses, 1..nrDays] of var bool: classes_days;           % assignment of day schedule for each class
@@ -238,7 +240,7 @@ constraint forall(c in 1..nrClasses)(
 
 % every course on the preference list of students has to be taken                                                                   % NEW
 constraint forall(s in 1..nrStudents)(
-    forall(pref in course_pref_input[student_pref_idx[s]..student_pref_input[course_pref_idx[s]+student_pref_cnt[s])(
+    forall(pref in student_pref_idx[s]..student_pref_idx[s]+student_pref_cnt[s])(
         exists(c in 1..nrClasses)(
             classes_students[c,s]
             /\ class_hierarchy_input[c,4] == student_pref_input[pref]
