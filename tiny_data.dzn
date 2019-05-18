@@ -4,8 +4,9 @@ nrWeeks = 9;
 slotsPerDay = 288;
 
 nrClasses = 20;
-nrStudents = 1; %temporary
+nrStudents = 0;
 nrRooms = 62;
+nrCourses = 19;
 
 % array giving the number of possible time options for each class
 classes_options = [17,18,18,44,18,11,14,14,3,14,17,18,17,18,17,14,17,17,17,17];
@@ -5079,5 +5080,218 @@ travel_adj_mat_input = [|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 |1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
 |1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
 |];
+
+%students_pref_idx
+student_pref_idx = [];
+
+%students_pref_cnt
+student_pref_cnt = [0];
+
+%students_pref (first value is a course, second value is the student id of the student that wants to attend it)
+student_pref_input = [];
+
+%class_hierarchy_input(index->class: parent|subpart|config|course)
+class_hierarchy_input = [|1,1,1,1,
+|2,2,2,2,
+|3,3,3,3,
+|3,4,3,3,
+|5,5,4,4,
+|6,6,5,5,
+|7,7,6,6,
+|8,8,7,7,
+|9,9,8,8,
+|10,10,9,9,
+|11,11,10,10,
+|12,12,11,11,
+|13,13,12,12,
+|14,14,13,13,
+|15,15,14,14,
+|16,16,15,15,
+|17,17,16,16,
+|18,18,17,17,
+|19,19,18,18,
+|20,20,19,19,
+|];
+
+%class_limit_input
+class_limit_input = [10,5,50,50,55,50,50,50,50,50,50,60,35,30,35,45,40,30,25,30,];
+
+%number of configurations
+nrConfigs = 19;
+
+%configs_cnt_s
+configs_cnt = [1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+
+%configs_idx_s
+configs_idx = [1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+
+
+%%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+nrSameStart=0;
+nrSameStart_distrib=0;
+SameStart_idx = [];
+SameStart_cnt = [];
+SameStart_required = [];
+SameStart_penalty = [];
+SameStart_distrib_input = [];
+
+
+nrSameTime=0;
+nrSameTime_distrib=0;
+SameTime_idx = [];
+SameTime_cnt = [];
+SameTime_required = [];
+SameTime_penalty = [];
+SameTime_distrib_input = [];
+
+
+nrDifferentTime=0;
+nrDifferentTime_distrib=0;
+DifferentTime_idx = [];
+DifferentTime_cnt = [];
+DifferentTime_required = [];
+DifferentTime_penalty = [];
+DifferentTime_distrib_input = [];
+
+
+nrSameDays=0;
+nrSameDays_distrib=0;
+SameDays_idx = [];
+SameDays_cnt = [];
+SameDays_required = [];
+SameDays_penalty = [];
+SameDays_distrib_input = [];
+
+
+nrDifferentDays=0;
+nrDifferentDays_distrib=0;
+DifferentDays_idx = [];
+DifferentDays_cnt = [];
+DifferentDays_required = [];
+DifferentDays_penalty = [];
+DifferentDays_distrib_input = [];
+
+
+nrSameWeeks=0;
+nrSameWeeks_distrib=0;
+SameWeeks_idx = [];
+SameWeeks_cnt = [];
+SameWeeks_required = [];
+SameWeeks_penalty = [];
+SameWeeks_distrib_input = [];
+
+
+nrDifferentWeeks=0;
+nrDifferentWeeks_distrib=0;
+DifferentWeeks_idx = [];
+DifferentWeeks_cnt = [];
+DifferentWeeks_required = [];
+DifferentWeeks_penalty = [];
+DifferentWeeks_distrib_input = [];
+
+
+nrSameRoom=0;
+nrSameRoom_distrib=0;
+SameRoom_idx = [];
+SameRoom_cnt = [];
+SameRoom_required = [];
+SameRoom_penalty = [];
+SameRoom_distrib_input = [];
+
+
+nrDifferentRoom=0;
+nrDifferentRoom_distrib=0;
+DifferentRoom_idx = [];
+DifferentRoom_cnt = [];
+DifferentRoom_required = [];
+DifferentRoom_penalty = [];
+DifferentRoom_distrib_input = [];
+
+
+nrOverlap=0;
+nrOverlap_distrib=0;
+Overlap_idx = [];
+Overlap_cnt = [];
+Overlap_required = [];
+Overlap_penalty = [];
+Overlap_distrib_input = [];
+
+
+nrNotOverlap=0;
+nrNotOverlap_distrib=0;
+NotOverlap_idx = [];
+NotOverlap_cnt = [];
+NotOverlap_required = [];
+NotOverlap_penalty = [];
+NotOverlap_distrib_input = [];
+
+nrSameAttendees=2;
+nrSameAttendees_distrib=4;
+SameAttendees_idx = [1,3];
+SameAttendees_cnt = [2,2];
+SameAttendees_required = [true,true];
+SameAttendees_penalty = [0,0];
+SameAttendees_distrib_input = [3,4,14,15];
+
+
+nrPrecedence=0;
+nrPrecedence_distrib=0;
+Precedence_idx = [];
+Precedence_cnt = [];
+Precedence_required = [];
+Precedence_penalty = [];
+Precedence_distrib_input = [];
+
+
+nrWorkDay=0;
+nrWorkDay_distrib=0;
+WorkDay_idx = [];
+WorkDay_cnt = [];
+WorkDay_required = [];
+WorkDay_penalty = [];
+WorkDay_distrib_input = [];
+WorkDay_nr1=[];
+
+nrMinGap=0;
+nrMinGap_distrib=0;
+MinGap_idx = [];
+MinGap_cnt = [];
+MinGap_required = [];
+MinGap_penalty = [];
+MinGap_distrib_input = [];
+MinGap_nr1=[];
+
+nrMaxDays=0;
+nrMaxDays_distrib=0;
+MaxDays_idx = [];
+MaxDays_cnt = [];
+MaxDays_required = [];
+MaxDays_penalty = [];
+MaxDays_distrib_input = [];
+MaxDays_nr1=[];
+
+nrMaxBreaks=0;
+nrMaxBreaks_distrib=0;
+MaxBreaks_idx = [];
+MaxBreaks_cnt = [];
+MaxBreaks_required = [];
+MaxBreaks_penalty = [];
+MaxBreaks_distrib_input = [];
+MaxBreaks_nr1=[];
+MaxBreaks_nr2=[];
+
+nrMaxBlock=0;
+nrMaxBlock_distrib=0;
+MaxBlock_idx = [];
+MaxBlock_cnt = [];
+MaxBlock_required = [];
+MaxBlock_penalty = [];
+MaxBlock_distrib_input = [];
+MaxBlock_nr1=[];
+MaxBlock_nr2=[];
+
 
 

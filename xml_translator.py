@@ -287,10 +287,13 @@ def convert_xml_to_dzn(xml_string):
 	## create dzn string from python dict
 
 	classes_courses = {}
+	configs = {}
 	courses = problem.find('courses')
 	for course in courses:
 		for config in course:
-			for subpart in config:
+			configs[config.attrib['id']] = []
+			for subpart in config: 
+				configs[config.attrib['id']].append(subpart.attrib['id'])
 				for class_ in subpart:
 					id = class_.attrib['id']
 					classes_courses[id] = {}
@@ -470,6 +473,7 @@ def convert_xml_to_dzn(xml_string):
 	students_pref_cnt_s = '['
 
 	idx_count = 1
+	cnt_count = 0
 	flag = 1
 	for idx, student in students.items():
 
@@ -635,38 +639,16 @@ nr{}_distrib=0;
 
 	#configs_s, configs_idx and configs_cnt
 
-	configs_s = '['
 	configs_idx_s = '['
 	configs_cnt_s = '['
-
-	nrConfigs = 0
-	idx_count = 1
-	flag = 1
-	for idx, config in classes_courses.items():
-
-		if flag == 1:
-			flag = 0
-		else:
-			configs_cnt_s += str(cnt_count) + ','
-			nrConfigs += 1
-
-		cnt_count = 0
-		configs_idx_s += str(idx_count) + ','
-
-		for course in student:
-			configs_s += '|'
-			configs_s += str(config['subpart']) + ','
-			configs_s += '% config {}\n'.format(idx)
-			configs_s += '\n'
-
-			idx_count += 1
-			cnt_count += 1
-
-
-	configs_s += '|]'
-	configs_idx_s +=  ']'
-	configs_cnt_s +=  str(cnt_count) + ']'
-	nrConfigs += 1
+	id = 1
+	for idx, config in configs.items():
+		configs_idx_s += str(id) + ','
+		configs_cnt_s += str(len(config)) + ','
+		id += len(config)
+	configs_idx_s = configs_idx_s[:-1] + ']'
+	configs_cnt_s = configs_cnt_s[:-1] + ']'
+	nrConfigs = str(len(configs))
 
 
 	return base_file.format(

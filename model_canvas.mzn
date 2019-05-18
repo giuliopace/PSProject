@@ -389,7 +389,7 @@ constraint forall(s in 1..nrStudents)(
         \/ classes_students[class_hierarchy_input[c,1],s]
     )
 );
-/*
+
 % each class of a subpart enrolls the student to the respective subpart                                                             % NEW
 constraint forall(s in 1..nrStudents)(
     forall(c in 1..nrClasses)(
@@ -432,8 +432,9 @@ constraint forall(s in 1..nrStudents)(
             /\ class_hierarchy_input[c,4] == student_pref_input[pref]
         )
     )
-);*/
+);
 
+/*
 % constraint ∨ (¬req ∧ penalty)  
 constraint forall(i in 1..nrSameStart)(
 
@@ -453,7 +454,7 @@ constraint forall(i in 1..nrSameStart)(
 
 
 )
-
+*/
 
 % objective function ##########################################################################################################
 solve minimize sum(classes_option_penalties)+sum(classes_room_penalties);
