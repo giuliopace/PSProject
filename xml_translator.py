@@ -61,8 +61,17 @@ rooms_unav_slots_input = {};
 % traveltime adjacency matrix
 travel_adj_mat_input = {};
 
-%students_preferences (first value is a class, second value is the student id of the student that wants to attend it)
-students_preferences = {};
+%students_pref_idx
+students_pref_idx = {}
+
+%students_pref_cnt
+students_pref_cnt = {}
+
+%students_pref (first value is a course, second value is the student id of the student that wants to attend it)
+students_pref = {};
+
+%class_info
+class_info = {}
 
 %%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -216,6 +225,27 @@ def convert_xml_to_dzn(xml_string):
 		distributions[d_type].append(distrib)	
 						
 	## create dzn string from python dict
+
+	classes_courses = {}
+	courses = problem.find('courses')
+	for course in courses:
+		for config in course:
+			for subpart in config:
+				for class_ in subpart:
+					id = class_.attrib['id']
+					classes_courses[id] = {}
+					if ('parent' in class_.attrib):
+						classes_courses[id]['parent'] = class_.attrib['parent']
+					else:
+						#classes_courses[id]['parent'] = [id]
+						classes_courses[id]['parent'] = '0'
+
+					classes_courses[id]['subpart'] = subpart.attrib['id']
+					classes_courses[id]['config'] = config.attrib['id']
+					classes_courses[id]['course'] = course.attrib['id']
+
+
+
 
 	# classes_options
 	classes_options_s = '['
@@ -373,21 +403,54 @@ def convert_xml_to_dzn(xml_string):
 	travel_adj_mat_s += '|]'
 
 
-	#students_preferences
+	#students_pref, students_pref_idx and students_pref_cnt_s
 
-	#print('printing students')
-	#print(students)
+	students_pref = '['
+	students_pref_idx_s = '['
+	students_pref_cnt_s = '['
 
-	students_preferences = '['
+	idx_count = 1
+	flag = 1
 	for idx, student in students.items():
-		#students_preferences += '|'
+
+		if flag == 1:
+			flag = 0
+		else:
+			students_pref_cnt_s += str(cnt_count) + ','
+
+		cnt_count = 0
+		students_pref_idx_s += str(idx_count) + ','
+
 		for course in student:
 			#print(student[id])
-			students_preferences += '|'
-			students_preferences += str(course) + ','
-			students_preferences += '% student {}\n'.format(idx)
-			students_preferences += '\n'
-	students_preferences += '|]'
+			students_pref += '|'
+			students_pref += str(course) + ','
+			students_pref += '% student {}\n'.format(idx)
+			students_pref += '\n'
+
+			idx_count += 1
+			cnt_count += 1
+
+
+	students_pref += '|]'
+	students_pref_idx_s += str(idx_count) + ']'
+	students_pref_cnt_s += str(cnt_count) + ']'
+
+	#class_info
+
+	class_info = '['
+
+#	print('printing classes')
+#	print(classes_courses)
+
+	for idx, class_el in classes_courses.items():
+		class_info += '|'
+		class_info += str(class_el['parent']) + ','
+		class_info += str(class_el['subpart']) + ','
+		class_info += str(class_el['config']) + ','
+		class_info += str(class_el['course']) + ','
+		class_info += '\n'
+	class_info += '|]'
 
 	# distributions
 	distrib_string = ""
@@ -456,9 +519,6 @@ def convert_xml_to_dzn(xml_string):
 		distrib_string += penalty_array + ';\n'
 		distrib_string += distrib_array + ';\n\n'
 
-
-
-
 	return base_file.format(
 		str(nr_days),
 		str(nr_weeks),
@@ -481,7 +541,10 @@ def convert_xml_to_dzn(xml_string):
 		rooms_unav_days_s,
 		rooms_unav_slots_s,
 		travel_adj_mat_s,
-		students_preferences,
+		students_pref_idx_s,
+		students_pref_cnt_s,
+		students_pref,
+		class_info,
 		distrib_string
 	)
 

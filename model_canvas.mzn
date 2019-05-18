@@ -7,6 +7,8 @@ int: slotsPerDay;
 int: nrClasses;
 int: nrStudents;
 int: nrRooms;
+int: nrCourses;                                                                                                                   % NEW
+int: nrConfigs;                                                                                                                   % NEW
 
 % index helpers
 array[1..nrClasses] of int: classes_options;
@@ -18,6 +20,11 @@ array[1..nrRooms+1] of int: rooms_unav_idx;
 array[1..nrClasses] of int: classes_rooms_cnt;
 array[1..nrClasses] of int: classes_rooms_idx;
 
+array[1..nrConfigs] of int: configs_cnt;                                                                                          % NEW
+array[1..nrConfigs] of int: configs_idx;                                                                                          % NEW
+
+array[1..nrStudents] of int: student_pref_cnt;                                                                                    % NEW
+array[1..nrStudents] of int: student_pref_idx;                                                                                    % NEW
 
 % total number of options, regardless of the class
 int: nrOptions = sum(classes_options);
@@ -28,6 +35,13 @@ int: nrClassesRooms = sum(classes_rooms_cnt);
 % total number of room unavailabilities
 int: nrUnavs = sum(rooms_unav_cnt);
 
+% total number of subparts
+int: nrSubparts = sum(configs_cnt);                                                                                               % NEW
+
+% total number of subparts
+int: nrPref = sum(student_pref_cnt);                                                                                              % NEW
+
+
 % input data ##################################################################################################################
 
 % input data for classes options
@@ -35,6 +49,15 @@ array[1..nrOptions, 1..nrWeeks] of bool: classes_weeks_input;
 array[1..nrOptions, 1..nrDays] of bool: classes_days_input;
 array[1..nrOptions, 1..2] of 1..slotsPerDay: classes_slots_input;
 array[1..nrOptions] of int: classes_penalties_input;
+
+% input data for class hierarchy
+array[1..nrClasses, 4] of int: class_hierarchy_input;                                                                             % NEW
+
+% input data for class limits
+array[1..nrClasses] of int: class_limit_input;                                                                                    % NEW
+
+% input data for course preferences of each student            
+array[1..nrPref] of int: student_pref_input;                                                                                      % NEW
 
 % input data for rooms available to a class
 array[1..nrClassesRooms, 1..2] of int: classes_rooms_input;
@@ -51,7 +74,7 @@ array[1..nrUnavs, 1..2] of 1..slotsPerDay: rooms_unav_slots_input;
 array[1..nrRooms, 1..nrRooms] of int: travel_adj_mat_input;
 
 
-% decision variables #########################################################################################################
+% decision variables ##########################################################################################################
 array[1..nrClasses, 1..nrDays] of var bool: classes_days;           % assignment of day schedule for each class
 array[1..nrClasses, 1..nrWeeks] of var bool: classes_weeks;         % assignment of week schedule for each class
 array[1..nrClasses, 1..nrStudents] of var bool: classes_students;   % assignment of enrolled students for each class
@@ -60,6 +83,7 @@ array[1..nrClasses] of var 0..slotsPerDay: classes_start;           % start time
 array[1..nrClasses] of var 0..slotsPerDay: classes_duration;        % duration assignment for each class
 array[1..nrClasses] of var int: classes_option_penalties;           % penalty for each option
 array[1..nrClasses] of var int: classes_room_penalties;             % penalty for each room
+array[1..nrSubparts, 1..nrStudents] of var bool: subparts_students; % assignment of enrolled students for each subpart            % NEW
 
 
 % predicates ##################################################################################################################
@@ -67,6 +91,23 @@ array[1..nrClasses] of var int: classes_room_penalties;             % penalty fo
 % no overlapping class
 predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
     s1 + d1 <= s2 \/ s2 + d2 <= s1;
+    
+% no overlapping class incl. travel time                                                                                          % NEW
+predicate no_overlap_time(var int:s1, var int:d1, var int:s2, var int:d2, var int:t) =
+    s1 + d1 + t <= s2 \/ s2 + d2 + t <= s1;
+    
+% student conflict
+predicate student_conflict(var int:c1, var int:c2, var int:s) =                                                                   % NEW
+    exists(w in 1..nrWeeks)(
+        exists(d in 1..nrDays)(
+            classes_students[c1,s]
+            /\ classes_students[c2,s]
+            /\ (classes_weeks[c1,w] == classes_weeks[c2,w])
+            /\ (classes_days[c1,d] == classes_days[c2,d])
+            /\ (not (no_overlap(classes_start[c1], classes_duration[c1], classes_start[c2], classes_duration[c2]))
+                \/ not (no_overlap_time(classes_start[c1], classes_duration[c1], classes_start[c2], classes_duration[c2],       travel_adj_mat_input[classes_room[c1],classes_room[c2]])))
+        )
+    );
 
 
 % constraints #################################################################################################################
@@ -106,7 +147,7 @@ constraint forall (i in 1..nrClasses)(
 
 % check if schedule assignment is possible
 constraint forall(i in 1..nrClasses) (
-    exists(o in classes_idx[i]..(classes_idx[i]+classes_options[i]-1)) (
+    exists(o in classes_idx[i]..(classes_idx[i]+classes_options[i]-1))(
         forall(w in 1..nrWeeks) (
             forall(d in 1..nrDays) (
                 classes_weeks[i,w] == classes_weeks_input[o,w] 
@@ -144,11 +185,11 @@ constraint forall(i in 1..nrClasses)(
 constraint forall(s in 1..nrStudents)(
     forall(c1 in 1..nrClasses)(
         forall(c2 in 1..nrClasses)(
-            c1 == c2
+            (c1 == c2)
             \/ not (classes_students[c1,s])
             \/ not (classes_students[c2,s])
             \/ not (class_hierarchy_input[c1,4] == class_hierarchy_input[c2,4])
-            \/ not (class_hierarchy_input[c1,3] == class_hierarchy_input[c2,3])
+            \/ (class_hierarchy_input[c1,3] == class_hierarchy_input[c2,3])
         )
     )
 );
@@ -158,6 +199,50 @@ constraint forall(s in 1..nrStudents)(
     forall(c in 1..nrClasses)(
         not (classes_students[c,s])
         \/ classes_students[class_hierarchy_input[c,1],s]
+    )
+);
+
+% each class of a subpart enrolls the student to the respective subpart                                                             % NEW
+constraint forall(s in 1..nrStudents)(
+    forall(c in 1..nrClasses)(
+        not (classes_students[c,s])
+        \/ subparts_students[class_hierarchy_input[c,2],s]
+    )
+);
+
+% each subpart can only be attended if there exists some class which is attended                                                    % NEW
+constraint forall(s in 1..nrStudents)(
+    forall(sp in 1..nrSubparts)(
+        not (subparts_students[sp,s])
+        \/ exists(c in 1..nrClasses)(
+            classes_students[c,s]
+            /\ class_hierarchy_input[c,2] == sp
+        )
+    )
+);
+
+% each student has to take at least 1 class in each subpart of a config                                                             % NEW
+constraint forall(s in 1..nrStudents)(
+    forall(c in 1..nrClasses)(
+        forall(sp in configs_idx[class_hierarchy_input[c,3]]..configs_idx[class_hierarchy_input[c,3]]+configs_cnt[class_hierarchy_input[c,3]])(
+            subparts_students[sp,s]
+            \/ not (classes_students[c,s])
+        )
+    )
+);
+
+% class limit >= number of students enrolled to the class                                                                           % NEW
+constraint forall(c in 1..nrClasses)(
+    class_limit_input[c] >= sum (s in nrStudents)(classes_students[c,s])
+);
+
+% every course on the preference list of students has to be taken                                                                   % NEW
+constraint forall(s in 1..nrStudents)(
+    forall(pref in course_pref_input[student_pref_idx[s]..student_pref_input[course_pref_idx[s]+student_pref_cnt[s])(
+        exists(c in 1..nrClasses)(
+            classes_students[c,s]
+            /\ class_hierarchy_input[c,4] == student_pref_input[pref]
+        )
     )
 );
 
