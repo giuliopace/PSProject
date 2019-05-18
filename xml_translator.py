@@ -1,4 +1,6 @@
-import xml.etree.ElementTree as ET
+import json
+import re
+from lxml import etree as ET
 import itertools
 import sys
 from array import *
@@ -9,8 +11,9 @@ nrWeeks = {};
 slotsPerDay = {};
 
 nrClasses = {};
-nrStudents = 1; %temporary
+nrStudents = {};
 nrRooms = {};
+nrCourses = {};
 
 % array giving the number of possible time options for each class
 classes_options = {};
@@ -60,20 +63,38 @@ rooms_unav_slots_input = {};
 travel_adj_mat_input = {};
 
 %students_pref_idx
-students_pref_idx = {}
+student_pref_idx = {};
 
 %students_pref_cnt
-students_pref_cnt = {}
+student_pref_cnt = {};
 
 %students_pref (first value is a course, second value is the student id of the student that wants to attend it)
-students_pref = {};
+student_pref_input = {};
 
-%class_info
-class_info = {}
+%class_hierarchy_input(index->class: parent|subpart|config|course)
+class_hierarchy_input = {}
+
+%class_limit_input
+class_limit_input = {}
+
+%number of configurations
+nrConfigs = {}
+
+%configs_cnt_s
+configs_cnt_s = {}
+
+%configs_idx_s
+configs_idx_s = {}
+
+
+
+%%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{}
 
 """
 
-def convert_xml(xml_string):
+def convert_xml_to_dzn(xml_string):
 	"""
 		returns a conversion of the xml instance to the dzn format
 
@@ -167,6 +188,80 @@ def convert_xml(xml_string):
 						r['penalty'] = room.attrib['penalty']
 						classes[id]['rooms'].append(r)
 
+	# distribution constraint
+	distributions = {}
+	distribs_node = problem.find("distributions")
+	for distrib_node in distribs_node:
+
+		# Parsing distribution informations
+		distrib = {}
+		required = True
+		penalty = 0
+		if "penalty" in distrib_node.attrib:
+			required = False
+			penalty = int(distrib_node.attrib["penalty"])
+
+		# distrib name
+		d_type = distrib_node.attrib["type"]
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxBreaks\((.*),(.*)\)", d_type):
+			matchres = re.search("MaxBreaks\((.*),(.*)\)", d_type)
+			nr1 = matchres.group(1)
+			nr2 = matchres.group(2)
+			d_type = "MaxBreaks"
+			distrib["nr1"] = nr1
+			distrib["nr2"] = nr2
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxBlock\((.*),(.*)\)", d_type):
+			matchres = re.search("MaxBlock\((.*),(.*)\)", d_type)
+			nr1 = matchres.group(1)
+			nr2 = matchres.group(2)
+			d_type = "MaxBlock"
+			distrib["nr1"] = nr1
+			distrib["nr2"] = nr2	
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxDays\((.*)\)", d_type):
+			matchres = re.search("MaxDays\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "MaxDays"
+			distrib["nr1"] = nr1
+
+		# if some info is stored in the name, retrieve it
+		if re.match("WorkDay\((.*)\)", d_type):
+			matchres = re.search("WorkDay\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "WorkDay"
+			distrib["nr1"] = nr1
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MinGap\((.*)\)", d_type):
+			matchres = re.search("MinGap\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "MinGap"
+			distrib["nr1"] = nr1
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxDayLoad\((.*)\)", d_type):
+			matchres = re.search("MaxDayLoad\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "MaxDayLoad"
+			distrib["nr1"] = nr1
+		
+		if d_type not in distributions:
+			distributions[d_type] = []
+
+		distrib["required"] = required
+		distrib["penalty"] = penalty
+		distrib["classes"] = []
+		for class_ in distrib_node:
+			id = int(class_.attrib["id"])
+			distrib["classes"].append(id)
+
+		distributions[d_type].append(distrib)
+
 	## create dzn string from python dict
 
 	classes_courses = {}
@@ -180,12 +275,12 @@ def convert_xml(xml_string):
 					if ('parent' in class_.attrib):
 						classes_courses[id]['parent'] = class_.attrib['parent']
 					else:
-						#classes_courses[id]['parent'] = [id]
-						classes_courses[id]['parent'] = '0'
+						classes_courses[id]['parent'] = class_.attrib['id']
 
 					classes_courses[id]['subpart'] = subpart.attrib['id']
 					classes_courses[id]['config'] = config.attrib['id']
 					classes_courses[id]['course'] = course.attrib['id']
+					classes_courses[id]['limit'] = class_.attrib['limit']
 
 
 
@@ -365,7 +460,6 @@ def convert_xml(xml_string):
 		students_pref_idx_s += str(idx_count) + ','
 
 		for course in student:
-			#print(student[id])
 			students_pref += '|'
 			students_pref += str(course) + ','
 			students_pref += '% student {}\n'.format(idx)
@@ -379,24 +473,154 @@ def convert_xml(xml_string):
 	students_pref_idx_s += str(idx_count) + ']'
 	students_pref_cnt_s += str(cnt_count) + ']'
 
-	#class_info
+	#class_hierarchy_input
 
-	class_info = '['
-
-#	print('printing classes')
-#	print(classes_courses)
+	class_hierarchy_input = '['
 
 	for idx, class_el in classes_courses.items():
-		class_info += '|'
-		class_info += str(class_el['parent']) + ','
-		class_info += str(class_el['subpart']) + ','
-		class_info += str(class_el['config']) + ','
-		class_info += str(class_el['course']) + ','
-		class_info += '\n'
-	class_info += '|]'
+		class_hierarchy_input += '|'
+		class_hierarchy_input += str(class_el['parent']) + ','
+		class_hierarchy_input += str(class_el['subpart']) + ','
+		class_hierarchy_input += str(class_el['config']) + ','
+		class_hierarchy_input += str(class_el['course']) + ','
+		class_hierarchy_input += '\n'
+	class_hierarchy_input += '|]'
 
-	print('printing class_info')
-	print(class_info)
+
+	#class_limit_input
+
+	class_limit_input = '['
+	for idx, class_el in classes_courses.items():
+		class_limit_input += '|'
+		class_limit_input += str(class_el['limit']) + ','
+		class_limit_input += '\n'
+	class_limit_input += '|]'
+
+	# distributions
+	distrib_string = ""
+
+	for name, distrib_collection in distributions.items():
+
+		additionnal = ""
+		nr1_array = ""
+		nr2_array = ""
+		if name == "MaxBreaks":
+			nr1_array = name + "_nr1 = ["
+			nr2_array = name + "_nr2 = ["
+		if name == "MaxBlock":
+			nr1_array = name + "_nr1 = ["
+			nr2_array = name + "_nr2 = ["
+		if name == "MaxDays":
+			nr1_array = name + "_nr1 = ["
+		if name == "WorkDay":
+			nr1_array = name + "_nr1 = ["
+		if name == "MaxDayLoad":
+			nr1_array = name + "_nr1 = ["
+		if name == "MinGap":
+			nr1_array = name + "_nr1 = ["
+
+		idx_array = name + "_idx = ["
+		cnt_array = name + "_cnt = ["
+		required_array = name + "_required = ["
+		penalty_array = name + "_penalty = ["
+		distrib_array = name + '_distrib_input = ['
+
+		id = 1
+
+		for distrib in distrib_collection:
+
+			idx_array += str(id) + ','
+			id += len(distrib["classes"])
+			cnt_array += str(len(distrib["classes"])) + ','
+			required_array += str(distrib["required"]) + ','
+			penalty_array += str(distrib["penalty"]) + ','
+
+			if name == "MaxBreaks":
+				nr1_array += str(distrib["nr1"]) + ','
+				nr2_array += str(distrib["nr2"]) + ','
+			if name == "MaxBlok":
+				nr1_array += str(distrib["nr1"]) + ','
+				nr2_array += str(distrib["nr2"]) + ','
+			if name == "MaxDays":
+				nr1_array += str(distrib["nr1"]) + ','
+			if name == "WorkDay":
+				nr1_array += str(distrib["nr1"]) + ','
+			if name == "MaxDayLoad":
+				nr1_array += str(distrib["nr1"]) + ','
+			if name == "MinGap":
+				nr1_array += str(distrib["nr1"]) + ','
+
+			for class_ in distrib["classes"]:
+				distrib_array += str(class_) + ','
+
+		idx_array = idx_array[:-1] + ']'
+		cnt_array = cnt_array[:-1] + ']'
+		required_array = required_array[:-1] + ']'
+		penalty_array = penalty_array[:-1] + ']'
+		distrib_array = distrib_array[:-1] + ']'
+
+		if name == "MaxBreaks":
+			nr1_array = nr1_array[:-1] + ']'
+			nr2_array = nr2_array[:-1] + ']'
+			additionnal += nr1_array + ';\n' + nr2_array + ';\n'
+		if name == "MaxBlock":
+			nr1_array = nr1_array[:-1] + ']'
+			nr2_array = nr2_array[:-1] + ']'
+			additionnal += nr1_array + ';\n' + nr2_array + ';\n'
+		if name == "MaxDays":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+		if name == "WorkDay":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+		if name == "MinGap":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+		if name == "MaxDayLoad":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+
+		distrib_string += additionnal
+		distrib_string += idx_array + ';\n'
+		distrib_string += cnt_array + ';\n'
+		distrib_string += required_array + ';\n'
+		distrib_string += penalty_array + ';\n'
+		distrib_string += distrib_array + ';\n\n'
+
+	#configs_s, configs_idx and configs_cnt
+
+	configs_s = '['
+	configs_idx_s = '['
+	configs_cnt_s = '['
+
+	nrConfigs = 0
+	idx_count = 1
+	flag = 1
+	for idx, config in classes_courses.items():
+
+		if flag == 1:
+			flag = 0
+		else:
+			configs_cnt_s += str(cnt_count) + ','
+			nrConfigs += 1
+
+		cnt_count = 0
+		configs_idx_s += str(idx_count) + ','
+
+		for course in student:
+			configs_s += '|'
+			configs_s += str(config['subpart']) + ','
+			configs_s += '% config {}\n'.format(idx)
+			configs_s += '\n'
+
+			idx_count += 1
+			cnt_count += 1
+
+
+	configs_s += '|]'
+	configs_idx_s += str(idx_count) + ']'
+	configs_cnt_s += str(cnt_count) + ']'
+	nrConfigs += 1
 
 
 	return base_file.format(
@@ -404,7 +628,9 @@ def convert_xml(xml_string):
 		str(nr_weeks),
 		str(slots_per_day),
 		str(len(classes)),
+		str(len(students)),
 		str(len(rooms)),
+		str(len(courses)),
 		classes_options_s,
 		classes_idx_s,
 		classes_weeks_s,
@@ -424,20 +650,91 @@ def convert_xml(xml_string):
 		students_pref_idx_s,
 		students_pref_cnt_s,
 		students_pref,
-		classes_days_sd_s
+		class_hierarchy_input,
+		class_limit_input,
+		nrConfigs,
+		configs_cnt_s,
+		configs_idx_s,
+		distrib_string
 	)
 
-"""
-room_capacities = {};
+def convert_sol_to_xml(minizinc_output):
+	"""
+		Returns a conversion from minizinc's output to a
+		solution in XML format defined here:
 
-% array giving the number of unavailabilities per room
-room_unav_cnt = {};
+		https://www.itc2019.org/format#solution
 
-% array giving the index of each room in the unavailabilities array
-rooms_unav_idx = {};
+		The solution should be printed with the following arguments:
 
-"""
+			minizinc model_canvas.mzn tiny_data.dzn --output-mode json --output-time --output-objective
 
-filename = sys.argv[1]
+		Arguments
+		---------
+		minizinc_json : str
+			string containing the solution in JSON format
+
+		Returns
+		-------
+		xml_string : str
+			string containing the solution in XML format
+	"""
+	# extracting running time
+	runtime = float(re.search("time elapsed: (.*) s", minizinc_output).group(1))
+
+	# extracting JSON
+	json_start = minizinc_output.find('{')
+	json_end = minizinc_output.find('}')
+	json_string = minizinc_output[json_start:json_end+1]
+	data = json.loads(json_string)
+
+	solution = ET.Element("solution",
+		name="unique-instance-name",
+		runtime=str(runtime),
+		technique="CP",
+		author="TDGPDP",
+		institution="TU Wien",
+		country="Austria")
+
+	for weeks, days, students, room, start, duration, i in zip(
+			data["classes_weeks"],
+			data["classes_days"],
+			data["classes_students"],
+			data["classes_room"],
+			data["classes_start"],
+			data["classes_duration"],
+			range(len(data["classes_days"]))):
+		string_weeks = ""
+		for week in weeks:
+			if week == True:
+				string_weeks += '1'
+			else:
+				string_weeks += '0'
+		string_days = ""
+		for day in days:
+			if day == True:
+				string_days += '1'
+			else:
+				string_days += '0'
+		classe = ET.SubElement(
+			solution,
+			"class",
+			id=str(i+1),
+			days=string_days,
+			weeks=string_weeks,
+			start=str(duration),
+			room=str(room))
+
+		for student in students:
+			ET.SubElement(classe, "student", id=str(student))
+
+	return ET.tostring(solution, encoding='utf-8', method='xml', pretty_print=True).decode()
+
+filename = sys.argv[2]
+option = sys.argv[1]
 xml_file = open(filename, "r")
-print(convert_xml(xml_file.read()))
+
+if option in ["-i", "--input"]:
+	print(convert_xml_to_dzn(xml_file.read()))
+elif option in ["-o", "--output"]:
+	print(convert_sol_to_xml(xml_file.read()))
