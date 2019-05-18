@@ -72,19 +72,19 @@ student_pref_cnt = {};
 student_pref_input = {};
 
 %class_hierarchy_input(index->class: parent|subpart|config|course)
-class_hierarchy_input = {}
+class_hierarchy_input = {};
 
 %class_limit_input
-class_limit_input = {}
+class_limit_input = {};
 
 %number of configurations
-nrConfigs = {}
+nrConfigs = {};
 
 %configs_cnt_s
-configs_cnt_s = {}
+configs_cnt = {};
 
 %configs_idx_s
-configs_idx_s = {}
+configs_idx = {};
 
 
 
