@@ -64,6 +64,10 @@ travel_adj_mat_input = {};
 %students_preferences (first value is a class, second value is the student id of the student that wants to attend it)
 students_preferences = {};
 
+%%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{}
+
 """
 
 def convert_xml_to_dzn(xml_string):
@@ -160,6 +164,57 @@ def convert_xml_to_dzn(xml_string):
 						r['penalty'] = room.attrib['penalty']
 						classes[id]['rooms'].append(r)
 
+	# distribution constraint
+	distributions = {}
+	distribs_node = problem.find("distributions")
+	for distrib_node in distribs_node:
+		
+		# Parsing distribution informations
+		distrib = {}
+		required = True
+		penalty = 0
+		if "penalty" in distrib_node.attrib:
+			required = False
+			penalty = int(distrib_node.attrib["penalty"])
+
+		# distrib name
+		d_type = distrib_node.attrib["type"]
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxBreaks\((.*),(.*)\)", d_type):
+			matchres = re.search("MaxBreaks\((.*),(.*)\)", d_type)
+			nr1 = matchres.group(1)
+			nr2 = matchres.group(2)
+			d_type = "MaxBreaks"
+			distrib["nr1"] = nr1
+			distrib["nr2"] = nr2	
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxDays\((.*)\)", d_type):
+			matchres = re.search("MaxDays\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "MaxDays"
+			distrib["nr1"] = nr1
+
+		# if some info is stored in the name, retrieve it
+		if re.match("WorkDay\((.*)\)", d_type):
+			matchres = re.search("WorkDay\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "WorkDay"
+			distrib["nr1"] = nr1
+		
+		if d_type not in distributions:
+			distributions[d_type] = []
+
+		distrib["required"] = required
+		distrib["penalty"] = penalty
+		distrib["classes"] = []
+		for class_ in distrib_node:
+			id = int(class_.attrib["id"])
+			distrib["classes"].append(id)
+
+		distributions[d_type].append(distrib)	
+						
 	## create dzn string from python dict
 
 	# classes_options
@@ -334,6 +389,74 @@ def convert_xml_to_dzn(xml_string):
 			students_preferences += '\n'
 	students_preferences += '|]'
 
+	# distributions
+	distrib_string = ""
+
+	for name, distrib_collection in distributions.items():
+
+		additionnal = ""
+		nr1_array = ""
+		nr2_array = ""
+		if name == "MaxBreaks":
+			nr1_array = name + "_nr1 = ["
+			nr2_array = name + "_nr2 = ["
+		if name == "MaxDays":
+			nr1_array = name + "_nr1 = ["
+		if name == "WorkDay":
+			nr1_array = name + "_nr1 = ["
+
+		idx_array = name + "_idx = ["
+		cnt_array = name + "_cnt = ["
+		required_array = name + "_required = ["
+		penalty_array = name + "_penalty = ["
+		distrib_array = name + '_distrib_input = ['
+
+		id = 1
+
+		for distrib in distrib_collection:
+			
+			idx_array += str(id) + ','
+			id += len(distrib["classes"])
+			cnt_array += str(len(distrib["classes"])) + ','
+			required_array += str(distrib["required"]) + ','
+			penalty_array += str(distrib["penalty"]) + ','
+
+			if name == "MaxBreaks":
+				nr1_array += str(distrib["nr1"]) + ','
+				nr2_array += str(distrib["nr2"]) + ','
+			if name == "MaxDays":
+				nr1_array += str(distrib["nr1"]) + ','
+			if name == "WorkDay":
+				nr1_array += str(distrib["nr1"]) + ','
+
+			for class_ in distrib["classes"]:
+				distrib_array += str(class_) + ','
+
+		idx_array = idx_array[:-1] + ']'
+		cnt_array = cnt_array[:-1] + ']'
+		required_array = required_array[:-1] + ']'
+		penalty_array = penalty_array[:-1] + ']'
+		distrib_array = distrib_array[:-1] + ']'
+
+		if name == "MaxBreaks":
+			nr1_array = nr1_array[:-1] + ']'
+			nr2_array = nr2_array[:-1] + ']'
+			additionnal += nr1_array + ';\n' + nr2_array + ';\n'
+		if name == "MaxDays":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+		if name == "WorkDay":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+
+		distrib_string += additionnal
+		distrib_string += idx_array + ';\n'
+		distrib_string += cnt_array + ';\n'
+		distrib_string += required_array + ';\n'
+		distrib_string += penalty_array + ';\n'
+		distrib_string += distrib_array + ';\n\n'
+
+
 
 
 	return base_file.format(
@@ -359,7 +482,7 @@ def convert_xml_to_dzn(xml_string):
 		rooms_unav_slots_s,
 		travel_adj_mat_s,
 		students_preferences,
-		classes_days_sd_s
+		distrib_string
 	)
 
 def convert_sol_to_xml(minizinc_output):
@@ -439,6 +562,6 @@ option = sys.argv[1]
 xml_file = open(filename, "r")
 
 if option in ["-i", "--input"]:
-	print(convert_xml(xml_file.read()))
+	print(convert_xml_to_dzn(xml_file.read()))
 elif option in ["-o", "--output"]:
 	print(convert_sol_to_xml(xml_file.read()))
