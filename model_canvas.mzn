@@ -434,7 +434,7 @@ constraint forall(s in 1..nrStudents)(
     )
 );*/
 
-% constraint ∨ (¬req ∧ penalty) 
+% constraint ∨ (¬req ∧ penalty)  
 constraint forall(i in 1..nrSameStart)(
 
     forall(c1 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
