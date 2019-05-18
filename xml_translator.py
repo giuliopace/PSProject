@@ -11,8 +11,9 @@ nrWeeks = {};
 slotsPerDay = {};
 
 nrClasses = {};
-nrStudents = 1; %temporary
+nrStudents = {};
 nrRooms = {};
+nrCourses = {};
 
 % array giving the number of possible time options for each class
 classes_options = {};
@@ -62,13 +63,13 @@ rooms_unav_slots_input = {};
 travel_adj_mat_input = {};
 
 %students_pref_idx
-students_pref_idx = {}
+student_pref_idx = {};
 
 %students_pref_cnt
-students_pref_cnt = {}
+student_pref_cnt = {};
 
 %students_pref (first value is a course, second value is the student id of the student that wants to attend it)
-students_pref = {};
+student_pref_input = {};
 
 %class_info
 class_info = {}
@@ -196,6 +197,15 @@ def convert_xml_to_dzn(xml_string):
 			nr2 = matchres.group(2)
 			d_type = "MaxBreaks"
 			distrib["nr1"] = nr1
+			distrib["nr2"] = nr2
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxBlock\((.*),(.*)\)", d_type):
+			matchres = re.search("MaxBlock\((.*),(.*)\)", d_type)
+			nr1 = matchres.group(1)
+			nr2 = matchres.group(2)
+			d_type = "MaxBlock"
+			distrib["nr1"] = nr1
 			distrib["nr2"] = nr2	
 
 		# if some info is stored in the name, retrieve it
@@ -210,6 +220,20 @@ def convert_xml_to_dzn(xml_string):
 			matchres = re.search("WorkDay\((.*)\)", d_type)
 			nr1 = matchres.group(1)
 			d_type = "WorkDay"
+			distrib["nr1"] = nr1
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MinGap\((.*)\)", d_type):
+			matchres = re.search("MinGap\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "MinGap"
+			distrib["nr1"] = nr1
+
+		# if some info is stored in the name, retrieve it
+		if re.match("MaxDayLoad\((.*)\)", d_type):
+			matchres = re.search("MaxDayLoad\((.*)\)", d_type)
+			nr1 = matchres.group(1)
+			d_type = "MaxDayLoad"
 			distrib["nr1"] = nr1
 		
 		if d_type not in distributions:
@@ -463,9 +487,16 @@ def convert_xml_to_dzn(xml_string):
 		if name == "MaxBreaks":
 			nr1_array = name + "_nr1 = ["
 			nr2_array = name + "_nr2 = ["
+		if name == "MaxBlock":
+			nr1_array = name + "_nr1 = ["
+			nr2_array = name + "_nr2 = ["
 		if name == "MaxDays":
 			nr1_array = name + "_nr1 = ["
 		if name == "WorkDay":
+			nr1_array = name + "_nr1 = ["
+		if name == "MaxDayLoad":
+			nr1_array = name + "_nr1 = ["
+		if name == "MinGap":
 			nr1_array = name + "_nr1 = ["
 
 		idx_array = name + "_idx = ["
@@ -487,9 +518,16 @@ def convert_xml_to_dzn(xml_string):
 			if name == "MaxBreaks":
 				nr1_array += str(distrib["nr1"]) + ','
 				nr2_array += str(distrib["nr2"]) + ','
+			if name == "MaxBlok":
+				nr1_array += str(distrib["nr1"]) + ','
+				nr2_array += str(distrib["nr2"]) + ','
 			if name == "MaxDays":
 				nr1_array += str(distrib["nr1"]) + ','
 			if name == "WorkDay":
+				nr1_array += str(distrib["nr1"]) + ','
+			if name == "MaxDayLoad":
+				nr1_array += str(distrib["nr1"]) + ','
+			if name == "MinGap":
 				nr1_array += str(distrib["nr1"]) + ','
 
 			for class_ in distrib["classes"]:
@@ -505,10 +543,20 @@ def convert_xml_to_dzn(xml_string):
 			nr1_array = nr1_array[:-1] + ']'
 			nr2_array = nr2_array[:-1] + ']'
 			additionnal += nr1_array + ';\n' + nr2_array + ';\n'
+		if name == "MaxBlock":
+			nr1_array = nr1_array[:-1] + ']'
+			nr2_array = nr2_array[:-1] + ']'
+			additionnal += nr1_array + ';\n' + nr2_array + ';\n'
 		if name == "MaxDays":
 			nr1_array = nr1_array[:-1] + ']'
 			additionnal += nr1_array + ';\n'
 		if name == "WorkDay":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+		if name == "MinGap":
+			nr1_array = nr1_array[:-1] + ']'
+			additionnal += nr1_array + ';\n'
+		if name == "MaxDayLoad":
 			nr1_array = nr1_array[:-1] + ']'
 			additionnal += nr1_array + ';\n'
 
@@ -524,7 +572,9 @@ def convert_xml_to_dzn(xml_string):
 		str(nr_weeks),
 		str(slots_per_day),
 		str(len(classes)),
+		str(len(students)),
 		str(len(rooms)),
+		str(len(courses)),
 		classes_options_s,
 		classes_idx_s,
 		classes_weeks_s,
