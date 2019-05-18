@@ -71,8 +71,22 @@ student_pref_cnt = {};
 %students_pref (first value is a course, second value is the student id of the student that wants to attend it)
 student_pref_input = {};
 
-%class_info
-class_info = {}
+%class_hierarchy_input(index->class: parent|subpart|config|course)
+class_hierarchy_input = {}
+
+%class_limit_input
+class_limit_input = {}
+
+%number of configurations
+nrConfigs = {}
+
+%configs_cnt_s
+configs_cnt_s = {}
+
+%configs_idx_s
+configs_idx_s = {}
+
+
 
 %%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -178,7 +192,7 @@ def convert_xml_to_dzn(xml_string):
 	distributions = {}
 	distribs_node = problem.find("distributions")
 	for distrib_node in distribs_node:
-		
+
 		# Parsing distribution informations
 		distrib = {}
 		required = True
@@ -246,8 +260,8 @@ def convert_xml_to_dzn(xml_string):
 			id = int(class_.attrib["id"])
 			distrib["classes"].append(id)
 
-		distributions[d_type].append(distrib)	
-						
+		distributions[d_type].append(distrib)
+
 	## create dzn string from python dict
 
 	classes_courses = {}
@@ -261,12 +275,12 @@ def convert_xml_to_dzn(xml_string):
 					if ('parent' in class_.attrib):
 						classes_courses[id]['parent'] = class_.attrib['parent']
 					else:
-						#classes_courses[id]['parent'] = [id]
-						classes_courses[id]['parent'] = '0'
+						classes_courses[id]['parent'] = class_.attrib['id']
 
 					classes_courses[id]['subpart'] = subpart.attrib['id']
 					classes_courses[id]['config'] = config.attrib['id']
 					classes_courses[id]['course'] = course.attrib['id']
+					classes_courses[id]['limit'] = class_.attrib['limit']
 
 
 
@@ -446,7 +460,6 @@ def convert_xml_to_dzn(xml_string):
 		students_pref_idx_s += str(idx_count) + ','
 
 		for course in student:
-			#print(student[id])
 			students_pref += '|'
 			students_pref += str(course) + ','
 			students_pref += '% student {}\n'.format(idx)
@@ -460,21 +473,28 @@ def convert_xml_to_dzn(xml_string):
 	students_pref_idx_s += str(idx_count) + ']'
 	students_pref_cnt_s += str(cnt_count) + ']'
 
-	#class_info
+	#class_hierarchy_input
 
-	class_info = '['
-
-#	print('printing classes')
-#	print(classes_courses)
+	class_hierarchy_input = '['
 
 	for idx, class_el in classes_courses.items():
-		class_info += '|'
-		class_info += str(class_el['parent']) + ','
-		class_info += str(class_el['subpart']) + ','
-		class_info += str(class_el['config']) + ','
-		class_info += str(class_el['course']) + ','
-		class_info += '\n'
-	class_info += '|]'
+		class_hierarchy_input += '|'
+		class_hierarchy_input += str(class_el['parent']) + ','
+		class_hierarchy_input += str(class_el['subpart']) + ','
+		class_hierarchy_input += str(class_el['config']) + ','
+		class_hierarchy_input += str(class_el['course']) + ','
+		class_hierarchy_input += '\n'
+	class_hierarchy_input += '|]'
+
+
+	#class_limit_input
+
+	class_limit_input = '['
+	for idx, class_el in classes_courses.items():
+		class_limit_input += '|'
+		class_limit_input += str(class_el['limit']) + ','
+		class_limit_input += '\n'
+	class_limit_input += '|]'
 
 	# distributions
 	distrib_string = ""
@@ -508,7 +528,7 @@ def convert_xml_to_dzn(xml_string):
 		id = 1
 
 		for distrib in distrib_collection:
-			
+
 			idx_array += str(id) + ','
 			id += len(distrib["classes"])
 			cnt_array += str(len(distrib["classes"])) + ','
@@ -567,6 +587,42 @@ def convert_xml_to_dzn(xml_string):
 		distrib_string += penalty_array + ';\n'
 		distrib_string += distrib_array + ';\n\n'
 
+	#configs_s, configs_idx and configs_cnt
+
+	configs_s = '['
+	configs_idx_s = '['
+	configs_cnt_s = '['
+
+	nrConfigs = 0
+	idx_count = 1
+	flag = 1
+	for idx, config in classes_courses.items():
+
+		if flag == 1:
+			flag = 0
+		else:
+			configs_cnt_s += str(cnt_count) + ','
+			nrConfigs += 1
+
+		cnt_count = 0
+		configs_idx_s += str(idx_count) + ','
+
+		for course in student:
+			configs_s += '|'
+			configs_s += str(config['subpart']) + ','
+			configs_s += '% config {}\n'.format(idx)
+			configs_s += '\n'
+
+			idx_count += 1
+			cnt_count += 1
+
+
+	configs_s += '|]'
+	configs_idx_s += str(idx_count) + ']'
+	configs_cnt_s += str(cnt_count) + ']'
+	nrConfigs += 1
+
+
 	return base_file.format(
 		str(nr_days),
 		str(nr_weeks),
@@ -594,21 +650,25 @@ def convert_xml_to_dzn(xml_string):
 		students_pref_idx_s,
 		students_pref_cnt_s,
 		students_pref,
-		class_info,
+		class_hierarchy_input,
+		class_limit_input,
+		nrConfigs,
+		configs_cnt_s,
+		configs_idx_s,
 		distrib_string
 	)
 
 def convert_sol_to_xml(minizinc_output):
 	"""
-		Returns a conversion from minizinc's output to a 
+		Returns a conversion from minizinc's output to a
 		solution in XML format defined here:
 
 		https://www.itc2019.org/format#solution
 
 		The solution should be printed with the following arguments:
 
-			minizinc model_canvas.mzn tiny_data.dzn --output-mode json --output-time --output-objective 
-		
+			minizinc model_canvas.mzn tiny_data.dzn --output-mode json --output-time --output-objective
+
 		Arguments
 		---------
 		minizinc_json : str
@@ -664,12 +724,12 @@ def convert_sol_to_xml(minizinc_output):
 			weeks=string_weeks,
 			start=str(duration),
 			room=str(room))
-		
+
 		for student in students:
 			ET.SubElement(classe, "student", id=str(student))
 
 	return ET.tostring(solution, encoding='utf-8', method='xml', pretty_print=True).decode()
-		
+
 filename = sys.argv[2]
 option = sys.argv[1]
 xml_file = open(filename, "r")

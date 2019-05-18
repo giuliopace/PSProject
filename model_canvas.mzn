@@ -73,6 +73,8 @@ array[1..nrUnavs, 1..2] of 1..slotsPerDay: rooms_unav_slots_input;
 % input data for travel time between rooms
 array[1..nrRooms, 1..nrRooms] of int: travel_adj_mat_input;
 
+% distribution variables
+
 
 % decision variables ##########################################################################################################
 array[1..nrClasses, 1..nrDays] of var bool: classes_days;           % assignment of day schedule for each class
