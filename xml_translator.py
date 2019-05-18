@@ -94,6 +94,28 @@ configs_idx = {};
 
 """
 
+
+distributionConstraints = [
+	["SameStart",0],
+	["SameTime",0],
+	["DifferentTime",0],
+	["SameDays",0],
+	["DifferentDays",0],
+	["SameWeeks",0],
+	["DifferentWeeks",0],
+	["SameRoom",0],
+	["DifferentRoom",0],
+	["Overlap",0],
+	["NotOverlap",0],
+	["SameAttendees",0],
+	["Precedence",0],
+	["WorkDay",1],
+	["MinGap",1],
+	["MaxDays",1],
+	["MaxBreaks",2],
+	["MaxBlock",2]
+]
+
 def convert_xml_to_dzn(xml_string):
 	"""
 		returns a conversion of the xml instance to the dzn format
@@ -499,11 +521,33 @@ def convert_xml_to_dzn(xml_string):
 	# distributions
 	distrib_string = ""
 
-	for name, distrib_collection in distributions.items():
+	# A BIG REFACTOR WOULD BE NECESSARY HERE BUT NO TIME
+	for name, param in distributionConstraints:
+
+		if name not in distributions:
+			distrib_string+="""
+nr{}=0;
+nr{}_distrib=0;
+{}_idx = [];
+{}_cnt = [];
+{}_required = [];
+{}_penalty = [];
+{}_distrib_input = [];
+""".format(name, name, name, name, name, name, name)
+			if param == 1 or param == 2:
+				distrib_string+= name + "_nr1=[];"
+			if param == 2:
+				distrib_string+= '\n' + name + "_nr2=[];"
+
+			distrib_string+='\n'
+			continue
 
 		additionnal = ""
 		nr1_array = ""
 		nr2_array = ""
+
+		distrib_collection = distributions[name]
+		
 		if name == "MaxBreaks":
 			nr1_array = name + "_nr1 = ["
 			nr2_array = name + "_nr2 = ["
@@ -532,7 +576,12 @@ def convert_xml_to_dzn(xml_string):
 			idx_array += str(id) + ','
 			id += len(distrib["classes"])
 			cnt_array += str(len(distrib["classes"])) + ','
-			required_array += str(distrib["required"]) + ','
+			
+			if distrib["required"] == True:
+				required_array +=  'true,'	
+			else:
+				required_array +=  'false,'
+
 			penalty_array += str(distrib["penalty"]) + ','
 
 			if name == "MaxBreaks":
@@ -581,6 +630,8 @@ def convert_xml_to_dzn(xml_string):
 			additionnal += nr1_array + ';\n'
 
 		distrib_string += additionnal
+		distrib_string += "nr" + name + "=" + str(len(distrib_collection)) + ';\n'
+		distrib_string += "nr" + name + "_distrib=" + str(sum([len(distrib["classes"]) for distrib in distrib_collection])) + ';\n'
 		distrib_string += idx_array + ';\n'
 		distrib_string += cnt_array + ';\n'
 		distrib_string += required_array + ';\n'

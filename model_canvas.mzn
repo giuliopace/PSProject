@@ -76,6 +76,174 @@ array[1..nrRooms, 1..nrRooms] of int: travel_adj_mat_input;
 % input for distributional constraints
 
 
+int: nrSameStart;
+int: nrSameStart_distrib;
+array[1..nrSameStart] of int: SameStart_idx;
+array[1..nrSameStart] of int: SameStart_cnt;
+array[1..nrSameStart] of bool: SameStart_required;
+array[1..nrSameStart] of int: SameStart_penalty;
+array[1..nrSameStart_distrib] of int: SameStart_distrib_input;
+
+
+int: nrSameTime;
+int: nrSameTime_distrib;
+array[1..nrSameTime] of int: SameTime_idx;
+array[1..nrSameTime] of int: SameTime_cnt;
+array[1..nrSameTime] of bool: SameTime_required;
+array[1..nrSameTime] of int: SameTime_penalty;
+array[1..nrSameTime_distrib] of int: SameTime_distrib_input;
+
+
+int: nrDifferentTime;
+int: nrDifferentTime_distrib;
+array[1..nrDifferentTime] of int: DifferentTime_idx;
+array[1..nrDifferentTime] of int: DifferentTime_cnt;
+array[1..nrDifferentTime] of bool: DifferentTime_required;
+array[1..nrDifferentTime] of int: DifferentTime_penalty;
+array[1..nrDifferentTime_distrib] of int: DifferentTime_distrib_input;
+
+
+int: nrSameDays;
+int: nrSameDays_distrib;
+array[1..nrSameDays] of int: SameDays_idx;
+array[1..nrSameDays] of int: SameDays_cnt;
+array[1..nrSameDays] of bool: SameDays_required;
+array[1..nrSameDays] of int: SameDays_penalty;
+array[1..nrSameDays_distrib] of int: SameDays_distrib_input;
+
+
+int: nrDifferentDays;
+int: nrDifferentDays_distrib;
+array[1..nrDifferentDays] of int: DifferentDays_idx;
+array[1..nrDifferentDays] of int: DifferentDays_cnt;
+array[1..nrDifferentDays] of bool: DifferentDays_required;
+array[1..nrDifferentDays] of int: DifferentDays_penalty;
+array[1..nrDifferentDays_distrib] of int: DifferentDays_distrib_input;
+
+
+int: nrSameWeeks;
+int: nrSameWeeks_distrib;
+array[1..nrSameWeeks] of int: SameWeeks_idx;
+array[1..nrSameWeeks] of int: SameWeeks_cnt;
+array[1..nrSameWeeks] of bool: SameWeeks_required;
+array[1..nrSameWeeks] of int: SameWeeks_penalty;
+array[1..nrSameWeeks_distrib] of int: SameWeeks_distrib_input;
+
+
+int: nrDifferentWeeks;
+int: nrDifferentWeeks_distrib;
+array[1..nrDifferentWeeks] of int: DifferentWeeks_idx;
+array[1..nrDifferentWeeks] of int: DifferentWeeks_cnt;
+array[1..nrDifferentWeeks] of bool: DifferentWeeks_required;
+array[1..nrDifferentWeeks] of int: DifferentWeeks_penalty;
+array[1..nrDifferentWeeks_distrib] of int: DifferentWeeks_distrib_input;
+
+
+int: nrSameRoom;
+int: nrSameRoom_distrib;
+array[1..nrSameRoom] of int: SameRoom_idx;
+array[1..nrSameRoom] of int: SameRoom_cnt;
+array[1..nrSameRoom] of bool: SameRoom_required;
+array[1..nrSameRoom] of int: SameRoom_penalty;
+array[1..nrSameRoom_distrib] of int: SameRoom_distrib_input;
+
+
+int: nrDifferentRoom;
+int: nrDifferentRoom_distrib;
+array[1..nrDifferentRoom] of int: DifferentRoom_idx;
+array[1..nrDifferentRoom] of int: DifferentRoom_cnt;
+array[1..nrDifferentRoom] of bool: DifferentRoom_required;
+array[1..nrDifferentRoom] of int: DifferentRoom_penalty;
+array[1..nrDifferentRoom_distrib] of int: DifferentRoom_distrib_input;
+
+
+int: nrOverlap;
+int: nrOverlap_distrib;
+array[1..nrOverlap] of int: Overlap_idx;
+array[1..nrOverlap] of int: Overlap_cnt;
+array[1..nrOverlap] of bool: Overlap_required;
+array[1..nrOverlap] of int: Overlap_penalty;
+array[1..nrOverlap_distrib] of int: Overlap_distrib_input;
+
+
+int: nrNotOverlap;
+int: nrNotOverlap_distrib;
+array[1..nrNotOverlap] of int: NotOverlap_idx;
+array[1..nrNotOverlap] of int: NotOverlap_cnt;
+array[1..nrNotOverlap] of bool: NotOverlap_required;
+array[1..nrNotOverlap] of int: NotOverlap_penalty;
+array[1..nrNotOverlap_distrib] of int: NotOverlap_distrib_input;
+
+
+int: nrSameAttendees;
+int: nrSameAttendees_distrib;
+array[1..nrSameAttendees] of int: SameAttendees_idx;
+array[1..nrSameAttendees] of int: SameAttendees_cnt;
+array[1..nrSameAttendees] of bool: SameAttendees_required;
+array[1..nrSameAttendees] of int: SameAttendees_penalty;
+array[1..nrSameAttendees_distrib] of int: SameAttendees_distrib_input;
+
+
+int: nrPrecedence;
+int: nrPrecedence_distrib;
+array[1..nrPrecedence] of int: Precedence_idx;
+array[1..nrPrecedence] of int: Precedence_cnt;
+array[1..nrPrecedence] of bool: Precedence_required;
+array[1..nrPrecedence] of int: Precedence_penalty;
+array[1..nrPrecedence_distrib] of int: Precedence_distrib_input;
+
+
+int: nrWorkDay;
+int: nrWorkDay_distrib;
+array[1..nrWorkDay] of int: WorkDay_idx;
+array[1..nrWorkDay] of int: WorkDay_cnt;
+array[1..nrWorkDay] of bool: WorkDay_required;
+array[1..nrWorkDay] of int: WorkDay_penalty;
+array[1..nrWorkDay] of int: WorkDay_distrib_input;
+array[1..nrWorkDay_distrib] of int: WorkDay_nr1;
+
+
+int: nrMinGap;
+int: nrMinGap_distrib;
+array[1..nrMinGap] of int: MinGap_idx;
+array[1..nrMinGap] of int: MinGap_cnt;
+array[1..nrMinGap] of bool: MinGap_required;
+array[1..nrMinGap] of int: MinGap_penalty;
+array[1..nrMinGap] of int: MinGap_distrib_input;
+array[1..nrMinGap_distrib] of int: MinGap_nr1;
+
+
+int: nrMaxDays;
+int: nrMaxDays_distrib;
+array[1..nrMaxDays] of int: MaxDays_idx;
+array[1..nrMaxDays] of int: MaxDays_cnt;
+array[1..nrMaxDays] of bool: MaxDays_required;
+array[1..nrMaxDays] of int: MaxDays_penalty;
+array[1..nrMaxDays] of int: MaxDays_distrib_input;
+array[1..nrMaxDays_distrib] of int: MaxDays_nr1;
+
+
+int: nrMaxBreaks;
+int: nrMaxBreaks_distrib;
+array[1..nrMaxBreaks] of int: MaxBreaks_idx;
+array[1..nrMaxBreaks] of int: MaxBreaks_cnt;
+array[1..nrMaxBreaks] of bool: MaxBreaks_required;
+array[1..nrMaxBreaks] of int: MaxBreaks_penalty;
+array[1..nrMaxBreaks] of int: MaxBreaks_distrib_input;
+array[1..nrMaxBreaks] of int: MaxBreaks_nr1;
+array[2..nrMaxBreaks_distrib] of int: MaxBreaks_nr2;
+
+
+int: nrMaxBlock;
+int: nrMaxBlock_distrib;
+array[1..nrMaxBlock] of int: MaxBlock_idx;
+array[1..nrMaxBlock] of int: MaxBlock_cnt;
+array[1..nrMaxBlock] of bool: MaxBlock_required;
+array[1..nrMaxBlock] of int: MaxBlock_penalty;
+array[1..nrMaxBlock] of int: MaxBlock_distrib_input;
+array[1..nrMaxBlock] of int: MaxBlock_nr1;
+array[2..nrMaxBlock_distrib] of int: MaxBlock_nr2;
+
 % decision variables ##########################################################################################################
 array[1..nrClasses, 1..nrDays] of var bool: classes_days;           % assignment of day schedule for each class
 array[1..nrClasses, 1..nrWeeks] of var bool: classes_weeks;         % assignment of week schedule for each class

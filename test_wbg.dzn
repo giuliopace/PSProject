@@ -14899,18 +14899,168 @@ configs_idx = [1,6,11,16,21,26,31,36,41,46,51,56,61,66,71,76,81,86,91,96,101,106
 
 %%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-SameAttendees_idx = [1,7,13,25,27,29,31,33,35,37,39,41,43,45,47,49,52,55,58,61,64,67,70,73,76,79,82,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113,115,117,119,121,123,125,128,131,134,137,140,142,144,146];
-SameAttendees_cnt = [6,6,12,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,2,2,2,2];
-SameAttendees_required = [True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True];
-SameAttendees_penalty = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-SameAttendees_distrib_input = [1,31,32,37,38,39,3,4,5,28,29,30,40,41,42,43,44,45,46,47,48,49,50,51,40,37,41,37,42,37,43,37,44,38,45,38,46,38,47,38,48,39,49,39,50,39,51,39,67,55,52,68,56,52,69,57,52,70,58,52,71,59,53,72,60,53,73,61,53,74,62,53,75,63,54,76,64,54,77,65,54,78,66,54,99,89,100,90,101,91,102,92,103,93,104,94,105,95,106,96,107,97,108,98,110,109,111,109,112,109,115,113,116,113,117,114,118,114,123,122,124,122,125,122,135,130,128,136,131,128,137,132,129,138,133,129,139,134,129,147,145,148,145,149,146,150,146];
 
+nrSameStart=0;
+nrSameStart_distrib=0;
+SameStart_idx = [];
+SameStart_cnt = [];
+SameStart_required = [];
+SameStart_penalty = [];
+SameStart_distrib_input = [];
+
+
+nrSameTime=0;
+nrSameTime_distrib=0;
+SameTime_idx = [];
+SameTime_cnt = [];
+SameTime_required = [];
+SameTime_penalty = [];
+SameTime_distrib_input = [];
+
+
+nrDifferentTime=0;
+nrDifferentTime_distrib=0;
+DifferentTime_idx = [];
+DifferentTime_cnt = [];
+DifferentTime_required = [];
+DifferentTime_penalty = [];
+DifferentTime_distrib_input = [];
+
+
+nrSameDays=0;
+nrSameDays_distrib=0;
+SameDays_idx = [];
+SameDays_cnt = [];
+SameDays_required = [];
+SameDays_penalty = [];
+SameDays_distrib_input = [];
+
+
+nrDifferentDays=0;
+nrDifferentDays_distrib=0;
+DifferentDays_idx = [];
+DifferentDays_cnt = [];
+DifferentDays_required = [];
+DifferentDays_penalty = [];
+DifferentDays_distrib_input = [];
+
+
+nrSameWeeks=0;
+nrSameWeeks_distrib=0;
+SameWeeks_idx = [];
+SameWeeks_cnt = [];
+SameWeeks_required = [];
+SameWeeks_penalty = [];
+SameWeeks_distrib_input = [];
+
+
+nrDifferentWeeks=0;
+nrDifferentWeeks_distrib=0;
+DifferentWeeks_idx = [];
+DifferentWeeks_cnt = [];
+DifferentWeeks_required = [];
+DifferentWeeks_penalty = [];
+DifferentWeeks_distrib_input = [];
+
+
+nrSameRoom=0;
+nrSameRoom_distrib=0;
+SameRoom_idx = [];
+SameRoom_cnt = [];
+SameRoom_required = [];
+SameRoom_penalty = [];
+SameRoom_distrib_input = [];
+
+
+nrDifferentRoom=0;
+nrDifferentRoom_distrib=0;
+DifferentRoom_idx = [];
+DifferentRoom_cnt = [];
+DifferentRoom_required = [];
+DifferentRoom_penalty = [];
+DifferentRoom_distrib_input = [];
+
+
+nrOverlap=0;
+nrOverlap_distrib=0;
+Overlap_idx = [];
+Overlap_cnt = [];
+Overlap_required = [];
+Overlap_penalty = [];
+Overlap_distrib_input = [];
+
+nrNotOverlap=26;
+nrNotOverlap_distrib=141;
 NotOverlap_idx = [1,6,10,12,14,24,27,29,41,43,47,57,60,63,75,78,89,91,95,97,108,120,123,128,131,140];
 NotOverlap_cnt = [5,4,2,2,10,3,2,12,2,4,10,3,3,12,3,11,2,4,2,11,12,3,5,3,9,2];
-NotOverlap_required = [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False];
+NotOverlap_required = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false];
 NotOverlap_penalty = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 NotOverlap_distrib_input = [139,137,135,138,136,33,34,35,36,140,141,31,32,89,90,91,92,93,94,95,96,97,98,37,38,39,145,146,40,48,44,49,41,45,50,46,42,51,43,47,143,144,149,150,147,148,105,106,99,103,104,107,100,102,108,101,52,53,54,110,111,112,59,55,60,61,63,62,56,57,58,64,65,66,3,4,5,17,18,19,20,21,22,23,24,25,26,27,113,114,117,118,115,116,119,120,6,7,8,9,10,11,12,13,14,15,16,72,73,76,75,68,74,70,67,77,78,71,69,123,124,125,132,130,133,134,131,28,29,30,79,80,81,82,83,84,85,86,87,128,129];
 
+nrSameAttendees=56;
+nrSameAttendees_distrib=147;
+SameAttendees_idx = [1,7,13,25,27,29,31,33,35,37,39,41,43,45,47,49,52,55,58,61,64,67,70,73,76,79,82,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113,115,117,119,121,123,125,128,131,134,137,140,142,144,146];
+SameAttendees_cnt = [6,6,12,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,2,2,2,2];
+SameAttendees_required = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
+SameAttendees_penalty = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+SameAttendees_distrib_input = [1,31,32,37,38,39,3,4,5,28,29,30,40,41,42,43,44,45,46,47,48,49,50,51,40,37,41,37,42,37,43,37,44,38,45,38,46,38,47,38,48,39,49,39,50,39,51,39,67,55,52,68,56,52,69,57,52,70,58,52,71,59,53,72,60,53,73,61,53,74,62,53,75,63,54,76,64,54,77,65,54,78,66,54,99,89,100,90,101,91,102,92,103,93,104,94,105,95,106,96,107,97,108,98,110,109,111,109,112,109,115,113,116,113,117,114,118,114,123,122,124,122,125,122,135,130,128,136,131,128,137,132,129,138,133,129,139,134,129,147,145,148,145,149,146,150,146];
+
+
+nrPrecedence=0;
+nrPrecedence_distrib=0;
+Precedence_idx = [];
+Precedence_cnt = [];
+Precedence_required = [];
+Precedence_penalty = [];
+Precedence_distrib_input = [];
+
+
+nrWorkDay=0;
+nrWorkDay_distrib=0;
+WorkDay_idx = [];
+WorkDay_cnt = [];
+WorkDay_required = [];
+WorkDay_penalty = [];
+WorkDay_distrib_input = [];
+WorkDay_nr1=[];
+
+nrMinGap=0;
+nrMinGap_distrib=0;
+MinGap_idx = [];
+MinGap_cnt = [];
+MinGap_required = [];
+MinGap_penalty = [];
+MinGap_distrib_input = [];
+MinGap_nr1=[];
+
+nrMaxDays=0;
+nrMaxDays_distrib=0;
+MaxDays_idx = [];
+MaxDays_cnt = [];
+MaxDays_required = [];
+MaxDays_penalty = [];
+MaxDays_distrib_input = [];
+MaxDays_nr1=[];
+
+nrMaxBreaks=0;
+nrMaxBreaks_distrib=0;
+MaxBreaks_idx = [];
+MaxBreaks_cnt = [];
+MaxBreaks_required = [];
+MaxBreaks_penalty = [];
+MaxBreaks_distrib_input = [];
+MaxBreaks_nr1=[];
+MaxBreaks_nr2=[];
+
+nrMaxBlock=0;
+nrMaxBlock_distrib=0;
+MaxBlock_idx = [];
+MaxBlock_cnt = [];
+MaxBlock_required = [];
+MaxBlock_penalty = [];
+MaxBlock_distrib_input = [];
+MaxBlock_nr1=[];
+MaxBlock_nr2=[];
 
 
 
