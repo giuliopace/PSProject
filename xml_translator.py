@@ -482,17 +482,14 @@ def convert_xml_to_dzn(xml_string):
 		students_pref_idx_s += str(idx_count) + ','
 
 		for course in student:
-			students_pref += '|'
 			students_pref += str(course) + ','
-			students_pref += '% student {}\n'.format(idx)
-			students_pref += '\n'
 
 			idx_count += 1
 			cnt_count += 1
 
 
-	students_pref += '|]'
-	students_pref_idx_s += str(idx_count) + ']'
+	students_pref += ']'
+	students_pref_idx_s +=  ']'
 	students_pref_cnt_s += str(cnt_count) + ']'
 
 	#class_hierarchy_input
@@ -513,10 +510,8 @@ def convert_xml_to_dzn(xml_string):
 
 	class_limit_input = '['
 	for idx, class_el in classes_courses.items():
-		class_limit_input += '|'
 		class_limit_input += str(class_el['limit']) + ','
-		class_limit_input += '\n'
-	class_limit_input += '|]'
+	class_limit_input += ']'
 
 	# distributions
 	distrib_string = ""
@@ -669,8 +664,8 @@ nr{}_distrib=0;
 
 
 	configs_s += '|]'
-	configs_idx_s += str(idx_count) + ']'
-	configs_cnt_s += str(cnt_count) + ']'
+	configs_idx_s +=  ']'
+	configs_cnt_s +=  str(cnt_count) + ']'
 	nrConfigs += 1
 
 

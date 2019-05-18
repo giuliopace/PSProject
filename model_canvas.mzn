@@ -51,7 +51,7 @@ array[1..nrOptions, 1..2] of 1..slotsPerDay: classes_slots_input;
 array[1..nrOptions] of int: classes_penalties_input;
 
 % input data for class hierarchy
-array[1..nrClasses, 4] of int: class_hierarchy_input;                                                                             % NEW
+array[1..nrClasses, 1..4] of int: class_hierarchy_input;                                                                             % NEW
 
 % input data for class limits
 array[1..nrClasses] of int: class_limit_input;                                                                                    % NEW
@@ -403,7 +403,7 @@ constraint forall(s in 1..nrStudents)(
 
 % class limit >= number of students enrolled to the class                                                                           % NEW
 constraint forall(c in 1..nrClasses)(
-    class_limit_input[c] >= sum (s in nrStudents)(classes_students[c,s])
+    class_limit_input[c] >= sum (s in 1..nrStudents)(classes_students[c,s])
 );
 
 % every course on the preference list of students has to be taken                                                                   % NEW
