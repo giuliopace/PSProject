@@ -371,7 +371,7 @@ constraint forall(s in 1..nrStudents)(
         \/ classes_students[class_hierarchy_input[c,1],s]
     )
 );
-
+/*
 % each class of a subpart enrolls the student to the respective subpart                                                             % NEW
 constraint forall(s in 1..nrStudents)(
     forall(c in 1..nrClasses)(
@@ -414,7 +414,16 @@ constraint forall(s in 1..nrStudents)(
             /\ class_hierarchy_input[c,4] == student_pref_input[pref]
         )
     )
-);
+);*/
+
+constraint forall(i in 1..nrSameStart)(
+    forall(c1 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
+        forall(c2 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
+            c1 == c2
+            \/ classes_start[c1] == class_start[c2]
+        )
+    )
+)
 
 
 % objective function ##########################################################################################################
