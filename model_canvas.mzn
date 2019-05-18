@@ -255,6 +255,24 @@ array[1..nrClasses] of var int: classes_option_penalties;           % penalty fo
 array[1..nrClasses] of var int: classes_room_penalties;             % penalty for each room
 array[1..nrSubparts, 1..nrStudents] of var bool: subparts_students; % assignment of enrolled students for each subpart            % NEW
 
+array[1..nrSameStart] of var int: SameStart_dec_penalty;
+array[1..nrSameTime] of var int: SameTime_dec_penalty;
+array[1..nrDifferentTime] of var int: DifferentTime_dec_penalty;
+array[1..nrSameDays] of var int: SameDays_dec_penalty;
+array[1..nrDifferentDays] of var int: DifferentDays_dec_penalty;
+array[1..nrSameWeeks] of var int: SameWeeks_dec_penalty;
+array[1..nrDifferentWeeks] of var int: DifferentWeeks_dec_penalty;
+array[1..nrSameRoom] of var int: SameRoom_dec_penalty;
+array[1..nrDifferentRoom] of var int: DifferentRoom_dec_penalty;
+array[1..nrOverlap] of var int: Overlap_dec_penalty;
+array[1..nrNotOverlap] of var int: NotOverlap_dec_penalty;
+array[1..nrSameAttendees] of var int: SameAttendees_dec_penalty;
+array[1..nrPrecedence] of var int: Precedence_dec_penalty;
+array[1..nrWorkDay] of var int: WorkDay_dec_penalty;
+array[1..nrMinGap] of var int: MinGap_dec_penalty;
+array[1..nrMaxDays] of var int: MaxDays_dec_penalty;
+array[1..nrMaxBreaks] of var int: MaxBreaks_dec_penalty;
+array[1..nrMaxBlock] of var int: MaxBlock_dec_penalty;
 
 % predicates ##################################################################################################################
 
@@ -416,13 +434,24 @@ constraint forall(s in 1..nrStudents)(
     )
 );*/
 
+% constraint ∨ (¬req ∧ penalty) 
 constraint forall(i in 1..nrSameStart)(
+
     forall(c1 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
         forall(c2 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
             c1 == c2
             \/ classes_start[c1] == class_start[c2]
         )
     )
+    
+    \/
+
+    (
+        not (SameStart_required[i]) 
+        /\ SameAttendees_penalty[i] == SameAttendees_dec_penalty[i]
+    )
+
+
 )
 
 
