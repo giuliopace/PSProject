@@ -51,7 +51,7 @@ array[1..nrOptions, 1..2] of 1..slotsPerDay: classes_slots_input;
 array[1..nrOptions] of int: classes_penalties_input;
 
 % input data for class hierarchy
-array[1..nrClasses, 1..4] of int: class_hierarchy_input;                                                                             % NEW
+array[1..nrClasses, 1..4] of int: class_hierarchy_input;                                                                          % NEW
 
 % input data for class limits
 array[1..nrClasses] of int: class_limit_input;                                                                                    % NEW
@@ -255,24 +255,24 @@ array[1..nrClasses] of var int: classes_option_penalties;           % penalty fo
 array[1..nrClasses] of var int: classes_room_penalties;             % penalty for each room
 array[1..nrSubparts, 1..nrStudents] of var bool: subparts_students; % assignment of enrolled students for each subpart            % NEW
 
-array[1..nrSameStart] of var int: SameStart_dec_penalty;
-array[1..nrSameTime] of var int: SameTime_dec_penalty;
-array[1..nrDifferentTime] of var int: DifferentTime_dec_penalty;
-array[1..nrSameDays] of var int: SameDays_dec_penalty;
-array[1..nrDifferentDays] of var int: DifferentDays_dec_penalty;
-array[1..nrSameWeeks] of var int: SameWeeks_dec_penalty;
-array[1..nrDifferentWeeks] of var int: DifferentWeeks_dec_penalty;
-array[1..nrSameRoom] of var int: SameRoom_dec_penalty;
-array[1..nrDifferentRoom] of var int: DifferentRoom_dec_penalty;
-array[1..nrOverlap] of var int: Overlap_dec_penalty;
-array[1..nrNotOverlap] of var int: NotOverlap_dec_penalty;
-array[1..nrSameAttendees] of var int: SameAttendees_dec_penalty;
-array[1..nrPrecedence] of var int: Precedence_dec_penalty;
-array[1..nrWorkDay] of var int: WorkDay_dec_penalty;
-array[1..nrMinGap] of var int: MinGap_dec_penalty;
-array[1..nrMaxDays] of var int: MaxDays_dec_penalty;
-array[1..nrMaxBreaks] of var int: MaxBreaks_dec_penalty;
-array[1..nrMaxBlock] of var int: MaxBlock_dec_penalty;
+array[1..nrSameStart] of var 1..10: SameStart_dec_penalty;
+array[1..nrSameTime] of var 1..10: SameTime_dec_penalty;
+array[1..nrDifferentTime] of var 1..10: DifferentTime_dec_penalty;
+array[1..nrSameDays] of var 1..10: SameDays_dec_penalty;
+array[1..nrDifferentDays] of var 1..10: DifferentDays_dec_penalty;
+array[1..nrSameWeeks] of var 1..10: SameWeeks_dec_penalty;
+array[1..nrDifferentWeeks] of var 1..10: DifferentWeeks_dec_penalty;
+array[1..nrSameRoom] of var 1..10: SameRoom_dec_penalty;
+array[1..nrDifferentRoom] of var 1..10: DifferentRoom_dec_penalty;
+array[1..nrOverlap] of var 1..10: Overlap_dec_penalty;
+array[1..nrNotOverlap] of var 1..10: NotOverlap_dec_penalty;
+array[1..nrSameAttendees] of var 1..10: SameAttendees_dec_penalty;
+array[1..nrPrecedence] of var 1..10: Precedence_dec_penalty;
+array[1..nrWorkDay] of var 1..10: WorkDay_dec_penalty;
+array[1..nrMinGap] of var 1..10: MinGap_dec_penalty;
+array[1..nrMaxDays] of var 1..10: MaxDays_dec_penalty;
+array[1..nrMaxBreaks] of var 1..10: MaxBreaks_dec_penalty;
+array[1..nrMaxBlock] of var 1..10: MaxBlock_dec_penalty;
 
 % predicates ##################################################################################################################
 
@@ -300,6 +300,89 @@ predicate student_conflict(var int:c1, var int:c2, var int:s) =                 
 
 
 % constraints #################################################################################################################
+
+
+% ensure that all penalties are positive
+constraint forall(i in 1..nrClasses)(
+    classes_option_penalties[i] >=0
+);
+
+constraint forall (i in 1..nrClasses)(
+    classes_room_penalties[i] >=0
+);
+
+constraint forall(i in 1..nrSameStart)(
+    SameStart_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrSameTime)(
+    SameTime_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrDifferentTime)(
+    DifferentTime_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrSameDays)(
+    SameDays_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrDifferentDays)(
+    DifferentDays_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrSameWeeks)(
+    SameWeeks_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrDifferentWeeks)(
+    DifferentWeeks_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrSameRoom)(
+    SameRoom_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrDifferentRoom)(
+    DifferentRoom_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrOverlap)(
+    Overlap_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrNotOverlap)(
+    NotOverlap_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrSameAttendees)(
+    SameAttendees_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrPrecedence)(
+    Precedence_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrWorkDay)(
+    WorkDay_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrMinGap)(
+    MinGap_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrMaxDays)(
+    MaxDays_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrMaxBreaks)(
+    MaxBreaks_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrMaxBlock)(
+    MaxBlock_dec_penalty[i] >= 0
+);
+
 
 % class assigned to one of its possible room
 constraint forall(i in 1..nrClasses)(
@@ -369,7 +452,7 @@ constraint forall(i in 1..nrClasses)(
         )
     )
 );
-/*
+
 % each student only attends classes in exactly 1 configuration of a course
 constraint forall(s in 1..nrStudents)(
     forall(c1 in 1..nrClasses)(
@@ -445,7 +528,7 @@ constraint forall(i in 1..nrSameStart)(
     forall(c1 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
         forall(c2 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
             c1 == c2
-            \/ classes_start[c1] == classes_start[c2]
+            \/ classes_start[SameStart_distrib_input[c1]] == classes_start[SameStart_distrib_input[c2]]
         )
     )
     
@@ -453,11 +536,53 @@ constraint forall(i in 1..nrSameStart)(
 
     (
         not (SameStart_required[i]) 
-        /\ SameAttendees_penalty[i] == SameAttendees_dec_penalty[i]
+        /\ SameStart_penalty[i] == SameStart_dec_penalty[i]
     )
 
-)
-*/
+);
+
+% constraint ∨ (¬req ∧ penalty)  
+constraint forall(i in 1..nrPrecedence)(
+    forall(c1 in Precedence_idx[i]..Precedence_idx[i]+Precedence_cnt[i]-1)(
+        forall(c2 in Precedence_idx[i]..Precedence_idx[i]+Precedence_cnt[i]-1)(
+            c1 >= c2 % we are only interested in the constraints where c1 < c2
+            \/
+            % start some week before
+            min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c1],w]==true) 
+            < min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c2],w]==true)
+            \/ % or
+            (
+                % start the same week
+                min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c1],w]==true) 
+                == min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c2],w]==true)
+                /\ % and
+                (
+                    % start some day before
+                    min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c1],d]==true) 
+                    < min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c2],d]==true)
+                    \/ % or
+                    (   
+                        % start the same day
+                        min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c1],d]==true) 
+                        == min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c2],d]==true)
+                        /\
+                        % and the class 1 finishes before class 2 starts
+                        classes_start[Precedence_distrib_input[c1]]+classes_duration[Precedence_distrib_input[c1]]
+                        <= classes_start[Precedence_distrib_input[c2]]
+                    )
+                )
+            )
+        )
+    )
+
+    \/
+
+    (
+        not (Precedence_required[i]) 
+        /\ Precedence_penalty[i] == Precedence_dec_penalty[i]
+    )
+);
+
 
 % objective function ##########################################################################################################
-solve minimize sum(classes_option_penalties)+sum(classes_room_penalties);
+solve minimize sum(classes_option_penalties)+sum(classes_room_penalties)+sum(SameStart_dec_penalty)+sum(SameTime_dec_penalty)+sum(DifferentTime_dec_penalty)+sum(SameDays_dec_penalty)+sum(DifferentDays_dec_penalty)+sum(SameWeeks_dec_penalty)+sum(DifferentWeeks_dec_penalty)+sum(SameRoom_dec_penalty)+sum(DifferentRoom_dec_penalty)+sum(Overlap_dec_penalty)+sum(NotOverlap_dec_penalty)+sum(SameAttendees_dec_penalty)+sum(Precedence_dec_penalty)+sum(WorkDay_dec_penalty)+sum(MinGap_dec_penalty)+sum(MaxDays_dec_penalty)+sum(MaxBreaks_dec_penalty)+sum(MaxBlock_dec_penalty);
