@@ -5085,7 +5085,7 @@ travel_adj_mat_input = [|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 student_pref_idx = [];
 
 %students_pref_cnt
-student_pref_cnt = [0];
+student_pref_cnt = [];
 
 %students_pref (first value is a course, second value is the student id of the student that wants to attend it)
 student_pref_input = [];

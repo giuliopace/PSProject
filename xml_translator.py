@@ -494,7 +494,10 @@ def convert_xml_to_dzn(xml_string):
 
 	students_pref += ']'
 	students_pref_idx_s +=  ']'
-	students_pref_cnt_s += str(cnt_count) + ']'
+	if cnt_count == 0:
+		students_pref_cnt_s += ']'
+	else:	
+		students_pref_cnt_s += str(cnt_count) + ']'
 
 	#class_hierarchy_input
 
