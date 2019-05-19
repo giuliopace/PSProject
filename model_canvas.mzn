@@ -284,6 +284,7 @@ array[1..nrMaxDays] of var 0..10: MaxDays_dec_penalty;
 array[1..nrMaxDayLoad] of var 0..10: MaxDayLoad_dec_penalty;
 array[1..nrMaxBreaks] of var 0..10: MaxBreaks_dec_penalty;
 array[1..nrMaxBlock] of var 0..10: MaxBlock_dec_penalty;
+array[1..nrStudents] of var 0..100: student_penalties;
 
 % predicates ##################################################################################################################
 
@@ -294,23 +295,29 @@ predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
 % no overlapping class incl. travel time                                                                                          % NEW
 predicate no_overlap_time(var int:s1, var int:d1, var int:s2, var int:d2, var int:t) =
     s1 + d1 + t <= s2 \/ s2 + d2 + t <= s1;
- 
-  
-% student conflict
-predicate student_conflict(var int:c1, var int:c2, var int:s) =                                                                   % NEW
-    exists(w in 1..nrWeeks)(
-        exists(d in 1..nrDays)(
-            classes_students[c1,s]
-            /\ classes_students[c2,s]
-            /\ (classes_weeks[c1,w] == classes_weeks[c2,w])
-            /\ (classes_days[c1,d] == classes_days[c2,d])
-            /\ (not (no_overlap(classes_start[c1], classes_duration[c1], classes_start[c2], classes_duration[c2]))
-                \/ not (no_overlap_time(classes_start[c1], classes_duration[c1], classes_start[c2], classes_duration[c2],       travel_adj_mat_input[classes_room[c1],classes_room[c2]])))
-        )
-    );
 
 
 % constraints #################################################################################################################
+
+constraint forall(s in 1..nrStudents)(
+    student_penalties[s] = 
+    sum(c1 in 1..nrClasses)(
+        sum(c2 in 1..nrClasses)(
+            bool2int(
+                forall(d in 1..nrDays)(
+                    forall(w in 1..nrWeeks)(
+                        classes_students[c1,s]
+                        /\ classes_students[c2,s]
+                        /\ (classes_weeks[c1,w] == classes_weeks[c2,w])
+                        /\ (classes_days[c1,d] == classes_days[c2,d])
+                        /\ (not (no_overlap(classes_start[c1], classes_duration[c1], classes_start[c2], classes_duration[c2]))
+                            \/ not (no_overlap_time(classes_start[c1], classes_duration[c1], classes_start[c2], classes_duration[c2], travel_adj_mat_input[classes_room[c1],classes_room[c2]])))
+                    )
+                )
+            )
+        )
+    )
+);
 
 
 % ensure that all penalties are positive
@@ -416,7 +423,6 @@ constraint forall(i in 1..nrClasses)(
 constraint forall (i in 1..nrClasses)(
     classes_room[i] == nrRooms+1
     \/
-    %forall (unav in rooms_unav_idx[classes_room[i]]..(rooms_unav_idx[classes_room[i]]+rooms_unav_cnt[classes_room[i]]-1))(
     forall (unav in 0..-1)(
         forall(w in 1..nrWeeks)(
             forall(d in 1..nrDays)(
@@ -905,4 +911,4 @@ constraint forall(i in 1..nrMaxDayLoad)(
 
 
 % objective function ##########################################################################################################
-solve minimize sum(classes_option_penalties)+sum(classes_room_penalties)+sum(SameStart_dec_penalty)+sum(SameTime_dec_penalty)+sum(DifferentTime_dec_penalty)+sum(SameDays_dec_penalty)+sum(DifferentDays_dec_penalty)+sum(SameWeeks_dec_penalty)+sum(DifferentWeeks_dec_penalty)+sum(SameRoom_dec_penalty)+sum(DifferentRoom_dec_penalty)+sum(Overlap_dec_penalty)+sum(NotOverlap_dec_penalty)+sum(SameAttendees_dec_penalty)+sum(Precedence_dec_penalty)+sum(WorkDay_dec_penalty)+sum(MinGap_dec_penalty)+sum(MaxDays_dec_penalty)+sum(MaxDayLoad_dec_penalty)+sum(MaxBreaks_dec_penalty)+sum(MaxBlock_dec_penalty);
+solve minimize sum(student_penalties)+sum(classes_option_penalties)+sum(classes_room_penalties)+sum(SameStart_dec_penalty)+sum(SameTime_dec_penalty)+sum(DifferentTime_dec_penalty)+sum(SameDays_dec_penalty)+sum(DifferentDays_dec_penalty)+sum(SameWeeks_dec_penalty)+sum(DifferentWeeks_dec_penalty)+sum(SameRoom_dec_penalty)+sum(DifferentRoom_dec_penalty)+sum(Overlap_dec_penalty)+sum(NotOverlap_dec_penalty)+sum(SameAttendees_dec_penalty)+sum(Precedence_dec_penalty)+sum(WorkDay_dec_penalty)+sum(MinGap_dec_penalty)+sum(MaxDays_dec_penalty)+sum(MaxDayLoad_dec_penalty)+sum(MaxBreaks_dec_penalty)+sum(MaxBlock_dec_penalty);
