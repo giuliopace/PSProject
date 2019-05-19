@@ -522,24 +522,219 @@ constraint forall(s in 1..nrStudents)(
 );
 
 
-% constraint ∨ (¬req ∧ penalty)  
-constraint forall(i in 1..nrSameStart)(
+% distributional constraints ###################################################################################################
 
+% sameStart | constraint ∨ (¬req ∧ penalty)  
+constraint forall(i in 1..nrSameStart)(
     forall(c1 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
         forall(c2 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
             c1 == c2
             \/ classes_start[SameStart_distrib_input[c1]] == classes_start[SameStart_distrib_input[c2]]
         )
     )
-    
     \/
-
     (
         not (SameStart_required[i]) 
         /\ SameStart_penalty[i] == SameStart_dec_penalty[i]
     )
-
 );
+
+% sameTime
+constraint forall(i in 1..nrSameTime)(
+    forall(c1 in SameTime_idx[i]..SameTime_idx[i]+SameTime_cnt[i]-1)(
+        forall(c2 in SameTime_idx[i]..SameTime_idx[i]+SameTime_cnt[i]-1)(
+            c1 == c2
+            \/ (classes_start[SameTime_distrib_input[c1]] <= classes_start[SameTime_distrib_input[c2]]
+                /\ classes_start[SameTime_distrib_input[c2]] + classes_duration[SameTime_distrib_input[c2]] <= classes_start[SameTime_distrib_input[c1]] + classes_duration[SameTime_distrib_input[c1]])
+            \/ (classes_start[SameTime_distrib_input[c2]] <= classes_start[SameTime_distrib_input[c1]]
+                /\ classes_start[SameTime_distrib_input[c1]] + classes_duration[SameTime_distrib_input[c1]] <= classes_start[SameTime_distrib_input[c2]] + classes_duration[SameTime_distrib_input[c2]])
+        )
+    )
+    \/
+    (
+        not (SameTime_required[i]) 
+        /\ SameTime_penalty[i] == SameTime_dec_penalty[i]
+    )
+);
+
+% differentTime
+constraint forall(i in 1..nrDifferentTime)(
+    forall(c1 in DifferentTime_idx[i]..DifferentTime_idx[i]+DifferentTime_cnt[i]-1)(
+        forall(c2 in DifferentTime_idx[i]..DifferentTime_idx[i]+DifferentTime_cnt[i]-1)(
+            c1 == c2
+            \/ (classes_start[DifferentTime_distrib_input[c1]] <= classes_start[DifferentTime_distrib_input[c2]])
+            \/ (classes_start[DifferentTime_distrib_input[c2]] <= classes_start[DifferentTime_distrib_input[c1]])
+        )
+    )
+    \/
+    (
+        not (DifferentTime_required[i]) 
+        /\ DifferentTime_penalty[i] == DifferentTime_dec_penalty[i]
+    )
+);
+
+% sameDays
+constraint forall(i in 1..nrSameDays)(
+    exists(c1 in SameDays_idx[i]..SameDays_idx[i]+SameDays_cnt[i]-1)(
+        forall(c2 in SameDays_idx[i]..SameDays_idx[i]+SameDays_cnt[i]-1)(
+            forall(d in 1..nrDays)(
+                c1 == c2
+                \/ not (classes_days[SameDays_distrib_input[c2],d]) \/ classes_days[SameDays_distrib_input[c1],d]
+            )
+        )
+    )
+    \/
+    (
+        not (SameDays_required[i]) 
+        /\ SameDays_penalty[i] == SameDays_dec_penalty[i]
+    )
+);
+
+% differentDays
+constraint forall(i in 1..nrDifferentDays)(
+    forall(c1 in DifferentDays_idx[i]..DifferentDays_idx[i]+DifferentDays_cnt[i]-1)(
+        forall(c2 in DifferentDays_idx[i]..DifferentDays_idx[i]+DifferentDays_cnt[i]-1)(
+            forall(d in 1..nrDays)(
+                c1 == c2
+                \/ not (classes_days[DifferentDays_distrib_input[c2],d] == classes_days[DifferentDays_distrib_input[c1],d])
+            )
+        )
+    )
+    \/
+    (
+        not (DifferentDays_required[i]) 
+        /\ DifferentDays_penalty[i] == DifferentDays_dec_penalty[i]
+    )
+);
+
+% sameWeeks
+constraint forall(i in 1..nrSameWeeks)(
+    exists(c1 in SameWeeks_idx[i]..SameWeeks_idx[i]+SameWeeks_cnt[i]-1)(
+        forall(c2 in SameWeeks_idx[i]..SameWeeks_idx[i]+SameWeeks_cnt[i]-1)(
+            forall(w in 1..nrWeeks)(
+                c1 == c2
+                \/ not (classes_weeks[SameWeeks_distrib_input[c2],w]) \/ classes_weeks[SameWeeks_distrib_input[c1],w]
+            )
+        )
+    )
+    \/
+    (
+        not (SameWeeks_required[i]) 
+        /\ SameWeeks_penalty[i] == SameWeeks_dec_penalty[i]
+    )
+);
+
+% differentWeeks
+constraint forall(i in 1..nrDifferentWeeks)(
+    forall(c1 in DifferentWeeks_idx[i]..DifferentWeeks_idx[i]+DifferentWeeks_cnt[i]-1)(
+        forall(c2 in DifferentWeeks_idx[i]..DifferentWeeks_idx[i]+DifferentWeeks_cnt[i]-1)(
+            forall(w in 1..nrWeeks)(
+                c1 == c2
+                \/ not (classes_weeks[SameWeeks_distrib_input[c2],w] == classes_weeks[SameWeeks_distrib_input[c1],w])
+            )
+        )
+    )
+    \/
+    (
+        not (DifferentWeeks_required[i]) 
+        /\ DifferentWeeks_penalty[i] == DifferentWeeks_dec_penalty[i]
+    )
+);
+
+% overlap
+constraint forall(i in 1..nrOverlap)(
+    forall(c1 in Overlap_idx[i]..Overlap_idx[i]+Overlap_cnt[i]-1)(
+        forall(c2 in Overlap_idx[i]..Overlap_idx[i]+Overlap_cnt[i]-1)(
+            forall(w in 1..nrWeeks)(
+                forall(d in 1..nrDays)(
+                    (classes_start[Overlap_distrib_input[c2]] < classes_start[Overlap_distrib_input[c1]]+classes_duration[Overlap_distrib_input[c1]])
+                    /\ (classes_start[Overlap_distrib_input[c1]] < classes_start[Overlap_distrib_input[c2]]+classes_duration[Overlap_distrib_input[c2]])
+                    /\ (classes_days[Overlap_distrib_input[c1],d] == classes_days[Overlap_distrib_input[c2],d])
+                    /\ (classes_weeks[Overlap_distrib_input[c1],w] == classes_weeks[Overlap_distrib_input[c2],w])
+                )
+            )
+        )
+    )
+    \/
+    (
+        not (Overlap_required[i]) 
+        /\ Overlap_penalty[i] == Overlap_dec_penalty[i]
+    )
+);
+
+% not overlap
+constraint forall(i in 1..nrNotOverlap)(
+    forall(c1 in NotOverlap_idx[i]..NotOverlap_idx[i]+NotOverlap_cnt[i]-1)(
+        forall(c2 in NotOverlap_idx[i]..NotOverlap_idx[i]+NotOverlap_cnt[i]-1)(
+            forall(w in 1..nrWeeks)(
+                forall(d in 1..nrDays)(
+                    c1 == c2
+                    \/ (not ((classes_start[NotOverlap_distrib_input[c2]] < classes_start[NotOverlap_distrib_input[c1]]+classes_duration[NotOverlap_distrib_input[c1]])
+                    /\ (classes_start[NotOverlap_distrib_input[c1]] < classes_start[NotOverlap_distrib_input[c2]]+classes_duration[NotOverlap_distrib_input[c2]])
+                    /\ (classes_days[NotOverlap_distrib_input[c1],d] == classes_days[NotOverlap_distrib_input[c2],d])
+                    /\ (classes_weeks[NotOverlap_distrib_input[c1],w] == classes_weeks[NotOverlap_distrib_input[c2],w])))
+                )
+            )
+        )
+    )
+    \/
+    (
+        not (NotOverlap_required[i]) 
+        /\ NotOverlap_penalty[i] == NotOverlap_dec_penalty[i]
+    )
+);
+
+% sameRoom
+constraint forall(i in 1..nrSameRoom)(
+    forall(c1 in SameRoom_idx[i]..SameRoom_idx[i]+SameRoom_cnt[i]-1)(
+        forall(c2 in SameRoom_idx[i]..SameRoom_idx[i]+SameRoom_cnt[i]-1)(
+            classes_room[SameRoom_distrib_input[c1]] == classes_room[SameRoom_distrib_input[c2]]
+        )
+    )
+    \/
+    (
+        not (SameRoom_required[i]) 
+        /\ SameRoom_penalty[i] == SameRoom_dec_penalty[i]
+    )
+);
+
+% differentRoom
+constraint forall(i in 1..nrDifferentRoom)(
+    forall(c1 in DifferentRoom_idx[i]..DifferentRoom_idx[i]+DifferentRoom_cnt[i]-1)(
+        forall(c2 in DifferentRoom_idx[i]..DifferentRoom_idx[i]+DifferentRoom_cnt[i]-1)(
+            c1 == c2
+            \/ not (classes_room[DifferentRoom_distrib_input[c1]] == classes_room[DifferentRoom_distrib_input[c2]])
+        )
+    )
+    \/
+    (
+        not (DifferentRoom_required[i]) 
+        /\ DifferentRoom_penalty[i] == DifferentRoom_dec_penalty[i]
+    )
+);
+
+% sameAttendees
+constraint forall(i in 1..nrSameAttendees)(
+    forall(c1 in SameAttendees_idx[i]..SameAttendees_idx[i]+SameAttendees_cnt[i]-1)(
+        forall(c2 in SameAttendees_idx[i]..SameAttendees_idx[i]+SameAttendees_cnt[i]-1)(
+            c1 == c2
+            \/ (classes_start[SameAttendees_distrib_input[c1]]+classes_duration[SameAttendees_distrib_input[c1]]+travel_adj_mat_input[classes_room[SameAttendees_distrib_input[c1]],classes_room[SameAttendees_distrib_input[c2]]] <= classes_start[SameAttendees_distrib_input[c2]])
+            \/ (classes_start[SameAttendees_distrib_input[c2]]+classes_duration[SameAttendees_distrib_input[c2]]+travel_adj_mat_input[classes_room[SameAttendees_distrib_input[c2]],classes_room[SameAttendees_distrib_input[c1]]] <= classes_start[SameAttendees_distrib_input[c1]])
+            \/ forall(w in 1..nrWeeks)(
+                  forall(d in 1..nrDays)(
+                      not (classes_days[SameAttendees_distrib_input[c1],d] == classes_days[SameAttendees_distrib_input[c2],d])
+                      \/ not (classes_weeks[SameAttendees_distrib_input[c1],w] == classes_weeks[SameAttendees_distrib_input[c2],w])
+                  )
+            )
+        )
+    )
+    \/
+    (
+        not (SameAttendees_required[i]) 
+        /\ SameAttendees_penalty[i] == SameAttendees_dec_penalty[i]
+    )
+);
+
 
 % constraint ∨ (¬req ∧ penalty)  
 constraint forall(i in 1..nrPrecedence)(
@@ -574,9 +769,7 @@ constraint forall(i in 1..nrPrecedence)(
             )
         )
     )
-
     \/
-
     (
         not (Precedence_required[i]) 
         /\ Precedence_penalty[i] == Precedence_dec_penalty[i]
