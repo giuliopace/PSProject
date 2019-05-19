@@ -5273,6 +5273,15 @@ MaxDays_penalty = [];
 MaxDays_distrib_input = [];
 MaxDays_nr1=[];
 
+nrMaxDayLoad=0;
+nrMaxDayLoad_distrib=0;
+MaxDayLoad_idx = [];
+MaxDayLoad_cnt = [];
+MaxDayLoad_required = [];
+MaxDayLoad_penalty = [];
+MaxDayLoad_distrib_input = [];
+MaxDayLoad_nr1=[];
+
 nrMaxBreaks=0;
 nrMaxBreaks_distrib=0;
 MaxBreaks_idx = [];

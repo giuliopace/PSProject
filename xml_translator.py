@@ -112,6 +112,7 @@ distributionConstraints = [
 	["WorkDay",1],
 	["MinGap",1],
 	["MaxDays",1],
+	["MaxDayLoad",1],
 	["MaxBreaks",2],
 	["MaxBlock",2]
 ]

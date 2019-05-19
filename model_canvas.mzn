@@ -223,6 +223,16 @@ array[1..nrMaxDays] of int: MaxDays_distrib_input;
 array[1..nrMaxDays_distrib] of int: MaxDays_nr1;
 
 
+int: nrMaxDayLoad;
+int: nrMaxDayLoad_distrib;
+array[1..nrMaxDayLoad] of int: MaxDayLoad_idx;
+array[1..nrMaxDayLoad] of int: MaxDayLoad_cnt;
+array[1..nrMaxDayLoad] of bool: MaxDayLoad_required;
+array[1..nrMaxDayLoad] of int: MaxDayLoad_penalty;
+array[1..nrMaxDayLoad] of int: MaxDayLoad_distrib_input;
+array[1..nrMaxDayLoad_distrib] of int: MaxDayLoad_nr1;
+
+
 int: nrMaxBreaks;
 int: nrMaxBreaks_distrib;
 array[1..nrMaxBreaks] of int: MaxBreaks_idx;
@@ -251,28 +261,29 @@ array[1..nrClasses, 1..nrStudents] of var bool: classes_students;   % assignment
 array[1..nrClasses] of var 1..nrRooms: classes_room;                % room assignment for each class
 array[1..nrClasses] of var 0..slotsPerDay: classes_start;           % start time assignment for each class
 array[1..nrClasses] of var 0..slotsPerDay: classes_duration;        % duration assignment for each class
-array[1..nrClasses] of var int: classes_option_penalties;           % penalty for each option
-array[1..nrClasses] of var int: classes_room_penalties;             % penalty for each room
+array[1..nrClasses] of var 0..100: classes_option_penalties;           % penalty for each option
+array[1..nrClasses] of var 0..100: classes_room_penalties;             % penalty for each room
 array[1..nrSubparts, 1..nrStudents] of var bool: subparts_students; % assignment of enrolled students for each subpart            % NEW
 
-array[1..nrSameStart] of var 1..10: SameStart_dec_penalty;
-array[1..nrSameTime] of var 1..10: SameTime_dec_penalty;
-array[1..nrDifferentTime] of var 1..10: DifferentTime_dec_penalty;
-array[1..nrSameDays] of var 1..10: SameDays_dec_penalty;
-array[1..nrDifferentDays] of var 1..10: DifferentDays_dec_penalty;
-array[1..nrSameWeeks] of var 1..10: SameWeeks_dec_penalty;
-array[1..nrDifferentWeeks] of var 1..10: DifferentWeeks_dec_penalty;
-array[1..nrSameRoom] of var 1..10: SameRoom_dec_penalty;
-array[1..nrDifferentRoom] of var 1..10: DifferentRoom_dec_penalty;
-array[1..nrOverlap] of var 1..10: Overlap_dec_penalty;
-array[1..nrNotOverlap] of var 1..10: NotOverlap_dec_penalty;
-array[1..nrSameAttendees] of var 1..10: SameAttendees_dec_penalty;
-array[1..nrPrecedence] of var 1..10: Precedence_dec_penalty;
-array[1..nrWorkDay] of var 1..10: WorkDay_dec_penalty;
-array[1..nrMinGap] of var 1..10: MinGap_dec_penalty;
-array[1..nrMaxDays] of var 1..10: MaxDays_dec_penalty;
-array[1..nrMaxBreaks] of var 1..10: MaxBreaks_dec_penalty;
-array[1..nrMaxBlock] of var 1..10: MaxBlock_dec_penalty;
+array[1..nrSameStart] of var 0..10: SameStart_dec_penalty;
+array[1..nrSameTime] of var 0..10: SameTime_dec_penalty;
+array[1..nrDifferentTime] of var 0..10: DifferentTime_dec_penalty;
+array[1..nrSameDays] of var 0..10: SameDays_dec_penalty;
+array[1..nrDifferentDays] of var 0..10: DifferentDays_dec_penalty;
+array[1..nrSameWeeks] of var 0..10: SameWeeks_dec_penalty;
+array[1..nrDifferentWeeks] of var 0..10: DifferentWeeks_dec_penalty;
+array[1..nrSameRoom] of var 0..10: SameRoom_dec_penalty;
+array[1..nrDifferentRoom] of var 0..10: DifferentRoom_dec_penalty;
+array[1..nrOverlap] of var 0..10: Overlap_dec_penalty;
+array[1..nrNotOverlap] of var 0..10: NotOverlap_dec_penalty;
+array[1..nrSameAttendees] of var 0..10: SameAttendees_dec_penalty;
+array[1..nrPrecedence] of var 0..10: Precedence_dec_penalty;
+array[1..nrWorkDay] of var 0..10: WorkDay_dec_penalty;
+array[1..nrMinGap] of var 0..10: MinGap_dec_penalty;
+array[1..nrMaxDays] of var 0..10: MaxDays_dec_penalty;
+array[1..nrMaxDayLoad] of var 0..10: MaxDayLoad_dec_penalty;
+array[1..nrMaxBreaks] of var 0..10: MaxBreaks_dec_penalty;
+array[1..nrMaxBlock] of var 0..10: MaxBlock_dec_penalty;
 
 % predicates ##################################################################################################################
 
@@ -373,6 +384,10 @@ constraint forall(i in 1..nrMinGap)(
 
 constraint forall(i in 1..nrMaxDays)(
     MaxDays_dec_penalty[i] >= 0
+);
+
+constraint forall(i in 1..nrMaxDayLoad)(
+    MaxDayLoad_dec_penalty[i] >= 0
 );
 
 constraint forall(i in 1..nrMaxBreaks)(
@@ -736,30 +751,30 @@ constraint forall(i in 1..nrSameAttendees)(
 );
 
 
-% constraint ∨ (¬req ∧ penalty)  
+% Precedence
 constraint forall(i in 1..nrPrecedence)(
     forall(c1 in Precedence_idx[i]..Precedence_idx[i]+Precedence_cnt[i]-1)(
         forall(c2 in Precedence_idx[i]..Precedence_idx[i]+Precedence_cnt[i]-1)(
             c1 >= c2 % we are only interested in the constraints where c1 < c2
             \/
             % start some week before
-            min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c1],w]==true) 
-            < min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c2],w]==true)
+            min(w in 1..nrWeeks)(w+bool2int(not classes_weeks[Precedence_distrib_input[c1],w])*nrWeeks) 
+            < min(w in 1..nrWeeks)(w+bool2int(not classes_weeks[Precedence_distrib_input[c2],w])*nrWeeks)
             \/ % or
             (
                 % start the same week
-                min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c1],w]==true) 
-                == min(w in 1..nrWeeks)(classes_weeks[Precedence_distrib_input[c2],w]==true)
+                min(w in 1..nrWeeks)(w+bool2int(not classes_weeks[Precedence_distrib_input[c1],w])*nrWeeks) 
+                == min(w in 1..nrWeeks)(w+bool2int(not classes_weeks[Precedence_distrib_input[c2],w])*nrWeeks)
                 /\ % and
                 (
                     % start some day before
-                    min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c1],d]==true) 
-                    < min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c2],d]==true)
+                    min(d in 1..nrDays)(d+bool2int(not classes_days[Precedence_distrib_input[c1],d])*nrDays) 
+                    < min(d in 1..nrDays)(d+bool2int(not classes_days[Precedence_distrib_input[c2],d])*nrDays)
                     \/ % or
                     (   
                         % start the same day
-                        min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c1],d]==true) 
-                        == min(d in 1..nrDays)(classes_days[Precedence_distrib_input[c2],d]==true)
+                        min(d in 1..nrDays)(d+bool2int(not classes_days[Precedence_distrib_input[c1],d])*nrDays) 
+                        == min(d in 1..nrDays)(d+bool2int(not classes_days[Precedence_distrib_input[c2],d])*nrDays)
                         /\
                         % and the class 1 finishes before class 2 starts
                         classes_start[Precedence_distrib_input[c1]]+classes_duration[Precedence_distrib_input[c1]]
@@ -776,6 +791,133 @@ constraint forall(i in 1..nrPrecedence)(
     )
 );
 
+% WorkDay
+constraint forall(i in 1..nrWorkDay)(
+    forall(c1 in WorkDay_idx[i]..WorkDay_idx[i]+WorkDay_cnt[i]-1)(
+        forall(c2 in WorkDay_idx[i]..WorkDay_idx[i]+WorkDay_cnt[i]-1)(
+            c1 == c2
+            \/
+            forall(w in 1..nrWeeks)(
+                forall(d in 1..nrDays)(
+                    (not (classes_weeks[WorkDay_distrib_input[c1],w] /\ classes_weeks[WorkDay_distrib_input[c2],w]))
+                    \/
+                    (not (classes_days[WorkDay_distrib_input[c1],d] /\ classes_days[WorkDay_distrib_input[c2],d]))
+                    \/
+                    (max(classes_start[WorkDay_distrib_input[c1]], classes_start[WorkDay_distrib_input[c2]])
+                     - min(classes_start[WorkDay_distrib_input[c1]]+classes_duration[WorkDay_distrib_input[c1]],
+                       classes_start[WorkDay_distrib_input[c2]]+classes_duration[WorkDay_distrib_input[c2]]) <= WorkDay_nr1[i])
+                )
+            )
+        )
+    )
+    \/
+    (
+        not (WorkDay_required[i]) 
+        /\ WorkDay_penalty[i] == WorkDay_dec_penalty[i]
+    )
+);
+
+% MinGap
+constraint forall(i in 1..nrMinGap)(
+    forall(c1 in MinGap_idx[i]..MinGap_idx[i]+MinGap_cnt[i]-1)(
+        forall(c2 in MinGap_idx[i]..MinGap_idx[i]+MinGap_cnt[i]-1)(
+            c1 == c2
+            \/
+            forall(w in 1..nrWeeks)(
+                forall(d in 1..nrDays)(
+                    (not (classes_weeks[MinGap_distrib_input[c1],w] /\ classes_weeks[MinGap_distrib_input[c1],w]))
+                    \/
+                    (not (classes_days[MinGap_distrib_input[c1],d] /\ classes_days[MinGap_distrib_input[c1],d]))
+                    \/
+                    (classes_start[MinGap_distrib_input[c1]]+classes_duration[MinGap_distrib_input[c1]]+MinGap_nr1[i] <= classes_start[MinGap_distrib_input[c2]])
+                    \/
+                    (classes_start[MinGap_distrib_input[c2]]+classes_duration[MinGap_distrib_input[c2]]+MinGap_nr1[i] <= classes_start[MinGap_distrib_input[c1]])
+                )
+            )
+        )
+    )
+    \/
+    (
+        not (MinGap_required[i]) 
+        /\ MinGap_penalty[i] == MinGap_dec_penalty[i]
+    )
+);
+
+% MaxDays
+constraint forall(i in 1..nrMaxDays)(
+    sum(d in 1..nrDays)(
+        bool2int(
+            exists(c in MaxDays_idx[i]..MaxDays_idx[i]+MaxDays_cnt[i]-1)(
+                classes_days[MaxDays_distrib_input[c],d]
+            )
+        )
+    ) <= MaxDays_nr1[i]
+    \/
+    (
+        not (MaxDays_required[i]) 
+        /\ MaxDays_dec_penalty[i] == (MaxDays_penalty[i] 
+        % in case of soft constraint, we multiply the penalty by the number of day violating the constraint
+          * (
+                sum(d in 1..nrDays)(
+                    bool2int(
+                        exists(c in MaxDays_idx[i]..MaxDays_idx[i]+MaxDays_cnt[i]-1)(
+                            classes_days[MaxDays_distrib_input[c],d]
+                        )
+                    )
+                ) - MaxDays_nr1[i]
+            )
+        )
+    )
+);
+
+% MaxDayLoad
+constraint forall(i in 1..nrMaxDayLoad)(
+    forall(w in 1..nrWeeks)(
+        forall(d in 1..nrDays)(
+            sum(c in MaxDayLoad_idx[i]..MaxDayLoad_idx[i]+MaxDayLoad_cnt[i]-1)
+            (
+                classes_duration[MaxDayLoad_distrib_input[c]]
+            ) <= MaxDayLoad_nr1[i]
+        )
+    )
+    \/
+    (
+        not (MaxDayLoad_required[i]) 
+        /\ MaxDayLoad_penalty[i] == ((MaxDayLoad_dec_penalty[i]
+          * (
+              % in case of soft constraint we multiply the penalty by the number of slots
+              % exceeding the max load over the semester
+              sum(w in 1..nrWeeks)(
+                sum(d in 1..nrDays)(
+                  max(
+                    sum(c in MaxDayLoad_idx[i]..MaxDayLoad_idx[i]+MaxDayLoad_cnt[i]-1)
+                    (
+                        classes_duration[MaxDayLoad_distrib_input[c]]
+                    ) - MaxDayLoad_nr1[i]
+                    ,0)
+                )
+              )
+            )
+        ) / nrWeeks )
+    )
+);
+
+% MaxBreaks
+constraint forall(i in 1..nrMaxBreaks)(
+    forall(w in 1..nrWeeks)(
+        forall(d in 1..nrDays)(
+            sum(c in MaxBreaks_idx[i]..MaxBreaks_idx[i]+MaxBreaks_cnt[i]-1)
+            (
+                classes_duration[MaxBreaks_distrib_input[c]]
+            ) <= MaxBreaks_nr1[i]
+        )
+    )
+    \/
+    (
+        not (MaxBreaks_required[i]) 
+        /\ MaxBreaks_penalty[i] == (MaxBreaks_dec_penalty[i]
+    )
+);
 
 % objective function ##########################################################################################################
-solve minimize sum(classes_option_penalties)+sum(classes_room_penalties)+sum(SameStart_dec_penalty)+sum(SameTime_dec_penalty)+sum(DifferentTime_dec_penalty)+sum(SameDays_dec_penalty)+sum(DifferentDays_dec_penalty)+sum(SameWeeks_dec_penalty)+sum(DifferentWeeks_dec_penalty)+sum(SameRoom_dec_penalty)+sum(DifferentRoom_dec_penalty)+sum(Overlap_dec_penalty)+sum(NotOverlap_dec_penalty)+sum(SameAttendees_dec_penalty)+sum(Precedence_dec_penalty)+sum(WorkDay_dec_penalty)+sum(MinGap_dec_penalty)+sum(MaxDays_dec_penalty)+sum(MaxBreaks_dec_penalty)+sum(MaxBlock_dec_penalty);
+solve minimize sum(classes_option_penalties)+sum(classes_room_penalties)+sum(SameStart_dec_penalty)+sum(SameTime_dec_penalty)+sum(DifferentTime_dec_penalty)+sum(SameDays_dec_penalty)+sum(DifferentDays_dec_penalty)+sum(SameWeeks_dec_penalty)+sum(DifferentWeeks_dec_penalty)+sum(SameRoom_dec_penalty)+sum(DifferentRoom_dec_penalty)+sum(Overlap_dec_penalty)+sum(NotOverlap_dec_penalty)+sum(SameAttendees_dec_penalty)+sum(Precedence_dec_penalty)+sum(WorkDay_dec_penalty)+sum(MinGap_dec_penalty)+sum(MaxDays_dec_penalty)+sum(MaxDayLoad_dec_penalty)+sum(MaxBreaks_dec_penalty)+sum(MaxBlock_dec_penalty);
