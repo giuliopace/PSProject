@@ -1,0 +1,5297 @@
+
+nrDays = 7;
+nrWeeks = 9;
+slotsPerDay = 288;
+
+nrClasses = 20;
+nrStudents = 2;
+nrRooms = 62;
+nrCourses = 19;
+
+% array giving the number of possible time options for each class
+classes_options = [17,18,18,44,18,11,14,14,3,14,17,18,17,18,17,14,17,17,17,17];
+
+% array giving the index of each class in the class_week array
+classes_idx = [1,18,36,54,98,116,127,141,155,158,172,189,207,224,242,259,273,290,307,324];
+
+% possible weeks
+classes_weeks_input = [|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|true,true,true,true,true,true,true,true,true,
+|];
+
+% possible days
+classes_days_input = [|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 1
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 2
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,true,true,true,false,false,false,% class 3
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,false,true,false,false,false,false,% class 4
+|false,true,false,true,false,false,false,% class 4
+|false,true,false,false,true,false,false,% class 4
+|false,false,true,false,true,false,false,% class 4
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 5
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 6
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 7
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 8
+|true,true,true,true,false,false,false,% class 9
+|true,true,true,true,false,false,false,% class 9
+|true,true,true,true,false,false,false,% class 9
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 10
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 11
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 12
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 13
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 14
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,true,true,true,false,false,false,% class 15
+|true,false,true,false,false,false,false,% class 16
+|false,true,false,true,false,false,false,% class 16
+|true,false,true,false,false,false,false,% class 16
+|false,true,false,true,false,false,false,% class 16
+|true,false,true,false,false,false,false,% class 16
+|false,true,false,true,false,false,false,% class 16
+|true,false,true,false,false,false,false,% class 16
+|false,true,false,true,false,false,false,% class 16
+|true,false,true,false,false,false,false,% class 16
+|false,true,false,true,false,false,false,% class 16
+|true,false,true,false,false,false,false,% class 16
+|false,true,false,true,false,false,false,% class 16
+|true,false,true,false,false,false,false,% class 16
+|false,true,false,true,false,false,false,% class 16
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 17
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 18
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 19
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|true,true,true,true,false,false,false,% class 20
+|];
+
+% start and duration of the class
+classes_slots_input = [|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,15,
+|108,15,
+|114,15,
+|120,15,
+|126,15,
+|132,15,
+|138,15,
+|144,15,
+|150,15,
+|156,15,
+|162,15,
+|168,15,
+|174,15,
+|180,15,
+|186,15,
+|192,15,
+|198,15,
+|204,15,
+|96,15,
+|108,15,
+|114,15,
+|120,15,
+|126,15,
+|132,15,
+|138,15,
+|144,15,
+|150,15,
+|156,15,
+|162,15,
+|168,15,
+|174,15,
+|180,15,
+|186,15,
+|192,15,
+|198,15,
+|204,15,
+|96,34,
+|96,34,
+|96,34,
+|96,34,
+|108,34,
+|108,34,
+|108,34,
+|108,34,
+|114,34,
+|114,34,
+|114,34,
+|114,34,
+|120,34,
+|120,34,
+|120,34,
+|120,34,
+|126,34,
+|126,34,
+|126,34,
+|126,34,
+|132,34,
+|132,34,
+|138,34,
+|138,34,
+|144,34,
+|144,34,
+|150,34,
+|150,34,
+|156,34,
+|156,34,
+|162,34,
+|162,34,
+|168,34,
+|168,34,
+|168,34,
+|168,34,
+|180,34,
+|180,34,
+|180,34,
+|180,34,
+|186,34,
+|186,34,
+|186,34,
+|186,34,
+|96,15,
+|108,15,
+|114,15,
+|120,15,
+|126,15,
+|132,15,
+|138,15,
+|144,15,
+|150,15,
+|156,15,
+|162,15,
+|168,15,
+|174,15,
+|180,15,
+|186,15,
+|192,15,
+|198,15,
+|204,15,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|132,22,
+|138,22,
+|144,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,15,
+|108,15,
+|114,15,
+|120,15,
+|126,15,
+|132,15,
+|138,15,
+|144,15,
+|150,15,
+|156,15,
+|162,15,
+|168,15,
+|174,15,
+|180,15,
+|186,15,
+|192,15,
+|198,15,
+|204,15,
+|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,15,
+|108,15,
+|114,15,
+|120,15,
+|126,15,
+|132,15,
+|138,15,
+|144,15,
+|150,15,
+|156,15,
+|162,15,
+|168,15,
+|174,15,
+|180,15,
+|186,15,
+|192,15,
+|198,15,
+|204,15,
+|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,58,
+|96,58,
+|108,58,
+|108,58,
+|114,58,
+|114,58,
+|120,58,
+|120,58,
+|126,58,
+|126,58,
+|132,58,
+|132,58,
+|138,58,
+|138,58,
+|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|96,22,
+|108,22,
+|114,22,
+|120,22,
+|126,22,
+|132,22,
+|138,22,
+|144,22,
+|150,22,
+|156,22,
+|162,22,
+|168,22,
+|174,22,
+|180,22,
+|186,22,
+|192,22,
+|198,22,
+|];
+
+% options penalty
+classes_penalties_input = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,12,12,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,20,20,20,20,20,20,20,0,20,20,20,20,20,20,20,20,20,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12];
+
+% array giving the number of room options for each class
+classes_rooms_cnt = [49,49,54,5,47,49,38,38,47,38,38,47,41,46,41,5,41,46,47,46];
+
+% array giving the index of each class in the class_room array
+classes_rooms_idx = [1,50,99,153,158,205,254,292,330,377,415,453,500,541,587,628,633,674,720,767];
+
+% options penalty (first value is the class index, second is the associated penalty)
+classes_rooms_input = [|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,4,
+|9,4,
+|10,4,
+|11,4,
+|12,4,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,4,
+|25,4,
+|26,4,
+|27,4,
+|28,4,
+|29,4,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,4,
+|38,4,
+|39,4,
+|44,4,
+|45,0,
+|46,4,
+|47,4,
+|49,0,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,4,
+|9,4,
+|10,4,
+|11,4,
+|12,4,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,4,
+|25,4,
+|26,4,
+|27,4,
+|28,4,
+|29,4,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,4,
+|38,4,
+|39,4,
+|44,4,
+|45,0,
+|46,4,
+|47,4,
+|49,0,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|12,0,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|18,4,
+|19,4,
+|20,0,
+|21,1,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|62,4,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|58,4,
+|59,4,
+|60,4,
+|61,4,
+|18,1,
+|19,1,
+|62,0,
+|58,1,
+|59,0,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|12,0,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,0,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,1,
+|10,4,
+|11,0,
+|13,1,
+|14,4,
+|15,0,
+|16,4,
+|17,4,
+|18,4,
+|19,1,
+|22,1,
+|23,1,
+|25,1,
+|28,1,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|40,0,
+|41,0,
+|42,0,
+|43,0,
+|62,0,
+|44,0,
+|46,4,
+|47,4,
+|48,0,
+|50,0,
+|51,4,
+|52,4,
+|53,0,
+|54,1,
+|55,4,
+|56,4,
+|57,4,
+|58,4,
+|59,0,
+|60,4,
+|61,4,
+|1,0,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,1,
+|10,4,
+|11,0,
+|13,1,
+|14,4,
+|15,0,
+|16,4,
+|17,4,
+|22,1,
+|23,1,
+|25,1,
+|28,1,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|44,0,
+|46,4,
+|47,4,
+|50,0,
+|51,4,
+|52,4,
+|54,1,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,0,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,1,
+|10,4,
+|11,0,
+|13,1,
+|14,4,
+|15,0,
+|16,4,
+|17,4,
+|22,1,
+|23,1,
+|25,1,
+|28,1,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|44,0,
+|46,4,
+|47,4,
+|50,0,
+|51,4,
+|52,4,
+|54,1,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|12,0,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,0,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,1,
+|10,4,
+|11,0,
+|13,1,
+|14,4,
+|15,0,
+|16,4,
+|17,4,
+|22,1,
+|23,1,
+|25,1,
+|28,1,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|44,0,
+|46,4,
+|47,4,
+|50,0,
+|51,4,
+|52,4,
+|54,1,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,0,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,1,
+|10,4,
+|11,0,
+|13,1,
+|14,4,
+|15,0,
+|16,4,
+|17,4,
+|22,1,
+|23,1,
+|25,1,
+|28,1,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|44,0,
+|46,4,
+|47,4,
+|50,0,
+|51,4,
+|52,4,
+|54,1,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|12,0,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,1,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,4,
+|10,4,
+|11,1,
+|13,4,
+|14,4,
+|15,1,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|25,4,
+|28,4,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|37,0,
+|38,0,
+|39,0,
+|44,1,
+|46,4,
+|47,4,
+|50,1,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,1,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,4,
+|10,4,
+|11,1,
+|13,4,
+|14,4,
+|15,1,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|25,4,
+|28,4,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|37,0,
+|38,0,
+|39,0,
+|44,1,
+|46,4,
+|47,4,
+|50,1,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|18,1,
+|19,1,
+|62,0,
+|58,1,
+|59,0,
+|1,1,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|9,4,
+|10,4,
+|11,1,
+|13,4,
+|14,4,
+|15,1,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|25,4,
+|28,4,
+|30,4,
+|31,0,
+|32,0,
+|33,4,
+|34,0,
+|35,0,
+|36,4,
+|37,0,
+|38,0,
+|39,0,
+|44,1,
+|46,4,
+|47,4,
+|50,1,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|12,0,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|1,4,
+|2,4,
+|3,4,
+|4,4,
+|5,4,
+|6,4,
+|7,4,
+|8,0,
+|9,4,
+|10,4,
+|11,4,
+|13,4,
+|14,4,
+|15,4,
+|16,4,
+|17,4,
+|22,4,
+|23,4,
+|24,0,
+|25,4,
+|26,0,
+|27,0,
+|28,4,
+|29,0,
+|30,4,
+|31,4,
+|32,4,
+|33,4,
+|34,4,
+|35,4,
+|36,4,
+|37,1,
+|38,1,
+|39,1,
+|44,4,
+|46,4,
+|47,4,
+|50,4,
+|51,4,
+|52,4,
+|54,4,
+|55,4,
+|56,4,
+|57,4,
+|60,4,
+|61,4,
+|];
+
+% array giving the number of unavailabilities per room
+rooms_unav_cnt = [20,36,32,32,19,19,46,6,20,49,19,46,18,23,18,33,37,10,10,2,13,1,10,10,7,4,12,3,6,23,37,29,20,26,13,20,19,10,24,0,0,0,0,18,0,11,0,21,21,21,21,24,24,8,16,17,10,3,12,23,2,10,0];
+
+% array giving the index of each room in the unavailabilities array
+rooms_unav_idx = [1,21,57,89,121,140,159,205,211,231,280,299,345,363,386,404,437,474,484,494,496,509,510,520,530,537,541,553,556,562,585,622,651,671,697,710,730,749,759,783,783,783,783,783,801,801,812,812,833,854,875,896,920,944,952,968,985,995,998,1010,1033,1035,1];
+
+room_capacities_input = [58,88,108,87,80,80,80,31,72,84,58,28,72,84,52,203,196,80,70,32,38,71,71,32,71,32,32,71,32,224,50,50,224,50,50,264,40,40,40,50,50,50,50,60,15,86,86,56,16,60,86,86,56,72,150,150,286,80,54,126,82,60];
+
+% possible weeks
+rooms_unav_weeks_input = [|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|true,false,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|true,false,false,false,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,true,false,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,true,false,false,false,false,false,false,false,
+|false,false,true,false,false,false,false,false,false,
+|false,false,false,false,true,false,false,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,false,false,false,true,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|false,false,false,false,false,true,false,false,false,
+|false,false,false,false,false,false,true,false,false,
+|false,false,false,false,false,false,false,true,false,
+|];
+
+% possible days
+rooms_unav_days_input = [|true,false,false,false,false,false,false,% room 1
+|true,false,false,false,false,false,false,% room 1
+|true,false,false,false,false,false,false,% room 1
+|true,false,false,false,false,false,false,% room 1
+|false,true,false,false,false,false,false,% room 1
+|false,true,false,false,false,false,false,% room 1
+|false,true,false,false,false,false,false,% room 1
+|false,false,true,false,false,false,false,% room 1
+|false,false,true,false,false,false,false,% room 1
+|false,false,false,true,false,false,false,% room 1
+|false,false,false,true,false,false,false,% room 1
+|false,false,false,true,false,false,false,% room 1
+|false,false,false,false,true,false,false,% room 1
+|false,false,false,false,true,false,false,% room 1
+|false,false,false,false,false,true,false,% room 1
+|false,false,false,false,false,true,false,% room 1
+|false,false,false,false,false,true,false,% room 1
+|false,false,false,false,false,false,true,% room 1
+|false,false,false,false,false,false,true,% room 1
+|false,false,false,false,false,false,true,% room 1
+|true,false,false,false,false,false,false,% room 2
+|true,false,false,false,false,false,false,% room 2
+|true,false,false,false,false,false,false,% room 2
+|true,false,false,false,false,false,false,% room 2
+|true,false,false,false,false,false,false,% room 2
+|false,true,false,false,false,false,false,% room 2
+|false,true,false,false,false,false,false,% room 2
+|false,true,false,false,false,false,false,% room 2
+|false,true,false,false,false,false,false,% room 2
+|false,true,false,false,false,false,false,% room 2
+|false,false,true,false,false,false,false,% room 2
+|false,false,true,false,false,false,false,% room 2
+|false,false,true,false,false,false,false,% room 2
+|false,false,true,false,false,false,false,% room 2
+|false,false,true,false,false,false,false,% room 2
+|false,false,false,true,false,false,false,% room 2
+|false,false,false,true,false,false,false,% room 2
+|false,false,false,true,false,false,false,% room 2
+|false,false,false,true,false,false,false,% room 2
+|false,false,false,true,false,false,false,% room 2
+|false,false,false,false,true,false,false,% room 2
+|false,false,false,false,true,false,false,% room 2
+|false,false,false,false,true,false,false,% room 2
+|false,false,false,false,true,false,false,% room 2
+|false,false,false,false,true,false,false,% room 2
+|false,false,false,false,false,true,false,% room 2
+|false,false,false,false,false,true,false,% room 2
+|false,false,false,false,false,true,false,% room 2
+|false,false,false,false,false,true,false,% room 2
+|false,false,false,false,false,true,false,% room 2
+|false,false,false,false,false,true,false,% room 2
+|false,false,false,false,false,false,true,% room 2
+|false,false,false,false,false,false,true,% room 2
+|false,false,false,false,false,false,true,% room 2
+|false,false,false,false,false,false,true,% room 2
+|false,false,false,false,false,false,true,% room 2
+|true,false,false,false,false,false,false,% room 3
+|true,false,false,false,false,false,false,% room 3
+|true,false,false,false,false,false,false,% room 3
+|true,false,false,false,false,false,false,% room 3
+|true,false,false,false,false,false,false,% room 3
+|false,true,false,false,false,false,false,% room 3
+|false,true,false,false,false,false,false,% room 3
+|false,true,false,false,false,false,false,% room 3
+|false,true,false,false,false,false,false,% room 3
+|false,true,false,false,false,false,false,% room 3
+|false,false,true,false,false,false,false,% room 3
+|false,false,true,false,false,false,false,% room 3
+|false,false,true,false,false,false,false,% room 3
+|false,false,true,false,false,false,false,% room 3
+|false,false,false,true,false,false,false,% room 3
+|false,false,false,true,false,false,false,% room 3
+|false,false,false,true,false,false,false,% room 3
+|false,false,false,true,false,false,false,% room 3
+|false,false,false,false,true,false,false,% room 3
+|false,false,false,false,true,false,false,% room 3
+|false,false,false,false,true,false,false,% room 3
+|false,false,false,false,true,false,false,% room 3
+|false,false,false,false,false,true,false,% room 3
+|false,false,false,false,false,true,false,% room 3
+|false,false,false,false,false,true,false,% room 3
+|false,false,false,false,false,true,false,% room 3
+|false,false,false,false,false,true,false,% room 3
+|false,false,false,false,false,false,true,% room 3
+|false,false,false,false,false,false,true,% room 3
+|false,false,false,false,false,false,true,% room 3
+|false,false,false,false,false,false,true,% room 3
+|false,false,false,false,false,false,true,% room 3
+|true,false,false,false,false,false,false,% room 4
+|true,false,false,false,false,false,false,% room 4
+|true,false,false,false,false,false,false,% room 4
+|true,false,false,false,false,false,false,% room 4
+|true,false,false,false,false,false,false,% room 4
+|false,true,false,false,false,false,false,% room 4
+|false,true,false,false,false,false,false,% room 4
+|false,true,false,false,false,false,false,% room 4
+|false,true,false,false,false,false,false,% room 4
+|false,true,false,false,false,false,false,% room 4
+|false,false,true,false,false,false,false,% room 4
+|false,false,true,false,false,false,false,% room 4
+|false,false,true,false,false,false,false,% room 4
+|false,false,true,false,false,false,false,% room 4
+|false,false,false,true,false,false,false,% room 4
+|false,false,false,true,false,false,false,% room 4
+|false,false,false,true,false,false,false,% room 4
+|false,false,false,true,false,false,false,% room 4
+|false,false,false,false,true,false,false,% room 4
+|false,false,false,false,true,false,false,% room 4
+|false,false,false,false,true,false,false,% room 4
+|false,false,false,false,true,false,false,% room 4
+|false,false,false,false,false,true,false,% room 4
+|false,false,false,false,false,true,false,% room 4
+|false,false,false,false,false,true,false,% room 4
+|false,false,false,false,false,true,false,% room 4
+|false,false,false,false,false,true,false,% room 4
+|false,false,false,false,false,false,true,% room 4
+|false,false,false,false,false,false,true,% room 4
+|false,false,false,false,false,false,true,% room 4
+|false,false,false,false,false,false,true,% room 4
+|false,false,false,false,false,false,true,% room 4
+|true,false,false,false,false,false,false,% room 5
+|true,false,false,false,false,false,false,% room 5
+|true,false,false,false,false,false,false,% room 5
+|false,true,false,false,false,false,false,% room 5
+|false,true,false,false,false,false,false,% room 5
+|false,true,false,false,false,false,false,% room 5
+|false,false,true,false,false,false,false,% room 5
+|false,false,true,false,false,false,false,% room 5
+|false,false,false,true,false,false,false,% room 5
+|false,false,false,true,false,false,false,% room 5
+|false,false,false,false,true,false,false,% room 5
+|false,false,false,false,true,false,false,% room 5
+|false,false,false,false,true,false,false,% room 5
+|false,false,false,false,false,true,false,% room 5
+|false,false,false,false,false,true,false,% room 5
+|false,false,false,false,false,true,false,% room 5
+|false,false,false,false,false,false,true,% room 5
+|false,false,false,false,false,false,true,% room 5
+|false,false,false,false,false,false,true,% room 5
+|true,false,false,false,false,false,false,% room 6
+|true,false,false,false,false,false,false,% room 6
+|true,false,false,false,false,false,false,% room 6
+|false,true,false,false,false,false,false,% room 6
+|false,true,false,false,false,false,false,% room 6
+|false,true,false,false,false,false,false,% room 6
+|false,false,true,false,false,false,false,% room 6
+|false,false,true,false,false,false,false,% room 6
+|false,false,false,true,false,false,false,% room 6
+|false,false,false,true,false,false,false,% room 6
+|false,false,false,false,true,false,false,% room 6
+|false,false,false,false,true,false,false,% room 6
+|false,false,false,false,true,false,false,% room 6
+|false,false,false,false,false,true,false,% room 6
+|false,false,false,false,false,true,false,% room 6
+|false,false,false,false,false,true,false,% room 6
+|false,false,false,false,false,false,true,% room 6
+|false,false,false,false,false,false,true,% room 6
+|false,false,false,false,false,false,true,% room 6
+|true,false,false,false,false,false,false,% room 7
+|true,false,false,false,false,false,false,% room 7
+|true,false,false,false,false,false,false,% room 7
+|true,false,false,false,false,false,false,% room 7
+|true,false,false,false,false,false,false,% room 7
+|true,false,false,false,false,false,false,% room 7
+|true,false,false,false,false,false,false,% room 7
+|false,true,false,false,false,false,false,% room 7
+|false,true,false,false,false,false,false,% room 7
+|false,true,false,false,false,false,false,% room 7
+|false,true,false,false,false,false,false,% room 7
+|false,true,false,false,false,false,false,% room 7
+|false,true,false,false,false,false,false,% room 7
+|false,true,false,false,false,false,false,% room 7
+|false,false,true,false,false,false,false,% room 7
+|false,false,true,false,false,false,false,% room 7
+|false,false,true,false,false,false,false,% room 7
+|false,false,true,false,false,false,false,% room 7
+|false,false,true,false,false,false,false,% room 7
+|false,false,true,false,false,false,false,% room 7
+|false,false,false,true,false,false,false,% room 7
+|false,false,false,true,false,false,false,% room 7
+|false,false,false,true,false,false,false,% room 7
+|false,false,false,true,false,false,false,% room 7
+|false,false,false,true,false,false,false,% room 7
+|false,false,false,true,false,false,false,% room 7
+|false,false,false,false,true,false,false,% room 7
+|false,false,false,false,true,false,false,% room 7
+|false,false,false,false,true,false,false,% room 7
+|false,false,false,false,true,false,false,% room 7
+|false,false,false,false,true,false,false,% room 7
+|false,false,false,false,true,false,false,% room 7
+|false,false,false,false,false,true,false,% room 7
+|false,false,false,false,false,true,false,% room 7
+|false,false,false,false,false,true,false,% room 7
+|false,false,false,false,false,true,false,% room 7
+|false,false,false,false,false,true,false,% room 7
+|false,false,false,false,false,true,false,% room 7
+|false,false,false,false,false,true,false,% room 7
+|false,false,false,false,false,false,true,% room 7
+|false,false,false,false,false,false,true,% room 7
+|false,false,false,false,false,false,true,% room 7
+|false,false,false,false,false,false,true,% room 7
+|false,false,false,false,false,false,true,% room 7
+|false,false,false,false,false,false,true,% room 7
+|false,false,false,false,false,false,true,% room 7
+|false,false,false,false,true,false,false,% room 8
+|false,false,false,false,true,false,false,% room 8
+|false,false,false,false,false,true,false,% room 8
+|false,false,false,false,false,true,false,% room 8
+|false,false,false,false,false,false,true,% room 8
+|false,false,false,false,false,false,true,% room 8
+|true,false,false,false,false,false,false,% room 9
+|true,false,false,false,false,false,false,% room 9
+|true,false,false,false,false,false,false,% room 9
+|false,true,false,false,false,false,false,% room 9
+|false,true,false,false,false,false,false,% room 9
+|false,true,false,false,false,false,false,% room 9
+|false,true,false,false,false,false,false,% room 9
+|false,false,true,false,false,false,false,% room 9
+|false,false,true,false,false,false,false,% room 9
+|false,false,false,true,false,false,false,% room 9
+|false,false,false,true,false,false,false,% room 9
+|false,false,false,true,false,false,false,% room 9
+|false,false,false,false,true,false,false,% room 9
+|false,false,false,false,true,false,false,% room 9
+|false,false,false,false,false,true,false,% room 9
+|false,false,false,false,false,true,false,% room 9
+|false,false,false,false,false,true,false,% room 9
+|false,false,false,false,false,false,true,% room 9
+|false,false,false,false,false,false,true,% room 9
+|false,false,false,false,false,false,true,% room 9
+|true,false,false,false,false,false,false,% room 10
+|true,false,false,false,false,false,false,% room 10
+|true,false,false,false,false,false,false,% room 10
+|true,false,false,false,false,false,false,% room 10
+|true,false,false,false,false,false,false,% room 10
+|true,false,false,false,false,false,false,% room 10
+|true,false,false,false,false,false,false,% room 10
+|false,true,false,false,false,false,false,% room 10
+|false,true,false,false,false,false,false,% room 10
+|false,true,false,false,false,false,false,% room 10
+|false,true,false,false,false,false,false,% room 10
+|false,true,false,false,false,false,false,% room 10
+|false,true,false,false,false,false,false,% room 10
+|false,true,false,false,false,false,false,% room 10
+|false,false,true,false,false,false,false,% room 10
+|false,false,true,false,false,false,false,% room 10
+|false,false,true,false,false,false,false,% room 10
+|false,false,true,false,false,false,false,% room 10
+|false,false,true,false,false,false,false,% room 10
+|false,false,true,false,false,false,false,% room 10
+|false,false,false,true,false,false,false,% room 10
+|false,false,false,true,false,false,false,% room 10
+|false,false,false,true,false,false,false,% room 10
+|false,false,false,true,false,false,false,% room 10
+|false,false,false,true,false,false,false,% room 10
+|false,false,false,true,false,false,false,% room 10
+|false,false,false,true,false,false,false,% room 10
+|false,false,false,false,true,false,false,% room 10
+|false,false,false,false,true,false,false,% room 10
+|false,false,false,false,true,false,false,% room 10
+|false,false,false,false,true,false,false,% room 10
+|false,false,false,false,true,false,false,% room 10
+|false,false,false,false,true,false,false,% room 10
+|false,false,false,false,true,false,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,true,false,% room 10
+|false,false,false,false,false,false,true,% room 10
+|false,false,false,false,false,false,true,% room 10
+|false,false,false,false,false,false,true,% room 10
+|false,false,false,false,false,false,true,% room 10
+|false,false,false,false,false,false,true,% room 10
+|false,false,false,false,false,false,true,% room 10
+|false,false,false,false,false,false,true,% room 10
+|true,false,false,false,false,false,false,% room 11
+|true,false,false,false,false,false,false,% room 11
+|true,false,false,false,false,false,false,% room 11
+|false,true,false,false,false,false,false,% room 11
+|false,true,false,false,false,false,false,% room 11
+|false,true,false,false,false,false,false,% room 11
+|false,true,false,false,false,false,false,% room 11
+|false,false,true,false,false,false,false,% room 11
+|false,false,true,false,false,false,false,% room 11
+|false,false,false,true,false,false,false,% room 11
+|false,false,false,true,false,false,false,% room 11
+|false,false,false,false,true,false,false,% room 11
+|false,false,false,false,true,false,false,% room 11
+|false,false,false,false,false,true,false,% room 11
+|false,false,false,false,false,true,false,% room 11
+|false,false,false,false,false,true,false,% room 11
+|false,false,false,false,false,false,true,% room 11
+|false,false,false,false,false,false,true,% room 11
+|false,false,false,false,false,false,true,% room 11
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|true,false,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,true,false,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,true,false,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,true,false,false,false,% room 12
+|false,false,false,false,true,false,false,% room 12
+|false,false,false,false,true,false,false,% room 12
+|false,false,false,false,false,true,false,% room 12
+|false,false,false,false,false,true,false,% room 12
+|false,false,false,false,false,true,false,% room 12
+|false,false,false,false,false,false,true,% room 12
+|false,false,false,false,false,false,true,% room 12
+|true,false,false,false,false,false,false,% room 13
+|true,false,false,false,false,false,false,% room 13
+|true,false,false,false,false,false,false,% room 13
+|false,true,false,false,false,false,false,% room 13
+|false,true,false,false,false,false,false,% room 13
+|false,true,false,false,false,false,false,% room 13
+|false,false,true,false,false,false,false,% room 13
+|false,false,true,false,false,false,false,% room 13
+|false,false,false,true,false,false,false,% room 13
+|false,false,false,true,false,false,false,% room 13
+|false,false,false,false,true,false,false,% room 13
+|false,false,false,false,true,false,false,% room 13
+|false,false,false,false,false,true,false,% room 13
+|false,false,false,false,false,true,false,% room 13
+|false,false,false,false,false,true,false,% room 13
+|false,false,false,false,false,false,true,% room 13
+|false,false,false,false,false,false,true,% room 13
+|false,false,false,false,false,false,true,% room 13
+|true,false,false,false,false,false,false,% room 14
+|true,false,false,false,false,false,false,% room 14
+|true,false,false,false,false,false,false,% room 14
+|true,false,false,false,false,false,false,% room 14
+|false,true,false,false,false,false,false,% room 14
+|false,true,false,false,false,false,false,% room 14
+|false,true,false,false,false,false,false,% room 14
+|false,true,false,false,false,false,false,% room 14
+|false,false,true,false,false,false,false,% room 14
+|false,false,true,false,false,false,false,% room 14
+|false,false,true,false,false,false,false,% room 14
+|false,false,false,true,false,false,false,% room 14
+|false,false,false,true,false,false,false,% room 14
+|false,false,false,false,true,false,false,% room 14
+|false,false,false,false,true,false,false,% room 14
+|false,false,false,false,true,false,false,% room 14
+|false,false,false,false,false,true,false,% room 14
+|false,false,false,false,false,true,false,% room 14
+|false,false,false,false,false,true,false,% room 14
+|false,false,false,false,false,false,true,% room 14
+|false,false,false,false,false,false,true,% room 14
+|false,false,false,false,false,false,true,% room 14
+|false,false,false,false,false,false,true,% room 14
+|true,false,false,false,false,false,false,% room 15
+|true,false,false,false,false,false,false,% room 15
+|true,false,false,false,false,false,false,% room 15
+|false,true,false,false,false,false,false,% room 15
+|false,true,false,false,false,false,false,% room 15
+|false,true,false,false,false,false,false,% room 15
+|false,false,true,false,false,false,false,% room 15
+|false,false,true,false,false,false,false,% room 15
+|false,false,false,true,false,false,false,% room 15
+|false,false,false,true,false,false,false,% room 15
+|false,false,false,false,true,false,false,% room 15
+|false,false,false,false,true,false,false,% room 15
+|false,false,false,false,true,false,false,% room 15
+|false,false,false,false,false,true,false,% room 15
+|false,false,false,false,false,true,false,% room 15
+|false,false,false,false,false,false,true,% room 15
+|false,false,false,false,false,false,true,% room 15
+|false,false,false,false,false,false,true,% room 15
+|true,false,false,false,false,false,false,% room 16
+|true,false,false,false,false,false,false,% room 16
+|true,false,false,false,false,false,false,% room 16
+|true,false,false,false,false,false,false,% room 16
+|true,false,false,false,false,false,false,% room 16
+|false,true,false,false,false,false,false,% room 16
+|false,true,false,false,false,false,false,% room 16
+|false,true,false,false,false,false,false,% room 16
+|false,true,false,false,false,false,false,% room 16
+|false,true,false,false,false,false,false,% room 16
+|false,false,true,false,false,false,false,% room 16
+|false,false,true,false,false,false,false,% room 16
+|false,false,true,false,false,false,false,% room 16
+|false,false,true,false,false,false,false,% room 16
+|false,false,false,true,false,false,false,% room 16
+|false,false,false,true,false,false,false,% room 16
+|false,false,false,true,false,false,false,% room 16
+|false,false,false,true,false,false,false,% room 16
+|false,false,false,false,true,false,false,% room 16
+|false,false,false,false,true,false,false,% room 16
+|false,false,false,false,true,false,false,% room 16
+|false,false,false,false,true,false,false,% room 16
+|false,false,false,false,false,true,false,% room 16
+|false,false,false,false,false,true,false,% room 16
+|false,false,false,false,false,true,false,% room 16
+|false,false,false,false,false,true,false,% room 16
+|false,false,false,false,false,true,false,% room 16
+|false,false,false,false,false,false,true,% room 16
+|false,false,false,false,false,false,true,% room 16
+|false,false,false,false,false,false,true,% room 16
+|false,false,false,false,false,false,true,% room 16
+|false,false,false,false,false,false,true,% room 16
+|false,false,false,false,false,false,true,% room 16
+|true,false,false,false,false,false,false,% room 17
+|true,false,false,false,false,false,false,% room 17
+|true,false,false,false,false,false,false,% room 17
+|true,false,false,false,false,false,false,% room 17
+|true,false,false,false,false,false,false,% room 17
+|true,false,false,false,false,false,false,% room 17
+|false,true,false,false,false,false,false,% room 17
+|false,true,false,false,false,false,false,% room 17
+|false,true,false,false,false,false,false,% room 17
+|false,true,false,false,false,false,false,% room 17
+|false,true,false,false,false,false,false,% room 17
+|false,true,false,false,false,false,false,% room 17
+|false,false,true,false,false,false,false,% room 17
+|false,false,true,false,false,false,false,% room 17
+|false,false,true,false,false,false,false,% room 17
+|false,false,true,false,false,false,false,% room 17
+|false,false,false,true,false,false,false,% room 17
+|false,false,false,true,false,false,false,% room 17
+|false,false,false,true,false,false,false,% room 17
+|false,false,false,true,false,false,false,% room 17
+|false,false,false,false,true,false,false,% room 17
+|false,false,false,false,true,false,false,% room 17
+|false,false,false,false,true,false,false,% room 17
+|false,false,false,false,true,false,false,% room 17
+|false,false,false,false,true,false,false,% room 17
+|false,false,false,false,false,true,false,% room 17
+|false,false,false,false,false,true,false,% room 17
+|false,false,false,false,false,true,false,% room 17
+|false,false,false,false,false,true,false,% room 17
+|false,false,false,false,false,true,false,% room 17
+|false,false,false,false,false,true,false,% room 17
+|false,false,false,false,false,false,true,% room 17
+|false,false,false,false,false,false,true,% room 17
+|false,false,false,false,false,false,true,% room 17
+|false,false,false,false,false,false,true,% room 17
+|false,false,false,false,false,false,true,% room 17
+|false,false,false,false,false,false,true,% room 17
+|true,false,false,false,false,false,false,% room 18
+|true,false,false,false,false,false,false,% room 18
+|false,true,false,false,false,false,false,% room 18
+|false,false,true,false,false,false,false,% room 18
+|false,false,true,false,false,false,false,% room 18
+|false,false,false,true,false,false,false,% room 18
+|false,false,false,true,false,false,false,% room 18
+|false,false,false,false,false,true,false,% room 18
+|false,false,false,false,false,false,true,% room 18
+|false,false,false,false,false,false,true,% room 18
+|true,false,false,false,false,false,false,% room 19
+|true,false,false,false,false,false,false,% room 19
+|false,true,false,false,false,false,false,% room 19
+|false,false,true,false,false,false,false,% room 19
+|false,false,true,false,false,false,false,% room 19
+|false,false,false,true,false,false,false,% room 19
+|false,false,false,true,false,false,false,% room 19
+|false,false,false,false,false,true,false,% room 19
+|false,false,false,false,false,false,true,% room 19
+|false,false,false,false,false,false,true,% room 19
+|false,false,false,true,false,false,false,% room 20
+|false,false,false,true,false,false,false,% room 20
+|true,false,false,false,false,false,false,% room 21
+|true,false,false,false,false,false,false,% room 21
+|false,true,false,false,false,false,false,% room 21
+|false,false,true,false,false,false,false,% room 21
+|false,false,true,false,false,false,false,% room 21
+|false,false,true,false,false,false,false,% room 21
+|false,false,false,true,false,false,false,% room 21
+|false,false,false,true,false,false,false,% room 21
+|false,false,false,true,false,false,false,% room 21
+|false,false,false,true,false,false,false,% room 21
+|false,false,false,false,false,true,false,% room 21
+|false,false,false,false,false,false,true,% room 21
+|false,false,false,false,false,false,true,% room 21
+|false,true,false,false,false,false,false,% room 22
+|true,false,false,false,false,false,false,% room 23
+|true,false,false,false,false,false,false,% room 23
+|true,false,false,false,false,false,false,% room 23
+|true,false,false,false,false,false,false,% room 23
+|false,false,true,false,false,false,false,% room 23
+|false,false,true,false,false,false,false,% room 23
+|false,false,true,false,false,false,false,% room 23
+|false,false,false,false,true,false,false,% room 23
+|false,false,false,false,true,false,false,% room 23
+|false,false,false,false,true,false,false,% room 23
+|true,false,false,false,false,false,false,% room 24
+|true,false,false,false,false,false,false,% room 24
+|true,false,false,false,false,false,false,% room 24
+|true,false,false,false,false,false,false,% room 24
+|false,true,false,false,false,false,false,% room 24
+|false,false,true,false,false,false,false,% room 24
+|false,false,true,false,false,false,false,% room 24
+|false,false,true,false,false,false,false,% room 24
+|false,false,false,false,true,false,false,% room 24
+|false,false,false,false,true,false,false,% room 24
+|true,false,false,false,false,false,false,% room 25
+|true,false,false,false,false,false,false,% room 25
+|true,false,false,false,false,false,false,% room 25
+|false,true,false,false,false,false,false,% room 25
+|false,false,true,false,false,false,false,% room 25
+|false,false,true,false,false,false,false,% room 25
+|false,false,true,false,false,false,false,% room 25
+|true,false,false,false,false,false,false,% room 26
+|false,false,true,false,false,false,false,% room 26
+|false,false,true,false,false,false,false,% room 26
+|false,false,true,false,false,false,false,% room 26
+|true,false,false,false,false,false,false,% room 27
+|true,false,false,false,false,false,false,% room 27
+|true,false,false,false,false,false,false,% room 27
+|true,false,false,false,false,false,false,% room 27
+|false,false,true,false,false,false,false,% room 27
+|false,false,true,false,false,false,false,% room 27
+|false,false,true,false,false,false,false,% room 27
+|false,false,false,false,true,false,false,% room 27
+|false,false,false,false,true,false,false,% room 27
+|false,false,false,false,true,false,false,% room 27
+|false,false,false,false,true,false,false,% room 27
+|false,false,false,false,true,false,false,% room 27
+|false,false,true,false,false,false,false,% room 28
+|false,false,true,false,false,false,false,% room 28
+|false,false,true,false,false,false,false,% room 28
+|true,false,false,false,false,false,false,% room 29
+|true,false,false,false,false,false,false,% room 29
+|true,false,false,false,false,false,false,% room 29
+|false,false,false,false,true,false,false,% room 29
+|false,false,false,false,true,false,false,% room 29
+|false,false,false,false,false,true,false,% room 29
+|true,false,false,false,false,false,false,% room 30
+|true,false,false,false,false,false,false,% room 30
+|true,false,false,false,false,false,false,% room 30
+|false,true,false,false,false,false,false,% room 30
+|false,true,false,false,false,false,false,% room 30
+|false,true,false,false,false,false,false,% room 30
+|false,true,false,false,false,false,false,% room 30
+|false,false,true,false,false,false,false,% room 30
+|false,false,true,false,false,false,false,% room 30
+|false,false,true,false,false,false,false,% room 30
+|false,false,false,true,false,false,false,% room 30
+|false,false,false,true,false,false,false,% room 30
+|false,false,false,true,false,false,false,% room 30
+|false,false,false,true,false,false,false,% room 30
+|false,false,false,false,true,false,false,% room 30
+|false,false,false,false,true,false,false,% room 30
+|false,false,false,false,true,false,false,% room 30
+|false,false,false,false,false,true,false,% room 30
+|false,false,false,false,false,true,false,% room 30
+|false,false,false,false,false,true,false,% room 30
+|false,false,false,false,false,false,true,% room 30
+|false,false,false,false,false,false,true,% room 30
+|false,false,false,false,false,false,true,% room 30
+|true,false,false,false,false,false,false,% room 31
+|true,false,false,false,false,false,false,% room 31
+|true,false,false,false,false,false,false,% room 31
+|true,false,false,false,false,false,false,% room 31
+|true,false,false,false,false,false,false,% room 31
+|true,false,false,false,false,false,false,% room 31
+|false,true,false,false,false,false,false,% room 31
+|false,true,false,false,false,false,false,% room 31
+|false,true,false,false,false,false,false,% room 31
+|false,true,false,false,false,false,false,% room 31
+|false,true,false,false,false,false,false,% room 31
+|false,false,true,false,false,false,false,% room 31
+|false,false,true,false,false,false,false,% room 31
+|false,false,true,false,false,false,false,% room 31
+|false,false,true,false,false,false,false,% room 31
+|false,false,true,false,false,false,false,% room 31
+|false,false,true,false,false,false,false,% room 31
+|false,false,false,true,false,false,false,% room 31
+|false,false,false,true,false,false,false,% room 31
+|false,false,false,true,false,false,false,% room 31
+|false,false,false,true,false,false,false,% room 31
+|false,false,false,true,false,false,false,% room 31
+|false,false,false,true,false,false,false,% room 31
+|false,false,false,true,false,false,false,% room 31
+|false,false,false,false,true,false,false,% room 31
+|false,false,false,false,true,false,false,% room 31
+|false,false,false,false,true,false,false,% room 31
+|false,false,false,false,true,false,false,% room 31
+|false,false,false,false,true,false,false,% room 31
+|false,false,false,false,true,false,false,% room 31
+|false,false,false,false,true,false,false,% room 31
+|false,false,false,false,false,true,false,% room 31
+|false,false,false,false,false,true,false,% room 31
+|false,false,false,false,false,true,false,% room 31
+|false,false,false,false,false,false,true,% room 31
+|false,false,false,false,false,false,true,% room 31
+|false,false,false,false,false,false,true,% room 31
+|true,false,false,false,false,false,false,% room 32
+|true,false,false,false,false,false,false,% room 32
+|true,false,false,false,false,false,false,% room 32
+|true,false,false,false,false,false,false,% room 32
+|false,true,false,false,false,false,false,% room 32
+|false,true,false,false,false,false,false,% room 32
+|false,true,false,false,false,false,false,% room 32
+|false,true,false,false,false,false,false,% room 32
+|false,false,true,false,false,false,false,% room 32
+|false,false,true,false,false,false,false,% room 32
+|false,false,true,false,false,false,false,% room 32
+|false,false,true,false,false,false,false,% room 32
+|false,false,false,true,false,false,false,% room 32
+|false,false,false,true,false,false,false,% room 32
+|false,false,false,true,false,false,false,% room 32
+|false,false,false,true,false,false,false,% room 32
+|false,false,false,true,false,false,false,% room 32
+|false,false,false,false,true,false,false,% room 32
+|false,false,false,false,true,false,false,% room 32
+|false,false,false,false,true,false,false,% room 32
+|false,false,false,false,true,false,false,% room 32
+|false,false,false,false,false,true,false,% room 32
+|false,false,false,false,false,true,false,% room 32
+|false,false,false,false,false,true,false,% room 32
+|false,false,false,false,false,true,false,% room 32
+|false,false,false,false,false,false,true,% room 32
+|false,false,false,false,false,false,true,% room 32
+|false,false,false,false,false,false,true,% room 32
+|false,false,false,false,false,false,true,% room 32
+|true,false,false,false,false,false,false,% room 33
+|true,false,false,false,false,false,false,% room 33
+|true,false,false,false,false,false,false,% room 33
+|false,true,false,false,false,false,false,% room 33
+|false,true,false,false,false,false,false,% room 33
+|false,true,false,false,false,false,false,% room 33
+|false,false,true,false,false,false,false,% room 33
+|false,false,true,false,false,false,false,% room 33
+|false,false,false,true,false,false,false,% room 33
+|false,false,false,true,false,false,false,% room 33
+|false,false,false,false,true,false,false,% room 33
+|false,false,false,false,true,false,false,% room 33
+|false,false,false,false,true,false,false,% room 33
+|false,false,false,false,false,true,false,% room 33
+|false,false,false,false,false,true,false,% room 33
+|false,false,false,false,false,true,false,% room 33
+|false,false,false,false,false,true,false,% room 33
+|false,false,false,false,false,false,true,% room 33
+|false,false,false,false,false,false,true,% room 33
+|false,false,false,false,false,false,true,% room 33
+|true,false,false,false,false,false,false,% room 34
+|true,false,false,false,false,false,false,% room 34
+|true,false,false,false,false,false,false,% room 34
+|true,false,false,false,false,false,false,% room 34
+|false,true,false,false,false,false,false,% room 34
+|false,true,false,false,false,false,false,% room 34
+|false,true,false,false,false,false,false,% room 34
+|false,true,false,false,false,false,false,% room 34
+|false,true,false,false,false,false,false,% room 34
+|false,false,true,false,false,false,false,% room 34
+|false,false,true,false,false,false,false,% room 34
+|false,false,true,false,false,false,false,% room 34
+|false,false,true,false,false,false,false,% room 34
+|false,false,false,true,false,false,false,% room 34
+|false,false,false,true,false,false,false,% room 34
+|false,false,false,true,false,false,false,% room 34
+|false,false,false,true,false,false,false,% room 34
+|false,false,false,false,true,false,false,% room 34
+|false,false,false,false,true,false,false,% room 34
+|false,false,false,false,true,false,false,% room 34
+|false,false,false,false,false,true,false,% room 34
+|false,false,false,false,false,true,false,% room 34
+|false,false,false,false,false,true,false,% room 34
+|false,false,false,false,false,false,true,% room 34
+|false,false,false,false,false,false,true,% room 34
+|false,false,false,false,false,false,true,% room 34
+|true,false,false,false,false,false,false,% room 35
+|true,false,false,false,false,false,false,% room 35
+|false,true,false,false,false,false,false,% room 35
+|false,true,false,false,false,false,false,% room 35
+|false,false,true,false,false,false,false,% room 35
+|false,false,true,false,false,false,false,% room 35
+|false,false,false,true,false,false,false,% room 35
+|false,false,false,true,false,false,false,% room 35
+|false,false,false,false,true,false,false,% room 35
+|false,false,false,false,false,true,false,% room 35
+|false,false,false,false,false,true,false,% room 35
+|false,false,false,false,false,false,true,% room 35
+|false,false,false,false,false,false,true,% room 35
+|true,false,false,false,false,false,false,% room 36
+|true,false,false,false,false,false,false,% room 36
+|true,false,false,false,false,false,false,% room 36
+|false,true,false,false,false,false,false,% room 36
+|false,true,false,false,false,false,false,% room 36
+|false,true,false,false,false,false,false,% room 36
+|false,false,true,false,false,false,false,% room 36
+|false,false,true,false,false,false,false,% room 36
+|false,false,false,true,false,false,false,% room 36
+|false,false,false,true,false,false,false,% room 36
+|false,false,false,false,true,false,false,% room 36
+|false,false,false,false,true,false,false,% room 36
+|false,false,false,false,true,false,false,% room 36
+|false,false,false,false,false,true,false,% room 36
+|false,false,false,false,false,true,false,% room 36
+|false,false,false,false,false,true,false,% room 36
+|false,false,false,false,false,true,false,% room 36
+|false,false,false,false,false,false,true,% room 36
+|false,false,false,false,false,false,true,% room 36
+|false,false,false,false,false,false,true,% room 36
+|true,false,false,false,false,false,false,% room 37
+|true,false,false,false,false,false,false,% room 37
+|true,false,false,false,false,false,false,% room 37
+|false,true,false,false,false,false,false,% room 37
+|false,true,false,false,false,false,false,% room 37
+|false,true,false,false,false,false,false,% room 37
+|false,false,true,false,false,false,false,% room 37
+|false,false,true,false,false,false,false,% room 37
+|false,false,false,true,false,false,false,% room 37
+|false,false,false,true,false,false,false,% room 37
+|false,false,false,false,true,false,false,% room 37
+|false,false,false,false,true,false,false,% room 37
+|false,false,false,false,true,false,false,% room 37
+|false,false,false,false,false,true,false,% room 37
+|false,false,false,false,false,true,false,% room 37
+|false,false,false,false,false,true,false,% room 37
+|false,false,false,false,false,false,true,% room 37
+|false,false,false,false,false,false,true,% room 37
+|false,false,false,false,false,false,true,% room 37
+|false,false,false,false,true,false,false,% room 38
+|false,false,false,false,true,false,false,% room 38
+|false,false,false,false,true,false,false,% room 38
+|false,false,false,false,true,false,false,% room 38
+|false,false,false,false,true,false,false,% room 38
+|false,false,false,false,true,false,false,% room 38
+|false,false,false,false,true,false,false,% room 38
+|false,false,false,false,false,true,false,% room 38
+|false,false,false,false,false,true,false,% room 38
+|false,false,false,false,false,true,false,% room 38
+|true,false,false,false,false,false,false,% room 39
+|true,false,false,false,false,false,false,% room 39
+|true,false,false,false,false,false,false,% room 39
+|false,true,false,false,false,false,false,% room 39
+|false,true,false,false,false,false,false,% room 39
+|false,true,false,false,false,false,false,% room 39
+|false,false,true,false,false,false,false,% room 39
+|false,false,true,false,false,false,false,% room 39
+|false,false,true,false,false,false,false,% room 39
+|false,false,true,false,false,false,false,% room 39
+|false,false,false,true,false,false,false,% room 39
+|false,false,false,true,false,false,false,% room 39
+|false,false,false,true,false,false,false,% room 39
+|false,false,false,true,false,false,false,% room 39
+|false,false,false,false,true,false,false,% room 39
+|false,false,false,false,true,false,false,% room 39
+|false,false,false,false,true,false,false,% room 39
+|false,false,false,false,true,false,false,% room 39
+|false,false,false,false,false,true,false,% room 39
+|false,false,false,false,false,true,false,% room 39
+|false,false,false,false,false,true,false,% room 39
+|false,false,false,false,false,false,true,% room 39
+|false,false,false,false,false,false,true,% room 39
+|false,false,false,false,false,false,true,% room 39
+|true,false,false,false,false,false,false,% room 44
+|true,false,false,false,false,false,false,% room 44
+|true,false,false,false,false,false,false,% room 44
+|true,false,false,false,false,false,false,% room 44
+|true,false,false,false,false,false,false,% room 44
+|false,true,false,false,false,false,false,% room 44
+|false,true,false,false,false,false,false,% room 44
+|false,false,true,false,false,false,false,% room 44
+|false,false,true,false,false,false,false,% room 44
+|false,false,true,false,false,false,false,% room 44
+|false,false,true,false,false,false,false,% room 44
+|false,false,false,true,false,false,false,% room 44
+|false,false,false,false,true,false,false,% room 44
+|false,false,false,false,true,false,false,% room 44
+|false,false,false,false,true,false,false,% room 44
+|false,false,false,false,true,false,false,% room 44
+|false,false,false,false,false,true,false,% room 44
+|false,false,false,false,false,false,true,% room 44
+|true,false,false,false,false,false,false,% room 46
+|true,false,false,false,false,false,false,% room 46
+|false,true,false,false,false,false,false,% room 46
+|false,true,false,false,false,false,false,% room 46
+|false,false,true,false,false,false,false,% room 46
+|false,false,true,false,false,false,false,% room 46
+|false,false,false,true,false,false,false,% room 46
+|false,false,false,true,false,false,false,% room 46
+|false,false,false,false,true,false,false,% room 46
+|false,false,false,false,false,true,false,% room 46
+|false,false,false,false,false,false,true,% room 46
+|true,false,false,false,false,false,false,% room 48
+|true,false,false,false,false,false,false,% room 48
+|true,false,false,false,false,false,false,% room 48
+|false,true,false,false,false,false,false,% room 48
+|false,true,false,false,false,false,false,% room 48
+|false,true,false,false,false,false,false,% room 48
+|false,false,true,false,false,false,false,% room 48
+|false,false,true,false,false,false,false,% room 48
+|false,false,true,false,false,false,false,% room 48
+|false,false,false,true,false,false,false,% room 48
+|false,false,false,true,false,false,false,% room 48
+|false,false,false,true,false,false,false,% room 48
+|false,false,false,false,true,false,false,% room 48
+|false,false,false,false,true,false,false,% room 48
+|false,false,false,false,true,false,false,% room 48
+|false,false,false,false,false,true,false,% room 48
+|false,false,false,false,false,true,false,% room 48
+|false,false,false,false,false,true,false,% room 48
+|false,false,false,false,false,false,true,% room 48
+|false,false,false,false,false,false,true,% room 48
+|false,false,false,false,false,false,true,% room 48
+|true,false,false,false,false,false,false,% room 49
+|true,false,false,false,false,false,false,% room 49
+|true,false,false,false,false,false,false,% room 49
+|false,true,false,false,false,false,false,% room 49
+|false,true,false,false,false,false,false,% room 49
+|false,true,false,false,false,false,false,% room 49
+|false,false,true,false,false,false,false,% room 49
+|false,false,true,false,false,false,false,% room 49
+|false,false,true,false,false,false,false,% room 49
+|false,false,false,true,false,false,false,% room 49
+|false,false,false,true,false,false,false,% room 49
+|false,false,false,true,false,false,false,% room 49
+|false,false,false,false,true,false,false,% room 49
+|false,false,false,false,true,false,false,% room 49
+|false,false,false,false,true,false,false,% room 49
+|false,false,false,false,false,true,false,% room 49
+|false,false,false,false,false,true,false,% room 49
+|false,false,false,false,false,true,false,% room 49
+|false,false,false,false,false,false,true,% room 49
+|false,false,false,false,false,false,true,% room 49
+|false,false,false,false,false,false,true,% room 49
+|true,false,false,false,false,false,false,% room 50
+|true,false,false,false,false,false,false,% room 50
+|true,false,false,false,false,false,false,% room 50
+|false,true,false,false,false,false,false,% room 50
+|false,true,false,false,false,false,false,% room 50
+|false,true,false,false,false,false,false,% room 50
+|false,false,true,false,false,false,false,% room 50
+|false,false,true,false,false,false,false,% room 50
+|false,false,true,false,false,false,false,% room 50
+|false,false,false,true,false,false,false,% room 50
+|false,false,false,true,false,false,false,% room 50
+|false,false,false,true,false,false,false,% room 50
+|false,false,false,false,true,false,false,% room 50
+|false,false,false,false,true,false,false,% room 50
+|false,false,false,false,true,false,false,% room 50
+|false,false,false,false,false,true,false,% room 50
+|false,false,false,false,false,true,false,% room 50
+|false,false,false,false,false,true,false,% room 50
+|false,false,false,false,false,false,true,% room 50
+|false,false,false,false,false,false,true,% room 50
+|false,false,false,false,false,false,true,% room 50
+|true,false,false,false,false,false,false,% room 51
+|true,false,false,false,false,false,false,% room 51
+|true,false,false,false,false,false,false,% room 51
+|false,true,false,false,false,false,false,% room 51
+|false,true,false,false,false,false,false,% room 51
+|false,true,false,false,false,false,false,% room 51
+|false,false,true,false,false,false,false,% room 51
+|false,false,true,false,false,false,false,% room 51
+|false,false,true,false,false,false,false,% room 51
+|false,false,false,true,false,false,false,% room 51
+|false,false,false,true,false,false,false,% room 51
+|false,false,false,true,false,false,false,% room 51
+|false,false,false,false,true,false,false,% room 51
+|false,false,false,false,true,false,false,% room 51
+|false,false,false,false,true,false,false,% room 51
+|false,false,false,false,false,true,false,% room 51
+|false,false,false,false,false,true,false,% room 51
+|false,false,false,false,false,true,false,% room 51
+|false,false,false,false,false,false,true,% room 51
+|false,false,false,false,false,false,true,% room 51
+|false,false,false,false,false,false,true,% room 51
+|true,false,false,false,false,false,false,% room 52
+|true,false,false,false,false,false,false,% room 52
+|true,false,false,false,false,false,false,% room 52
+|false,true,false,false,false,false,false,% room 52
+|false,true,false,false,false,false,false,% room 52
+|false,true,false,false,false,false,false,% room 52
+|false,false,true,false,false,false,false,% room 52
+|false,false,true,false,false,false,false,% room 52
+|false,false,true,false,false,false,false,% room 52
+|false,false,false,true,false,false,false,% room 52
+|false,false,false,true,false,false,false,% room 52
+|false,false,false,true,false,false,false,% room 52
+|false,false,false,false,true,false,false,% room 52
+|false,false,false,false,true,false,false,% room 52
+|false,false,false,false,true,false,false,% room 52
+|false,false,false,false,false,true,false,% room 52
+|false,false,false,false,false,true,false,% room 52
+|false,false,false,false,false,true,false,% room 52
+|false,false,false,false,false,true,false,% room 52
+|false,false,false,false,false,true,false,% room 52
+|false,false,false,false,false,true,false,% room 52
+|false,false,false,false,false,false,true,% room 52
+|false,false,false,false,false,false,true,% room 52
+|false,false,false,false,false,false,true,% room 52
+|true,false,false,false,false,false,false,% room 53
+|true,false,false,false,false,false,false,% room 53
+|true,false,false,false,false,false,false,% room 53
+|false,true,false,false,false,false,false,% room 53
+|false,true,false,false,false,false,false,% room 53
+|false,true,false,false,false,false,false,% room 53
+|false,false,true,false,false,false,false,% room 53
+|false,false,true,false,false,false,false,% room 53
+|false,false,true,false,false,false,false,% room 53
+|false,false,false,true,false,false,false,% room 53
+|false,false,false,true,false,false,false,% room 53
+|false,false,false,true,false,false,false,% room 53
+|false,false,false,false,true,false,false,% room 53
+|false,false,false,false,true,false,false,% room 53
+|false,false,false,false,true,false,false,% room 53
+|false,false,false,false,true,false,false,% room 53
+|false,false,false,false,true,false,false,% room 53
+|false,false,false,false,true,false,false,% room 53
+|false,false,false,false,false,true,false,% room 53
+|false,false,false,false,false,true,false,% room 53
+|false,false,false,false,false,true,false,% room 53
+|false,false,false,false,false,false,true,% room 53
+|false,false,false,false,false,false,true,% room 53
+|false,false,false,false,false,false,true,% room 53
+|true,false,false,false,false,false,false,% room 54
+|true,false,false,false,false,false,false,% room 54
+|false,true,false,false,false,false,false,% room 54
+|false,false,true,false,false,false,false,% room 54
+|false,false,false,true,false,false,false,% room 54
+|false,false,false,false,true,false,false,% room 54
+|false,false,false,false,false,true,false,% room 54
+|false,false,false,false,false,false,true,% room 54
+|true,false,false,false,false,false,false,% room 55
+|true,false,false,false,false,false,false,% room 55
+|true,false,false,false,false,false,false,% room 55
+|false,true,false,false,false,false,false,% room 55
+|false,true,false,false,false,false,false,% room 55
+|false,true,false,false,false,false,false,% room 55
+|false,false,true,false,false,false,false,% room 55
+|false,false,true,false,false,false,false,% room 55
+|false,false,false,true,false,false,false,% room 55
+|false,false,false,true,false,false,false,% room 55
+|false,false,false,false,true,false,false,% room 55
+|false,false,false,false,true,false,false,% room 55
+|false,false,false,false,false,true,false,% room 55
+|false,false,false,false,false,true,false,% room 55
+|false,false,false,false,false,false,true,% room 55
+|false,false,false,false,false,false,true,% room 55
+|true,false,false,false,false,false,false,% room 56
+|true,false,false,false,false,false,false,% room 56
+|true,false,false,false,false,false,false,% room 56
+|true,false,false,false,false,false,false,% room 56
+|false,true,false,false,false,false,false,% room 56
+|false,true,false,false,false,false,false,% room 56
+|false,true,false,false,false,false,false,% room 56
+|false,false,true,false,false,false,false,% room 56
+|false,false,true,false,false,false,false,% room 56
+|false,false,false,true,false,false,false,% room 56
+|false,false,false,true,false,false,false,% room 56
+|false,false,false,false,true,false,false,% room 56
+|false,false,false,false,true,false,false,% room 56
+|false,false,false,false,false,true,false,% room 56
+|false,false,false,false,false,true,false,% room 56
+|false,false,false,false,false,false,true,% room 56
+|false,false,false,false,false,false,true,% room 56
+|true,false,false,false,false,false,false,% room 57
+|false,true,false,false,false,false,false,% room 57
+|false,false,true,false,false,false,false,% room 57
+|false,false,false,true,false,false,false,% room 57
+|false,false,false,true,false,false,false,% room 57
+|false,false,false,false,true,false,false,% room 57
+|false,false,false,false,false,true,false,% room 57
+|false,false,false,false,false,true,false,% room 57
+|false,false,false,false,false,true,false,% room 57
+|false,false,false,false,false,false,true,% room 57
+|false,false,false,false,true,false,false,% room 58
+|false,false,false,false,false,true,false,% room 58
+|false,false,false,false,false,false,true,% room 58
+|true,false,false,false,false,false,false,% room 59
+|true,false,false,false,false,false,false,% room 59
+|true,false,false,false,false,false,false,% room 59
+|false,true,false,false,false,false,false,% room 59
+|false,true,false,false,false,false,false,% room 59
+|false,true,false,false,false,false,false,% room 59
+|false,false,true,false,false,false,false,% room 59
+|false,false,true,false,false,false,false,% room 59
+|false,false,true,false,false,false,false,% room 59
+|false,false,false,true,false,false,false,% room 59
+|false,false,false,true,false,false,false,% room 59
+|false,false,false,true,false,false,false,% room 59
+|true,false,false,false,false,false,false,% room 60
+|true,false,false,false,false,false,false,% room 60
+|false,true,false,false,false,false,false,% room 60
+|false,true,false,false,false,false,false,% room 60
+|false,true,false,false,false,false,false,% room 60
+|false,false,true,false,false,false,false,% room 60
+|false,false,true,false,false,false,false,% room 60
+|false,false,false,true,false,false,false,% room 60
+|false,false,false,true,false,false,false,% room 60
+|false,false,false,true,false,false,false,% room 60
+|false,false,false,true,false,false,false,% room 60
+|false,false,false,true,false,false,false,% room 60
+|false,false,false,true,false,false,false,% room 60
+|false,false,false,false,true,false,false,% room 60
+|false,false,false,false,true,false,false,% room 60
+|false,false,false,false,false,true,false,% room 60
+|false,false,false,false,false,true,false,% room 60
+|false,false,false,false,false,true,false,% room 60
+|false,false,false,false,false,true,false,% room 60
+|false,false,false,false,false,true,false,% room 60
+|false,false,false,false,false,true,false,% room 60
+|false,false,false,false,false,false,true,% room 60
+|false,false,false,false,false,false,true,% room 60
+|false,false,false,false,false,true,false,% room 61
+|false,false,false,false,false,true,false,% room 61
+|true,false,false,false,false,false,false,% room 62
+|true,false,false,false,false,false,false,% room 62
+|true,false,false,false,false,false,false,% room 62
+|true,false,false,false,false,false,false,% room 62
+|false,false,true,false,false,false,false,% room 62
+|false,false,true,false,false,false,false,% room 62
+|false,false,true,false,false,false,false,% room 62
+|false,false,false,false,true,false,false,% room 62
+|false,false,false,false,true,false,false,% room 62
+|false,false,false,false,true,false,false,% room 62
+|];
+
+% start and duration of the class
+rooms_unav_slots_input = [|96,120,
+|96,120,
+|96,120,
+|120,24,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|162,24,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,168,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,168,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,168,
+|96,180,
+|96,144,
+|96,144,
+|96,144,
+|96,168,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,144,
+|96,144,
+|96,144,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,144,
+|96,144,
+|96,144,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|138,18,
+|216,42,
+|126,132,
+|138,120,
+|126,132,
+|138,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|168,12,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|108,48,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,120,
+|96,120,
+|96,120,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,120,
+|96,120,
+|96,120,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,120,
+|96,120,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,120,
+|96,120,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,72,
+|96,120,
+|96,120,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,120,
+|96,120,
+|96,120,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|156,24,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|168,15,
+|168,15,
+|168,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|168,15,
+|168,15,
+|168,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|168,15,
+|168,15,
+|168,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|132,30,
+|168,15,
+|168,15,
+|168,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|195,15,
+|96,168,
+|132,30,
+|96,168,
+|120,96,
+|126,132,
+|120,96,
+|126,132,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,120,
+|96,168,
+|96,144,
+|96,144,
+|96,192,
+|96,168,
+|96,144,
+|96,144,
+|96,192,
+|96,168,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,72,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|132,24,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,144,
+|96,144,
+|96,144,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,72,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|240,36,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|240,36,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,180,
+|96,144,
+|96,144,
+|96,144,
+|240,36,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|240,36,
+|96,180,
+|96,180,
+|96,144,
+|96,144,
+|96,192,
+|240,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|132,24,
+|168,24,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|186,24,
+|168,24,
+|168,24,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|168,36,
+|186,18,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|168,24,
+|168,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|216,36,
+|216,36,
+|216,36,
+|216,36,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|96,24,
+|96,24,
+|228,24,
+|228,24,
+|228,24,
+|216,36,
+|216,36,
+|216,36,
+|228,24,
+|228,24,
+|228,24,
+|120,24,
+|228,24,
+|108,36,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|132,48,
+|96,144,
+|96,144,
+|132,48,
+|96,144,
+|96,144,
+|132,72,
+|132,48,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|132,72,
+|132,72,
+|144,24,
+|96,192,
+|96,144,
+|96,144,
+|132,72,
+|132,72,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|132,72,
+|132,72,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|132,72,
+|132,72,
+|156,24,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|132,72,
+|132,72,
+|132,72,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|240,36,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|84,96,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,192,
+|156,48,
+|156,48,
+|96,192,
+|96,192,
+|156,48,
+|156,48,
+|156,48,
+|96,192,
+|96,192,
+|156,48,
+|156,48,
+|96,192,
+|96,192,
+|156,48,
+|156,48,
+|96,192,
+|156,48,
+|156,48,
+|96,192,
+|96,192,
+|156,48,
+|96,192,
+|96,192,
+|156,48,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|84,96,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|132,24,
+|132,24,
+|132,24,
+|132,24,
+|132,24,
+|132,24,
+|132,24,
+|120,54,
+|120,54,
+|120,54,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|96,144,
+|96,144,
+|96,192,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|96,192,
+|156,48,
+|96,192,
+|228,24,
+|228,24,
+|228,24,
+|96,192,
+|96,192,
+|228,24,
+|228,24,
+|228,24,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,168,
+|96,192,
+|96,168,
+|96,192,
+|96,168,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|168,24,
+|168,24,
+|168,24,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|216,24,
+|216,24,
+|216,24,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|204,24,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|96,192,
+|204,72,
+|96,192,
+|228,24,
+|96,192,
+|96,120,
+|96,192,
+|216,24,
+|96,192,
+|96,126,
+|102,120,
+|102,120,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|132,36,
+|96,180,
+|96,180,
+|96,180,
+|96,180,
+|96,180,
+|96,180,
+|96,180,
+|96,180,
+|96,180,
+|168,24,
+|168,24,
+|228,24,
+|228,24,
+|96,180,
+|96,180,
+|96,180,
+|96,180,
+|168,24,
+|168,24,
+|228,24,
+|228,24,
+|96,180,
+|96,180,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|228,24,
+|];
+
+% traveltime adjacency matrix
+travel_adj_mat_input = [|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
+|1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
+|];
+
+%students_pref_idx
+student_pref_idx = [1,2,];
+
+%students_pref_cnt
+student_pref_cnt = [1,2];
+
+%students_pref (first value is a course, second value is the student id of the student that wants to attend it)
+student_pref_input = [1,1,2,];
+
+%class_hierarchy_input(index->class: parent|subpart|config|course)
+class_hierarchy_input = [|1,1,1,1,
+|2,2,2,2,
+|3,3,3,3,
+|3,4,3,3,
+|5,5,4,4,
+|6,6,5,5,
+|7,7,6,6,
+|8,8,7,7,
+|9,9,8,8,
+|10,10,9,9,
+|11,11,10,10,
+|12,12,11,11,
+|13,13,12,12,
+|14,14,13,13,
+|15,15,14,14,
+|16,16,15,15,
+|17,17,16,16,
+|18,18,17,17,
+|19,19,18,18,
+|20,20,19,19,
+|];
+
+%class_limit_input
+class_limit_input = [10,5,50,50,55,50,50,50,50,50,50,60,35,30,35,45,40,30,25,30,];
+
+%number of configurations
+nrConfigs = 19;
+
+%configs_cnt_s
+configs_cnt = [1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+
+%configs_idx_s
+configs_idx = [1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+
+
+%%% Distribution data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+nrSameStart=0;
+nrSameStart_distrib=0;
+SameStart_idx = [];
+SameStart_cnt = [];
+SameStart_required = [];
+SameStart_penalty = [];
+SameStart_distrib_input = [];
+
+
+nrSameTime=0;
+nrSameTime_distrib=0;
+SameTime_idx = [];
+SameTime_cnt = [];
+SameTime_required = [];
+SameTime_penalty = [];
+SameTime_distrib_input = [];
+
+
+nrDifferentTime=0;
+nrDifferentTime_distrib=0;
+DifferentTime_idx = [];
+DifferentTime_cnt = [];
+DifferentTime_required = [];
+DifferentTime_penalty = [];
+DifferentTime_distrib_input = [];
+
+
+nrSameDays=0;
+nrSameDays_distrib=0;
+SameDays_idx = [];
+SameDays_cnt = [];
+SameDays_required = [];
+SameDays_penalty = [];
+SameDays_distrib_input = [];
+
+
+nrDifferentDays=0;
+nrDifferentDays_distrib=0;
+DifferentDays_idx = [];
+DifferentDays_cnt = [];
+DifferentDays_required = [];
+DifferentDays_penalty = [];
+DifferentDays_distrib_input = [];
+
+
+nrSameWeeks=0;
+nrSameWeeks_distrib=0;
+SameWeeks_idx = [];
+SameWeeks_cnt = [];
+SameWeeks_required = [];
+SameWeeks_penalty = [];
+SameWeeks_distrib_input = [];
+
+
+nrDifferentWeeks=0;
+nrDifferentWeeks_distrib=0;
+DifferentWeeks_idx = [];
+DifferentWeeks_cnt = [];
+DifferentWeeks_required = [];
+DifferentWeeks_penalty = [];
+DifferentWeeks_distrib_input = [];
+
+
+nrSameRoom=0;
+nrSameRoom_distrib=0;
+SameRoom_idx = [];
+SameRoom_cnt = [];
+SameRoom_required = [];
+SameRoom_penalty = [];
+SameRoom_distrib_input = [];
+
+
+nrDifferentRoom=0;
+nrDifferentRoom_distrib=0;
+DifferentRoom_idx = [];
+DifferentRoom_cnt = [];
+DifferentRoom_required = [];
+DifferentRoom_penalty = [];
+DifferentRoom_distrib_input = [];
+
+
+nrOverlap=0;
+nrOverlap_distrib=0;
+Overlap_idx = [];
+Overlap_cnt = [];
+Overlap_required = [];
+Overlap_penalty = [];
+Overlap_distrib_input = [];
+
+
+nrNotOverlap=0;
+nrNotOverlap_distrib=0;
+NotOverlap_idx = [];
+NotOverlap_cnt = [];
+NotOverlap_required = [];
+NotOverlap_penalty = [];
+NotOverlap_distrib_input = [];
+
+nrSameAttendees=2;
+nrSameAttendees_distrib=4;
+SameAttendees_idx = [1,3];
+SameAttendees_cnt = [2,2];
+SameAttendees_required = [true,true];
+SameAttendees_penalty = [0,0];
+SameAttendees_distrib_input = [3,4,14,15];
+
+
+nrPrecedence=0;
+nrPrecedence_distrib=0;
+Precedence_idx = [];
+Precedence_cnt = [];
+Precedence_required = [];
+Precedence_penalty = [];
+Precedence_distrib_input = [];
+
+
+nrWorkDay=0;
+nrWorkDay_distrib=0;
+WorkDay_idx = [];
+WorkDay_cnt = [];
+WorkDay_required = [];
+WorkDay_penalty = [];
+WorkDay_distrib_input = [];
+WorkDay_nr1=[];
+
+nrMinGap=0;
+nrMinGap_distrib=0;
+MinGap_idx = [];
+MinGap_cnt = [];
+MinGap_required = [];
+MinGap_penalty = [];
+MinGap_distrib_input = [];
+MinGap_nr1=[];
+
+nrMaxDays=0;
+nrMaxDays_distrib=0;
+MaxDays_idx = [];
+MaxDays_cnt = [];
+MaxDays_required = [];
+MaxDays_penalty = [];
+MaxDays_distrib_input = [];
+MaxDays_nr1=[];
+
+nrMaxBreaks=0;
+nrMaxBreaks_distrib=0;
+MaxBreaks_idx = [];
+MaxBreaks_cnt = [];
+MaxBreaks_required = [];
+MaxBreaks_penalty = [];
+MaxBreaks_distrib_input = [];
+MaxBreaks_nr1=[];
+MaxBreaks_nr2=[];
+
+nrMaxBlock=0;
+nrMaxBlock_distrib=0;
+MaxBlock_idx = [];
+MaxBlock_cnt = [];
+MaxBlock_required = [];
+MaxBlock_penalty = [];
+MaxBlock_distrib_input = [];
+MaxBlock_nr1=[];
+MaxBlock_nr2=[];
+
+
+

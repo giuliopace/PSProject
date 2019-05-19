@@ -279,11 +279,12 @@ array[1..nrMaxBlock] of var int: MaxBlock_dec_penalty;
 % no overlapping class
 predicate no_overlap(var int:s1, var int:d1, var int:s2, var int:d2) =
     s1 + d1 <= s2 \/ s2 + d2 <= s1;
-    
+  
 % no overlapping class incl. travel time                                                                                          % NEW
 predicate no_overlap_time(var int:s1, var int:d1, var int:s2, var int:d2, var int:t) =
     s1 + d1 + t <= s2 \/ s2 + d2 + t <= s1;
-    
+ 
+  
 % student conflict
 predicate student_conflict(var int:c1, var int:c2, var int:s) =                                                                   % NEW
     exists(w in 1..nrWeeks)(
@@ -398,6 +399,7 @@ constraint forall(s in 1..nrStudents)(
     )
 );
 
+
 % each subpart can only be attended if there exists some class which is attended                                                    % NEW
 constraint forall(s in 1..nrStudents)(
     forall(sp in 1..nrSubparts)(
@@ -409,10 +411,11 @@ constraint forall(s in 1..nrStudents)(
     )
 );
 
+
 % each student has to take at least 1 class in each subpart of a config                                                             % NEW
 constraint forall(s in 1..nrStudents)(
     forall(c in 1..nrClasses)(
-        forall(sp in configs_idx[class_hierarchy_input[c,3]]..configs_idx[class_hierarchy_input[c,3]]+configs_cnt[class_hierarchy_input[c,3]])(
+        forall(sp in configs_idx[class_hierarchy_input[c,3]]..configs_idx[class_hierarchy_input[c,3]]+configs_cnt[class_hierarchy_input[c,3]]-1)(
             subparts_students[sp,s]
             \/ not (classes_students[c,s])
         )
@@ -424,9 +427,10 @@ constraint forall(c in 1..nrClasses)(
     class_limit_input[c] >= sum (s in 1..nrStudents)(classes_students[c,s])
 );
 
+
 % every course on the preference list of students has to be taken                                                                   % NEW
 constraint forall(s in 1..nrStudents)(
-    forall(pref in student_pref_idx[s]..student_pref_idx[s]+student_pref_cnt[s])(
+    forall(pref in student_pref_idx[s]..student_pref_idx[s]+student_pref_cnt[s]-1)(
         exists(c in 1..nrClasses)(
             classes_students[c,s]
             /\ class_hierarchy_input[c,4] == student_pref_input[pref]
@@ -441,7 +445,7 @@ constraint forall(i in 1..nrSameStart)(
     forall(c1 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
         forall(c2 in SameStart_idx[i]..SameStart_idx[i]+SameStart_cnt[i]-1)(
             c1 == c2
-            \/ classes_start[c1] == class_start[c2]
+            \/ classes_start[c1] == classes_start[c2]
         )
     )
     
