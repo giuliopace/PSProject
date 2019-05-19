@@ -902,22 +902,7 @@ constraint forall(i in 1..nrMaxDayLoad)(
     )
 );
 
-% MaxBreaks
-constraint forall(i in 1..nrMaxBreaks)(
-    forall(w in 1..nrWeeks)(
-        forall(d in 1..nrDays)(
-            sum(c in MaxBreaks_idx[i]..MaxBreaks_idx[i]+MaxBreaks_cnt[i]-1)
-            (
-                classes_duration[MaxBreaks_distrib_input[c]]
-            ) <= MaxBreaks_nr1[i]
-        )
-    )
-    \/
-    (
-        not (MaxBreaks_required[i]) 
-        /\ MaxBreaks_penalty[i] == (MaxBreaks_dec_penalty[i]
-    )
-);
+
 
 % objective function ##########################################################################################################
 solve minimize sum(classes_option_penalties)+sum(classes_room_penalties)+sum(SameStart_dec_penalty)+sum(SameTime_dec_penalty)+sum(DifferentTime_dec_penalty)+sum(SameDays_dec_penalty)+sum(DifferentDays_dec_penalty)+sum(SameWeeks_dec_penalty)+sum(DifferentWeeks_dec_penalty)+sum(SameRoom_dec_penalty)+sum(DifferentRoom_dec_penalty)+sum(Overlap_dec_penalty)+sum(NotOverlap_dec_penalty)+sum(SameAttendees_dec_penalty)+sum(Precedence_dec_penalty)+sum(WorkDay_dec_penalty)+sum(MinGap_dec_penalty)+sum(MaxDays_dec_penalty)+sum(MaxDayLoad_dec_penalty)+sum(MaxBreaks_dec_penalty)+sum(MaxBlock_dec_penalty);
