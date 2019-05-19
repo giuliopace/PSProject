@@ -368,7 +368,7 @@ constraint forall(i in 1..nrClasses)(
         )
     )
 );
-
+/*
 % each student only attends classes in exactly 1 configuration of a course
 constraint forall(s in 1..nrStudents)(
     forall(c1 in 1..nrClasses)(
@@ -434,7 +434,7 @@ constraint forall(s in 1..nrStudents)(
     )
 );
 
-/*
+
 % constraint ∨ (¬req ∧ penalty)  
 constraint forall(i in 1..nrSameStart)(
 
@@ -451,7 +451,6 @@ constraint forall(i in 1..nrSameStart)(
         not (SameStart_required[i]) 
         /\ SameAttendees_penalty[i] == SameAttendees_dec_penalty[i]
     )
-
 
 )
 */
