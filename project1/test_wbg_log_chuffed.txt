@@ -1,0 +1,137 @@
+% Pruned 49955 learnt clauses
+% Pruned 49839 learnt clauses
+% Pruned 49990 learnt clauses
+% Pruned 49982 learnt clauses
+% Pruned 49984 learnt clauses
+% Pruned 49978 learnt clauses
+% Pruned 49968 learnt clauses
+% Pruned 49993 learnt clauses
+% Pruned 49980 learnt clauses
+% Pruned 49966 learnt clauses
+% Pruned 49970 learnt clauses
+% Pruned 49965 learnt clauses
+% Pruned 49974 learnt clauses
+% Pruned 49969 learnt clauses
+% Pruned 49978 learnt clauses
+% Pruned 49970 learnt clauses
+% Pruned 49971 learnt clauses
+% Pruned 49971 learnt clauses
+% Pruned 49978 learnt clauses
+% Pruned 49987 learnt clauses
+% Pruned 49986 learnt clauses
+% Pruned 49967 learnt clauses
+% Pruned 49972 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49967 learnt clauses
+% Pruned 49971 learnt clauses
+% Pruned 49969 learnt clauses
+% Pruned 49969 learnt clauses
+% Pruned 49972 learnt clauses
+% Pruned 49984 learnt clauses
+% Pruned 49977 learnt clauses
+% Pruned 49963 learnt clauses
+% Pruned 49964 learnt clauses
+% Pruned 49962 learnt clauses
+% Pruned 49961 learnt clauses
+% Pruned 49964 learnt clauses
+% Pruned 49965 learnt clauses
+% Pruned 49962 learnt clauses
+% Pruned 49968 learnt clauses
+% Pruned 49969 learnt clauses
+% Pruned 49970 learnt clauses
+% Pruned 49972 learnt clauses
+% Pruned 49971 learnt clauses
+% Pruned 49972 learnt clauses
+% Pruned 49966 learnt clauses
+% Pruned 49974 learnt clauses
+% Pruned 49966 learnt clauses
+% Pruned 49977 learnt clauses
+% Pruned 49976 learnt clauses
+% Pruned 49979 learnt clauses
+% Pruned 49969 learnt clauses
+% Pruned 49980 learnt clauses
+% Pruned 49963 learnt clauses
+% Pruned 49974 learnt clauses
+% Pruned 49977 learnt clauses
+% Pruned 49976 learnt clauses
+% Pruned 49975 learnt clauses
+% Pruned 49974 learnt clauses
+% Pruned 49976 learnt clauses
+% Pruned 49977 learnt clauses
+% Pruned 49974 learnt clauses
+% Pruned 49976 learnt clauses
+% Pruned 49979 learnt clauses
+% Pruned 49969 learnt clauses
+% Pruned 49967 learnt clauses
+% Pruned 49972 learnt clauses
+% Pruned 49973 learnt clauses
+% Pruned 49974 learnt clauses
+% Pruned 49975 learnt clauses
+% Pruned 49975 learnt clauses
+% Pruned 49976 learnt clauses
+% Pruned 49975 learnt clauses
+% Pruned 49974 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49983 learnt clauses
+% Pruned 49984 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49985 learnt clauses
+% Pruned 49978 learnt clauses
+% Pruned 49982 learnt clauses
+% Pruned 49983 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49980 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49985 learnt clauses
+% Pruned 49981 learnt clauses
+% Pruned 49978 learnt clauses
+% Pruned 49983 learnt clauses
+% Pruned 49986 learnt clauses
+% Pruned 49983 learnt clauses
+% Pruned 49986 learnt clauses
+% Pruned 49987 learnt clauses
+% Pruned 49977 learnt clauses
+% Pruned 49984 learnt clauses
+% Pruned 49987 learnt clauses
+% Pruned 49986 learnt clauses
+% Pruned 49982 learnt clauses
+% Pruned 49985 learnt clauses
+% Pruned 49990 learnt clauses
+% Pruned 49982 learnt clauses
+% Pruned 49979 learnt clauses
+% Pruned 49980 learnt clauses
+% Pruned 49977 learnt clauses
+% Pruned 49980 learnt clauses
+% Pruned 49984 learnt clauses
+% Pruned 49985 learnt clauses
+% Pruned 49990 learnt clauses
+% Pruned 49997 learnt clauses
+% Pruned 49996 learnt clauses
+% Pruned 49983 learnt clauses
+% Pruned 49990 learnt clauses
+% Pruned 49995 learnt clauses
+% Pruned 49995 learnt clauses
+% Pruned 49998 learnt clauses
+%%%mzn-stat: nodes=24319206
+%%%mzn-stat: failures=5873511
+%%%mzn-stat: restarts=0
+%%%mzn-stat: variables=1112943
+%%%mzn-stat: intVars=3920
+%%%mzn-stat: boolVariables=1109021
+%%%mzn-stat: propagators=65737
+%%%mzn-stat: propagations=3940722005
+%%%mzn-stat: peakDepth=2579
+%%%mzn-stat: nogoods=5873511
+%%%mzn-stat: backjumps=18445695
+%%%mzn-stat: peakMem=0.00
+%%%mzn-stat: time=3616.893
+%%%mzn-stat: initTime=19.126
+%%%mzn-stat: solveTime=3597.767
+%%%mzn-stat: objective=-1
+%%%mzn-stat: optTime=0.000
+%%%mzn-stat: baseMem=0.00
+%%%mzn-stat: trailMem=0.12
+%%%mzn-stat: randomSeed=1558308086
+=====UNSATISFIABLE=====
