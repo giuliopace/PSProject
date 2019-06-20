@@ -155,10 +155,18 @@ def isVertexCover(graph, solution):
 	'''
 		returns true if the solution is a vertex cover for the graph
 	'''
-	#TODO
+	#check for every edge: if none of the two vertices is marked as True in the solution we return false. If we never return false it means that every edge is covered so i return true
+	for edge in graph.edges:
+		a, b = map(list,zip(edge))
+		if solution[a] == False and solution[b] == False:
+			return False
+
+	return True
+
 
 
 filename = "./instancesPace/vc-exact_031.gr"
 graph = parseInstanceFile(filename)
 result = tabuSearch(graph, 100, "iterations_number", 10)
 print(result)
+
