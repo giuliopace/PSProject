@@ -2,7 +2,19 @@ from parser import *
 import numpy as np
 import time
 
+'''
+	TODOLIST:
+		- improve fitness function (i dont think we need to)
+		- improve way of checking vertex cover (right now it is very stupid)
 
+
+	PROBLEMS:
+		- Apparently we reach really quickly what appears to be a local minimum but then we stagnate there forever (takes 49 iterations to reach it and then that's it).
+		I think he gets to a dead end and then basically waits there until the tabulist frees up his father. Then he goes to his father and then immediately goes back to the dead end. So basically never gets out.
+
+		- The running time is manageable for the graphs with 800 nodes (019, 031, 035, 037) but with bigger ones it takes forever even to create the graph itself.
+		I tried with 007 that has 10k nodes half an hour ago and it is still going so now im gonna go to bed and see if tomorrow it is done lol
+'''
 
 def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 	'''
@@ -35,21 +47,24 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 		neighborhood = getNeighbours(best_candidate)
 		if len(neighborhood) == 0:
 			neighborhood_is_empty = True
+			print("Neighborhood is empty!")
 
 		if neighborhood_is_empty == False:
 			for candidate in neighborhood:
 				if not contains(tabulist, candidate) and (fitness(candidate) > fitness(best_candidate)):
+					#print('iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
 					if isVertexCover(graph, candidate):
 						best_candidate = candidate
 
 			if fitness(best_candidate) > fitness(current_best):
 				current_best = best_candidate
-
-
-
 				no_improvement_counter = 0
+
+				print('iteration nr %s and current best is %s.' % (curr_iteration_number, current_best))
+
 			else:
 				no_improvement_counter += 1
+				print("Result not improved for %s iterations." % (no_improvement_counter))
 
 			if len(tabulist) == max_tabu_size:
 				tabulist.pop()
@@ -132,7 +147,7 @@ def getNeighbours(solution):
 
 def fitness(solution):
 	'''
-		for now just wants to maximize the Falses in the solution but still being a Vertex Cover
+		one point for each False in the solution (for now)
 	'''
 	count = 0
 	for el in solution:
@@ -143,7 +158,7 @@ def fitness(solution):
 
 def contains(tabulist, candidate):
 	'''
-		ŕeturns true if a candidate is in the tabulist
+		returns true if a candidate is in the tabulist
 	'''
 	for element in tabulist:
 		if np.array_equal(element, candidate):
@@ -164,9 +179,11 @@ def isVertexCover(graph, solution):
 	return True
 
 
+#main stuff
 
-filename = "./instancesPace/vc-exact_031.gr"
+filename = "./instancesPace/vc-exact_007.gr"
 graph = parseInstanceFile(filename)
-result = tabuSearch(graph, 100, "iterations_number", 10)
-print(result)
 
+result = tabuSearch(graph, 20, "iterations_number", 100)
+
+print("The best result is the following: %s" % result)
