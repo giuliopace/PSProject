@@ -6,6 +6,7 @@ import time
 	TODOLIST:
 		- improve fitness function (i dont think we need to)
 		- improve way of checking vertex cover (right now it is very stupid)
+		- time out stopping method is incomplete (we need the time in tabuSearch())
 
 
 	PROBLEMS:
@@ -71,6 +72,8 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 
 			tabulist.append(best_candidate)
 
+		print("Total iterations: %s" % curr_iteration_number)
+		#print(time)
 	return current_best
 
 
@@ -84,6 +87,8 @@ def createSolution(graph):
 def stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter):
 	'''
 		returns a boolean, true if the stopping condition is reached, false otherwise
+
+		NOT SURE THIS IS WORKING
 	'''
 	if stopping_condition == "time_out":
 		if nr == 0:
@@ -118,6 +123,7 @@ def stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhoo
 			return True
 		else:
 			return False
+	#this is probably never reached (at least in our examples)
 
 	elif stopping_condition == "no_improvement":
 
