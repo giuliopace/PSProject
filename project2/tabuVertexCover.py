@@ -14,7 +14,7 @@ import time
 		I think he gets to a dead end and then basically waits there until the tabulist frees up his father. Then he goes to his father and then immediately goes back to the dead end. So basically never gets out.
 
 		- The running time is manageable for the graphs with 800 nodes (019, 031, 035, 037) but with bigger ones it takes forever even to create the graph itself.
-		I tried with 007 that has 10k nodes half an hour ago and it is still going so now im gonna go to bed and see if tomorrow it is done lol
+		007, that has 10k nodes, took approximately 6 hours to run.
 '''
 
 def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
@@ -30,6 +30,8 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 	#create a random solution (can be all ones)
 	fs= createSolution(graph)
 
+	starting_time = time.time()
+
 	current_best = fs
 	best_candidate = fs
 	tabulist = []
@@ -38,7 +40,7 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 	neighborhood_is_empty = False
 	no_improvement_counter = 0
 
-	while not stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter):
+	while not stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time):
 		curr_iteration_number += 1
 
 		if neighborhood_is_empty == True:
@@ -73,7 +75,21 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 			tabulist.append(best_candidate)
 
 		print("Total iterations: %s" % curr_iteration_number)
-		#print(time)
+		running_time = time.time() - starting_time
+
+	print("Total running time: %s" % (running_time))
+	if stopping_condition == "time_out":
+		print("Stopped by time out")
+
+	elif stopping_condition == "iterations_number":
+		print("Stopped after %s iterations" % curr_iteration_number)
+
+	elif stopping_condition == "empty_neighborhood":
+		print("Stopped because of empty neighborhood")
+
+	elif stopping_condition == "no_improvement":
+		print("Stopped because there was no improvement for %s iterations." % no_improvement_counter)
+
 	return current_best
 
 
@@ -84,26 +100,20 @@ def createSolution(graph):
 	return np.ones(len(graph.nodes()),dtype=bool)
 
 
-def stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter):
+def stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time):
 	'''
 		returns a boolean, true if the stopping condition is reached, false otherwise
 
-		NOT SURE THIS IS WORKING
 	'''
 	if stopping_condition == "time_out":
 		if nr == 0:
 			print('Care: your time_out time is ZERO')
 
-		global firstRun
-		timeFirstRun=0
-		if firstRun:
-			timeFirstRun=time.time()
+		now = time.time()
+		if now - starting_time > nr:
+			return True
 		else:
-			now = time.time()
-			if now-time > time_out:
-				return True
-			else:
-				return False
+			return False
 
 
 
@@ -187,9 +197,9 @@ def isVertexCover(graph, solution):
 
 #main stuff
 
-filename = "./instancesPace/vc-exact_007.gr"
+filename = "./instancesPace/vc-exact_031.gr"
 graph = parseInstanceFile(filename)
-
-result = tabuSearch(graph, 20, "iterations_number", 100)
+print('graph created successfully')
+result = tabuSearch(graph, 20, "time_out", 10)
 
 print("The best result is the following: %s" % result)
