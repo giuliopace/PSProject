@@ -34,6 +34,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 		curr_iteration_number += 1
 		if neighborhood_is_empty == True:
 			tabulist.pop(0)
+			fitnessesTabuList.pop(0)
 			neighborhood_is_empty = False
 
 		neighborhood, fitnesses = getNeighbours(best_candidate)
@@ -65,6 +66,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 
 			if len(tabulist) == max_tabu_size:
 				tabulist.pop(0)
+				fitnessesTabuList.pop(0)
 
 			tabulist.append(best_candidate)
 			fitnessesTabuList.append(bestfitness)
@@ -182,8 +184,12 @@ def contains(tabulist, fitnessTabuList, candidate, candifitness):
 	'''
 		returns true if a candidate is in the tabulist
 	'''
-	for element, fitness in zip(tabulist, fitnessTabuList):
-		if(not fitness==candifitness):
+	
+
+	for element, fitness2 in zip(tabulist, fitnessTabuList):
+		# if the fitness of the two elements is different
+		# they cannot be the same, we skip the costly comparaison
+		if(fitness2!=candifitness):
 			continue
 		if (element==candidate).all():
 			return True
@@ -206,7 +212,7 @@ def isVertexCover(graph, solution):
 
 
 # default params
-filename = "./instancesPace/vc-exact_007.gr"
+filename = "./instancesPace/vc-exact_031.gr"
 tabulistLength = 200
 timeout = 60
 max_iter = 1000
