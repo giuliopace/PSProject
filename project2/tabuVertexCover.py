@@ -2,6 +2,7 @@ from parser import *
 import numpy as np
 import time
 import random
+import sys
 
 '''
 	TODOLIST:
@@ -58,7 +59,6 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 			cur_best_candidate = createSolutionOfTrues(graph)
 			bestfitness = 0
 			for candidate, curfitness in zip(neighborhood, fitnesses):
-				t1 = time.time()
 				if (curfitness > bestfitness) and not contains(tabulist, candidate):
 					#print('Iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
 					if isVertexCover(graph, candidate):
@@ -195,7 +195,6 @@ def contains(tabulist, candidate):
 	'''
 		returns true if a candidate is in the tabulist
 	'''
-
 	for element in tabulist:
 		if (element==candidate).all():
 			return True
@@ -217,12 +216,41 @@ def isVertexCover(graph, solution):
 	return True
 
 
-#main stuff
-
+# default params
 filename = "./instancesPace/vc-exact_007.gr"
+tabulistLength = 200
+timeout = 60
+max_iter = 1000
+no_improvement = 500
+helpMsg = """Parameters:
+-f [str] : filename
+-t [int] : timeout (seconds)
+-i [int] : max number of iterations 
+-n [int] : max number of iterations without improvement
+-h       : print this help message
+"""
+
+
+# param parsing 
+params = sys.argv[1:]
+while(len(params)>0):
+	param = params.pop(0)
+	if len(params)>0 and param=="-f":
+		filename = params.pop(0)
+	elif len(params)>0 and param=="-t":
+		timeout = params.pop(0)
+	elif len(params)>0 and param=="-i":
+		max_iter = params.pop(0)
+	elif len(params)>0 and param=="-n":
+		no_improvement = params.pop(0)
+	elif param=="-h":
+		print(helpMsg)
+		sys.exit(0)
+
+# processing
 graph = parseInstanceFile(filename)
 print('Graph created successfully')
-result = tabuSearch(graph, 200, 60, 1000, 500) #parameters are tabu size, time_out, iterations, no improvement
+result = tabuSearch(graph, tabulistLength, timeout, max_iter, no_improvement) #parameters are tabu size, time_out, iterations, no improvement
 fitness = fitness(result)
 
 print("The best result is %s, with a fitness of %s " % (result, fitness))
