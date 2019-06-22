@@ -36,15 +36,20 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 	best_candidate = fs
 	tabulist = []
 	tabulist.append(fs)
+
+
 	curr_iteration_number = 0
 	neighborhood_is_empty = False
 	no_improvement_counter = 0
 
 	while not stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time):
+
+		#print(len(tabulist))
+		#input("caca")
 		curr_iteration_number += 1
 
 		if neighborhood_is_empty == True:
-			tabulist.pop()
+			tabulist.pop(0)
 			neighborhood_is_empty = False
 
 		neighborhood = getNeighbours(best_candidate)
@@ -53,11 +58,14 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 			print("Neighborhood is empty!")
 
 		if neighborhood_is_empty == False:
+			cur_best_candidate = createSolution(graph)
 			for candidate in neighborhood:
-				if not contains(tabulist, candidate) and (fitness(candidate) > fitness(best_candidate)):
+				if not contains(tabulist, candidate) and (fitness(candidate) > fitness(cur_best_candidate)):
 					#print('iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
 					if isVertexCover(graph, candidate):
-						best_candidate = candidate
+						cur_best_candidate = candidate
+
+			best_candidate = cur_best_candidate
 
 			if fitness(best_candidate) > fitness(current_best):
 				current_best = best_candidate
@@ -67,10 +75,10 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 
 			else:
 				no_improvement_counter += 1
-				print("Result not improved for %s iterations." % (no_improvement_counter))
+				print("Result not improved for %s iterations. explored: %s" % (no_improvement_counter, best_candidate))
 
 			if len(tabulist) == max_tabu_size:
-				tabulist.pop()
+				tabulist.pop(0)
 
 			tabulist.append(best_candidate)
 
@@ -200,6 +208,6 @@ def isVertexCover(graph, solution):
 filename = "./instancesPace/vc-exact_031.gr"
 graph = parseInstanceFile(filename)
 print('graph created successfully')
-result = tabuSearch(graph, 20, "time_out", 10)
+result = tabuSearch(graph, 100000, "time_out", 100)
 
 print("The best result is the following: %s" % result)
