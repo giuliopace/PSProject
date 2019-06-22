@@ -17,7 +17,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 	'''
 	#create a random solution (can be all ones)
 	fs = createSolution(graph)
-	print('Starting soltion: %s' % fs)
+	#print('Starting soltion: %s' % fs)
 	starting_time = time.time()
 
 	current_best = fs
@@ -40,7 +40,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 		neighborhood, fitnesses = getNeighbours(best_candidate)
 		if len(neighborhood) == 0:
 			neighborhood_is_empty = True
-			print("Neighborhood is empty!")
+			#print("Neighborhood is empty!")
 
 		if neighborhood_is_empty == False:
 			cur_best_candidate = createSolutionOfTrues(graph)
@@ -58,11 +58,11 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 				current_best = best_candidate
 				no_improvement_counter = 0
 
-				print('Iteration nr %s and current best is %s.' % (curr_iteration_number, current_best))
+				#print('Iteration nr %s and current best is %s.' % (curr_iteration_number, current_best))
 
 			else:
 				no_improvement_counter += 1
-				print("Result not improved for %s iterations. explored: %s" % (no_improvement_counter, best_candidate))
+				#print("Result not improved for %s iterations. explored: %s" % (no_improvement_counter, best_candidate))
 
 			if len(tabulist) == max_tabu_size:
 				tabulist.pop(0)
@@ -193,8 +193,6 @@ def contains(tabulist, fitnessTabuList, candidate, candifitness):
 			continue
 		if (element==candidate).all():
 			return True
-		#print(t2-t1)
-		#input("wefipwjefpowjefpowjefpoj")
 	return False
 
 
@@ -220,13 +218,13 @@ no_improvement = 500
 helpMsg = """Parameters:
 -f [str] : filename
 -t [int] : timeout (seconds)
--i [int] : max number of iterations 
+-i [int] : max number of iterations
 -n [int] : max number of iterations without improvement
 -h       : print this help message
 """
 
 
-# param parsing 
+# param parsing
 params = sys.argv[1:]
 while(len(params)>0):
 	param = params.pop(0)
@@ -244,8 +242,16 @@ while(len(params)>0):
 
 # processing
 graph = parseInstanceFile(filename)
-print('Graph created successfully')
-result = tabuSearch(graph, tabulistLength, timeout, max_iter, no_improvement) #parameters are tabu size, time_out, iterations, no improvement
-fitness = fitness(result)
+#print('Graph created successfully')
+aggr = 0
+best = 100000000000
+for i in range(1,10):
+	result = tabuSearch(graph, tabulistLength, timeout, max_iter, no_improvement) #parameters are tabu size, time_out, iterations, no improvement
+	dimension = len(result) - fitness(result)
+	if dimension < best:
+		dimension = best
+	aggr += dimension
+	avg = aggr / 10
 
-print("The best result is %s, with a fitness of %s " % (result, fitness))
+	print("Run %s: the best result is %s, a vertex cover of dimension %s " % (i, result, dimension))
+print("avg = %s, best = %s" % (avg, best))
