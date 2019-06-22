@@ -3,20 +3,6 @@ import numpy as np
 import time
 import random
 
-'''
-	TODOLIST:
-		- improve fitness function (i dont think we need to)
-		- improve way of checking vertex cover (right now it is very stupid)
-		- time out stopping method is incomplete (we need the time in tabuSearch())
-
-
-	PROBLEMS:
-		- Apparently we reach really quickly what appears to be a local minimum but then we stagnate there forever (takes 49 iterations to reach it and then that's it).
-		I think he gets to a dead end and then basically waits there until the tabulist frees up his father. Then he goes to his father and then immediately goes back to the dead end. So basically never gets out.
-
-		- The running time is manageable for the graphs with 800 nodes (019, 031, 035, 037) but with bigger ones it takes forever even to create the graph itself.
-		007, that has 10k nodes, took approximately 6 hours to run.
-'''
 
 def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 	'''
@@ -219,7 +205,7 @@ def isVertexCover(graph, solution):
 
 #main stuff
 
-filename = "./instancesPace/vc-exact_007.gr"
+filename = "./instancesPace/vc-exact_001.gr"
 graph = parseInstanceFile(filename)
 print('Graph created successfully')
 result = tabuSearch(graph, 200, 60, 1000, 500) #parameters are tabu size, time_out, iterations, no improvement
