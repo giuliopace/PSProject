@@ -24,7 +24,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 	best_candidate = fs
 	tabulist = []
 	tabulist.append(fs)
-
+	fitnessesTabuList = [fitness(fs)]
 
 	curr_iteration_number = 0
 	neighborhood_is_empty = False
@@ -45,7 +45,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 			cur_best_candidate = createSolutionOfTrues(graph)
 			bestfitness = 0
 			for candidate, curfitness in zip(neighborhood, fitnesses):
-				if (curfitness > bestfitness) and not contains(tabulist, candidate):
+				if (curfitness > bestfitness) and not contains(tabulist, fitnessesTabuList,candidate, curfitness):
 					#print('Iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
 					if isVertexCover(graph, candidate):
 						bestfitness = curfitness
@@ -67,6 +67,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 				tabulist.pop(0)
 
 			tabulist.append(best_candidate)
+			fitnessesTabuList.append(bestfitness)
 
 	running_time = time.time() - starting_time
 	print("Total running time: %s" % (running_time))
@@ -177,11 +178,13 @@ def fitness(solution):
 	return count
 
 
-def contains(tabulist, candidate):
+def contains(tabulist, fitnessTabuList, candidate, candifitness):
 	'''
 		returns true if a candidate is in the tabulist
 	'''
-	for element in tabulist:
+	for element, fitness in zip(tabulist, fitnessTabuList):
+		if(not fitness==candifitness):
+			continue
 		if (element==candidate).all():
 			return True
 		#print(t2-t1)
