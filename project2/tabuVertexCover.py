@@ -56,12 +56,18 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 
 		if neighborhood_is_empty == False:
 			cur_best_candidate = createSolution(graph)
+			bestfitness = fitness(cur_best_candidate)
+			mean_time_check = 0
 			for candidate in neighborhood:
-				if not contains(tabulist, candidate) and (fitness(candidate) > fitness(cur_best_candidate)):
+				t1 = time.time()
+				if not contains(tabulist, candidate) and (fitness(candidate) > bestfitness):
 					#print('iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
 					if isVertexCover(graph, candidate):
+						bestfitness = fitness(candidate)
 						cur_best_candidate = candidate
-
+				t2 = time.time()
+				mean_time_check += t2-t1
+			print("mean_time_check_neigh={}".format(mean_time_check/len(neighborhood)))
 			best_candidate = cur_best_candidate
 
 			if fitness(best_candidate) > fitness(current_best):
@@ -184,6 +190,6 @@ def isVertexCover(graph, solution):
 filename = "./instancesPace/vc-exact_031.gr"
 graph = parseInstanceFile(filename)
 print('graph created successfully')
-result = tabuSearch(graph, 20, "time_out", 100)
+result = tabuSearch(graph, 200, 100.0, 1000, 500)
 
 print("The best result is the following: %s" % result)
