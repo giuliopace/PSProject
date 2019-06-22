@@ -249,9 +249,9 @@ for i in range(1,10):
 	result = tabuSearch(graph, tabulistLength, timeout, max_iter, no_improvement) #parameters are tabu size, time_out, iterations, no improvement
 	dimension = len(result) - fitness(result)
 	if dimension < best:
-		dimension = best
+		best = dimension
 	aggr += dimension
 	avg = aggr / 10
 
-	print("Run %s: the best result is %s, a vertex cover of dimension %s " % (i, result, dimension))
+	print("Run %s: the best result is a vertex cover of dimension %s " % (i, dimension))
 print("avg = %s, best = %s" % (avg, best))
