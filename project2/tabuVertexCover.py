@@ -115,7 +115,7 @@ def createSolution(graph):
 
 			if isVertexCover(graph, solution):
 				curr_time = time.time() - starting_time
-				print('Time to create a starting solution is %s and you found a random solution in %s attempts (percentage = %s)' % (curr_time, i*j, starting_percent + (j*3)))
+				print('Time to create a starting solution is %s and you found a random solution in %s attempts (percentage = %s)' % (curr_time, ((j-1)*20) + i, starting_percent + (j*3)))
 				return solution
 
 	curr_time = time.time() - starting_time
@@ -184,7 +184,7 @@ def contains(tabulist, fitnessTabuList, candidate, candifitness):
 	'''
 		returns true if a candidate is in the tabulist
 	'''
-	
+
 
 	for element, fitness2 in zip(tabulist, fitnessTabuList):
 		# if the fitness of the two elements is different
@@ -210,7 +210,7 @@ def isVertexCover(graph, solution):
 
 
 # default params
-filename = "./instancesPace/vc-exact_031.gr"
+filename = "./instancesPace/vc-exact_003.gr"
 tabulistLength = 200
 timeout = 60
 max_iter = 1000
@@ -245,7 +245,7 @@ graph = parseInstanceFile(filename)
 #print('Graph created successfully')
 aggr = 0
 best = 100000000000
-for i in range(1,10):
+for i in range(1,11):
 	result = tabuSearch(graph, tabulistLength, timeout, max_iter, no_improvement) #parameters are tabu size, time_out, iterations, no improvement
 	dimension = len(result) - fitness(result)
 	if dimension < best:
