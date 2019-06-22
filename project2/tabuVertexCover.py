@@ -1,6 +1,7 @@
 from parser import *
 import numpy as np
 import time
+import random
 
 '''
 	TODOLIST:
@@ -29,7 +30,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 	'''
 	#create a random solution (can be all ones)
 	fs = createSolution(graph)
-
+	print('Starting soltion: %s' % fs)
 	starting_time = time.time()
 
 	current_best = fs
@@ -44,7 +45,6 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 
 	while stoppingCondition(time_out, max_iterations, no_improvement, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time) == 0 :
 		curr_iteration_number += 1
-
 		if neighborhood_is_empty == True:
 			tabulist.pop(0)
 			neighborhood_is_empty = False
@@ -55,26 +55,25 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 			print("Neighborhood is empty!")
 
 		if neighborhood_is_empty == False:
-			cur_best_candidate = createSolution(graph)
+			cur_best_candidate = createSolutionOfTrues(graph)
 			bestfitness = 0
 			mean_time_check = 0
 			for candidate, curfitness in zip(neighborhood, fitnesses):
 				t1 = time.time()
 				if not contains(tabulist, candidate) and (curfitness > bestfitness):
-					#print('iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
+					print('Iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
 					if isVertexCover(graph, candidate):
 						bestfitness = curfitness
 						cur_best_candidate = candidate
 				t2 = time.time()
 				mean_time_check += t2-t1
-			print("mean_time_check_neigh={}".format(mean_time_check/len(neighborhood)))
 			best_candidate = cur_best_candidate
 
 			if fitness(best_candidate) > fitness(current_best):
 				current_best = best_candidate
 				no_improvement_counter = 0
 
-				print('iteration nr %s and current best is %s.' % (curr_iteration_number, current_best))
+				print('Iteration nr %s and current best is %s.' % (curr_iteration_number, current_best))
 
 			else:
 				no_improvement_counter += 1
@@ -105,12 +104,36 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 
 	return current_best
 
+def random_bool_generator(percent=50):
+    return random.randrange(100) < percent
 
-def createSolution(graph):
+def createSolutionOfTrues(graph):
 	'''
 		create a solution with all true (always a valid VC)
 	'''
 	return np.ones(len(graph.nodes()),dtype=bool)
+
+
+def createSolution(graph):
+	'''
+		tries to create a random solution. if he doesnt manage to find one that is a vertex cover in 10 attempts, returns a solution of trues
+	'''
+	starting_time = time.time()
+	starting_percent = 82
+	for j in range(1,5):
+		for i in range(1,20):
+			solution = np.empty(len(graph.nodes()),dtype=bool)
+			for it in range(len(solution)):
+				solution[it] = random_bool_generator(starting_percent + (j*3))
+
+			if isVertexCover(graph, solution):
+				curr_time = time.time() - starting_time
+				print('Time to create a starting solution is %s and you found a random solution in %s attempts (percentage = %s)' % (curr_time, i*j, starting_percent + (j*3)))
+				return solution
+
+	curr_time = time.time() - starting_time
+	print('Time to create a starting solution is %s and you have a solution of trues' % curr_time)
+	return createSolutionOfTrues(graph)
 
 
 def stoppingCondition(time_out, max_iterations, no_improvement, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time):
@@ -195,9 +218,10 @@ def isVertexCover(graph, solution):
 
 #main stuff
 
-filename = "./instancesPace/vc-exact_031.gr"
+filename = "./instancesPace/vc-exact_007.gr"
 graph = parseInstanceFile(filename)
-print('graph created successfully')
-result = tabuSearch(graph, 200, 100.0, 1000, 500)
+print('Graph created successfully')
+result = tabuSearch(graph, 200, 60, 1000, 500) #parameters are tabu size, time_out, iterations, no improvement
+fitness = fitness(result)
 
-print("The best result is the following: %s" % result)
+print("The best result is %s, with a fitness of %s " % (result, fitness))
