@@ -202,7 +202,6 @@ def isVertexCover(graph, solution):
 	return True
 
 
-<<<<<<< HEAD
 # default params
 filename = "./instancesPace/vc-exact_007.gr"
 tabulistLength = 200
@@ -235,11 +234,6 @@ while(len(params)>0):
 		sys.exit(0)
 
 # processing
-=======
-#main stuff
-
-filename = "./instancesPace/vc-exact_001.gr"
->>>>>>> 9d881c944adf9dccc943abf0ad8d31d340e8477a
 graph = parseInstanceFile(filename)
 print('Graph created successfully')
 result = tabuSearch(graph, tabulistLength, timeout, max_iter, no_improvement) #parameters are tabu size, time_out, iterations, no improvement
