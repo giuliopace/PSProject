@@ -49,21 +49,21 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 			tabulist.pop(0)
 			neighborhood_is_empty = False
 
-		neighborhood = getNeighbours(best_candidate)
+		neighborhood, fitnesses = getNeighbours(best_candidate)
 		if len(neighborhood) == 0:
 			neighborhood_is_empty = True
 			print("Neighborhood is empty!")
 
 		if neighborhood_is_empty == False:
 			cur_best_candidate = createSolution(graph)
-			bestfitness = fitness(cur_best_candidate)
+			bestfitness = 0
 			mean_time_check = 0
-			for candidate in neighborhood:
+			for candidate, curfitness in zip(neighborhood, fitnesses):
 				t1 = time.time()
-				if not contains(tabulist, candidate) and (fitness(candidate) > bestfitness):
+				if not contains(tabulist, candidate) and (curfitness > bestfitness):
 					#print('iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
 					if isVertexCover(graph, candidate):
-						bestfitness = fitness(candidate)
+						bestfitness = curfitness
 						cur_best_candidate = candidate
 				t2 = time.time()
 				mean_time_check += t2-t1
@@ -143,12 +143,20 @@ def getNeighbours(solution):
 	'''
 	neighbours = []
 
+	base_fitness = fitness(solution)
+
+	fitnesses = []
+
 	for i in range(len(solution)):
 		el = np.copy(solution)
 		el[i]=not el[i]
+		if el[i] == False:
+			fitnesses.append(base_fitness+1)
+		else:
+			fitnesses.append(base_fitness-1)
 		neighbours.append(el)
 
-	return neighbours
+	return neighbours, fitnesses
 
 
 def fitness(solution):
