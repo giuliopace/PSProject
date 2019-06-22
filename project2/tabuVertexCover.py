@@ -17,7 +17,7 @@ import time
 		007, that has 10k nodes, took approximately 6 hours to run.
 '''
 
-def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
+def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 	'''
 		graph contains the graph
 		max_tabu_size contains the maximum size of the tabu stack
@@ -28,7 +28,7 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 		A solution is an array of bools with length=nr of vertices where true means "picked for the vertex cover"
 	'''
 	#create a random solution (can be all ones)
-	fs= createSolution(graph)
+	fs = createSolution(graph)
 
 	starting_time = time.time()
 
@@ -42,10 +42,7 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 	neighborhood_is_empty = False
 	no_improvement_counter = 0
 
-	while not stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time):
-
-		#print(len(tabulist))
-		#input("caca")
+	while stoppingCondition(time_out, max_iterations, no_improvement, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time) == 0 :
 		curr_iteration_number += 1
 
 		if neighborhood_is_empty == True:
@@ -82,20 +79,22 @@ def tabuSearch(graph, max_tabu_size, stopping_condition, nr=0):
 
 			tabulist.append(best_candidate)
 
-		print("Total iterations: %s" % curr_iteration_number)
-		running_time = time.time() - starting_time
-
+	running_time = time.time() - starting_time
 	print("Total running time: %s" % (running_time))
-	if stopping_condition == "time_out":
+	print("Total iterations: %s" % curr_iteration_number)
+
+	#printing stopping condition
+	stopping_condition = stoppingCondition(time_out, max_iterations, no_improvement, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time)
+	if stopping_condition == 1:
 		print("Stopped by time out")
 
-	elif stopping_condition == "iterations_number":
+	elif stopping_condition == 2:
 		print("Stopped after %s iterations" % curr_iteration_number)
 
-	elif stopping_condition == "empty_neighborhood":
+	elif stopping_condition == 3:
 		print("Stopped because of empty neighborhood")
 
-	elif stopping_condition == "no_improvement":
+	elif stopping_condition == 4:
 		print("Stopped because there was no improvement for %s iterations." % no_improvement_counter)
 
 	return current_best
@@ -108,50 +107,27 @@ def createSolution(graph):
 	return np.ones(len(graph.nodes()),dtype=bool)
 
 
-def stoppingCondition(stopping_condition, nr, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time):
+def stoppingCondition(time_out, max_iterations, no_improvement, curr_iteration_number, neighborhood_is_empty, no_improvement_counter, starting_time):
 	'''
-		returns a boolean, true if the stopping condition is reached, false otherwise
+		returns 0 if no stop, 1 if it stops for timeout, 2 for iteration numbers, 3 empty_neighborhood, 4 no_improvement
 
 	'''
-	if stopping_condition == "time_out":
-		if nr == 0:
-			print('Care: your time_out time is ZERO')
+	now = time.time()
+	if now - starting_time > time_out:
+		return 1
 
-		now = time.time()
-		if now - starting_time > nr:
-			return True
-		else:
-			return False
+	if curr_iteration_number >= max_iterations:
+		return 2
 
+	if neighborhood_is_empty == True:
+		return 3
 
-
-	elif stopping_condition == "iterations_number":
-
-		if nr == 0:
-			print('Care: you set 0 iterations')
-
-		if curr_iteration_number == nr:
-			return True
-		else:
-			return False
-
-
-	elif stopping_condition == "empty_neighborhood":
-		if neighborhood_is_empty == True:
-			return True
-		else:
-			return False
 	#this is probably never reached (at least in our examples)
 
-	elif stopping_condition == "no_improvement":
+	if no_improvement_counter >= no_improvement:
+		return 4
 
-		if nr == 0:
-			print('Care: your counter is set to zero')
-
-		if no_improvement_counter == nr:
-			return True
-		else:
-			return False
+	return 0
 
 
 def getNeighbours(solution):
@@ -208,6 +184,6 @@ def isVertexCover(graph, solution):
 filename = "./instancesPace/vc-exact_031.gr"
 graph = parseInstanceFile(filename)
 print('graph created successfully')
-result = tabuSearch(graph, 100000, "time_out", 100)
+result = tabuSearch(graph, 20, "time_out", 100)
 
 print("The best result is the following: %s" % result)
