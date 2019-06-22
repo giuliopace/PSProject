@@ -224,11 +224,11 @@ while(len(params)>0):
 	if len(params)>0 and param=="-f":
 		filename = params.pop(0)
 	elif len(params)>0 and param=="-t":
-		timeout = params.pop(0)
+		timeout = int(params.pop(0))
 	elif len(params)>0 and param=="-i":
-		max_iter = params.pop(0)
+		max_iter = int(params.pop(0))
 	elif len(params)>0 and param=="-n":
-		no_improvement = params.pop(0)
+		no_improvement = int(params.pop(0))
 	elif param=="-h":
 		print(helpMsg)
 		sys.exit(0)
