@@ -160,9 +160,13 @@ def getNeighbours(solution, graph):
 		el = np.copy(solution)
 		el[i]=not el[i]
 		if el[i] == False:
+			notVC = False
 			for neigh in graph.neighbors(i):
 				if el[neigh] == False:
-					continue
+					notVC = True
+					break
+			if notVC:
+				continue
 			fitnesses.append(base_fitness+1)
 		else:
 			fitnesses.append(base_fitness-1)
