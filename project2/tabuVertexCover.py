@@ -216,10 +216,10 @@ def isVertexCover(graph, solution):
 
 
 # default params
-filename = "./instancesPace/vc-exact_003.gr"
+filename = "./instancesPace/vc-exact_031.gr"
 tabulistLength = 200
 timeout = 60
-max_iter = 1000
+max_iter = 10000
 no_improvement = 500
 helpMsg = """Parameters:
 -f [str] : filename
@@ -247,10 +247,12 @@ while(len(params)>0):
 		sys.exit(0)
 
 # processing
+print("Starting...")
+print(filename)
 graph = parseInstanceFile(filename)
-#print('Graph created successfully')
+print('Graph created successfully')
 aggr = 0
-best = 100000000000
+best = 10000000000
 for i in range(1,11):
 	result = tabuSearch(graph, tabulistLength, timeout, max_iter, no_improvement) #parameters are tabu size, time_out, iterations, no improvement
 	dimension = len(result) - fitness(result)
@@ -260,4 +262,6 @@ for i in range(1,11):
 	avg = aggr / 10
 
 	print("Run %s: the best result is a vertex cover of dimension %s " % (i, dimension))
+
 print("avg = %s, best = %s" % (avg, best))
+print("Saul Goodman")

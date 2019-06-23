@@ -1,0 +1,90 @@
+Starting...
+Run 1: the best result is a vertex cover of dimension 6007 
+Run 2: the best result is a vertex cover of dimension 6007 
+Run 3: the best result is a vertex cover of dimension 6007 
+Run 4: the best result is a vertex cover of dimension 6021 
+Run 5: the best result is a vertex cover of dimension 6021 
+Run 6: the best result is a vertex cover of dimension 6010 
+Run 7: the best result is a vertex cover of dimension 6010 
+Run 8: the best result is a vertex cover of dimension 6010 
+Run 9: the best result is a vertex cover of dimension 6010 
+Run 10: the best result is a vertex cover of dimension 6013 
+./instancesPace/vc-exact_001.gr
+avg = 6011.6, best = 6007
+Run 1: the best result is a vertex cover of dimension 60494 
+Run 2: the best result is a vertex cover of dimension 60468 
+Run 3: the best result is a vertex cover of dimension 60483 
+Run 4: the best result is a vertex cover of dimension 60469 
+Run 5: the best result is a vertex cover of dimension 60472 
+Run 6: the best result is a vertex cover of dimension 60474 
+Run 7: the best result is a vertex cover of dimension 60482 
+Run 8: the best result is a vertex cover of dimension 60470 
+Run 9: the best result is a vertex cover of dimension 60484 
+Run 10: the best result is a vertex cover of dimension 60469 
+./instancesPace/vc-exact_003.gr
+avg = 60476.5, best = 60468
+Run 1: the best result is a vertex cover of dimension 138 
+Run 2: the best result is a vertex cover of dimension 141 
+Run 3: the best result is a vertex cover of dimension 141 
+Run 4: the best result is a vertex cover of dimension 139 
+Run 5: the best result is a vertex cover of dimension 142 
+Run 6: the best result is a vertex cover of dimension 139 
+Run 7: the best result is a vertex cover of dimension 146 
+Run 8: the best result is a vertex cover of dimension 144 
+Run 9: the best result is a vertex cover of dimension 140 
+Run 10: the best result is a vertex cover of dimension 145 
+./instancesPace/vc-exact_005.gr
+avg = 141.5, best = 138
+Run 1: the best result is a vertex cover of dimension 8522 
+Run 2: the best result is a vertex cover of dimension 8523 
+Run 3: the best result is a vertex cover of dimension 8528 
+Run 4: the best result is a vertex cover of dimension 8554 
+Run 5: the best result is a vertex cover of dimension 8557 
+Run 6: the best result is a vertex cover of dimension 8526 
+Run 7: the best result is a vertex cover of dimension 8521 
+Run 8: the best result is a vertex cover of dimension 8541 
+Run 9: the best result is a vertex cover of dimension 8557 
+Run 10: the best result is a vertex cover of dimension 8557 
+./instancesPace/vc-exact_007.gr
+avg = 8538.6, best = 8521
+Run 1: the best result is a vertex cover of dimension 38415 
+Run 2: the best result is a vertex cover of dimension 38406 
+Run 3: the best result is a vertex cover of dimension 38403 
+Run 4: the best result is a vertex cover of dimension 38405 
+Run 5: the best result is a vertex cover of dimension 38411 
+Run 6: the best result is a vertex cover of dimension 38403 
+Run 7: the best result is a vertex cover of dimension 38412 
+Run 8: the best result is a vertex cover of dimension 38414 
+Run 9: the best result is a vertex cover of dimension 38403 
+Run 10: the best result is a vertex cover of dimension 38404 
+./instancesPace/vc-exact_009.gr
+avg = 38407.6, best = 38403
+Run 1: the best result is a vertex cover of dimension 9780 
+Run 2: the best result is a vertex cover of dimension 9782 
+Run 3: the best result is a vertex cover of dimension 9775 
+Run 4: the best result is a vertex cover of dimension 9769 
+Run 5: the best result is a vertex cover of dimension 9775 
+Run 6: the best result is a vertex cover of dimension 9770 
+Run 7: the best result is a vertex cover of dimension 9779 
+Run 8: the best result is a vertex cover of dimension 9769 
+Run 9: the best result is a vertex cover of dimension 9774 
+Run 10: the best result is a vertex cover of dimension 9782 
+./instancesPace/vc-exact_011.gr
+avg = 9775.5, best = 9769
+Run 1: the best result is a vertex cover of dimension 45305 
+Run 2: the best result is a vertex cover of dimension 45305 
+Run 3: the best result is a vertex cover of dimension 45305 
+Run 4: the best result is a vertex cover of dimension 45305 
+Run 5: the best result is a vertex cover of dimension 45305 
+Run 6: the best result is a vertex cover of dimension 45305 
+Run 7: the best result is a vertex cover of dimension 45305 
+Run 8: the best result is a vertex cover of dimension 45305 
+Run 9: the best result is a vertex cover of dimension 45305 
+Run 10: the best result is a vertex cover of dimension 45305 
+./instancesPace/vc-exact_013.gr
+avg = 45305.0, best = 45305
+Run 1: the best result is a vertex cover of dimension 53608 
+Run 2: the best result is a vertex cover of dimension 53608 
+Run 3: the best result is a vertex cover of dimension 53608 
+Run 4: the best result is a vertex cover of dimension 53608 
+Run 5: the best result is a vertex cover of dimension 53608 
