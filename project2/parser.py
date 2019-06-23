@@ -21,7 +21,7 @@ def parseInstanceFile(instanceFilePath):
 	"""
 	file = open(instanceFilePath,"r")
 
-	graph = nx.DiGraph()
+	graph = nx.Graph()
 
 	# parse info about edges and vertices
 	line = file.readline()

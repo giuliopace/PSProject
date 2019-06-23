@@ -37,7 +37,7 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 			fitnessesTabuList.pop(0)
 			neighborhood_is_empty = False
 
-		neighborhood, fitnesses = getNeighbours(best_candidate)
+		neighborhood, fitnesses = getNeighbours(best_candidate, graph)
 		if len(neighborhood) == 0:
 			neighborhood_is_empty = True
 			#print("Neighborhood is empty!")
@@ -48,9 +48,8 @@ def tabuSearch(graph, max_tabu_size, time_out, max_iterations, no_improvement):
 			for candidate, curfitness in zip(neighborhood, fitnesses):
 				if (curfitness > bestfitness) and not contains(tabulist, fitnessesTabuList,candidate, curfitness):
 					#print('Iteration nr %s and current best candidate is %s.' % (curr_iteration_number, best_candidate))
-					if isVertexCover(graph, candidate):
-						bestfitness = curfitness
-						cur_best_candidate = candidate
+					bestfitness = curfitness
+					cur_best_candidate = candidate
 
 			best_candidate = cur_best_candidate
 
@@ -146,7 +145,7 @@ def stoppingCondition(time_out, max_iterations, no_improvement, curr_iteration_n
 	return 0
 
 
-def getNeighbours(solution):
+def getNeighbours(solution, graph):
 	'''
 		returns a vector of neighbours
 		one neighbour per vertex, swaps each vertex
@@ -161,6 +160,9 @@ def getNeighbours(solution):
 		el = np.copy(solution)
 		el[i]=not el[i]
 		if el[i] == False:
+			for neigh in graph.neighbors(i):
+				if el[neigh] == False:
+					continue
 			fitnesses.append(base_fitness+1)
 		else:
 			fitnesses.append(base_fitness-1)
